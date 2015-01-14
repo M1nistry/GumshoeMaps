@@ -301,7 +301,7 @@ namespace Gumshoe_Maps
         private void dgvMaps_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             panelDgv.Size = new Size(480, 214);
-            dgvMaps.Size = new Size(479, 208);
+            dgvMaps.Size = new Size(497, 234);
             dgvMaps.Location = new Point(1, 1);
 
             //if (dgvMaps.SelectedRows.Count <= 0) return;
@@ -312,7 +312,7 @@ namespace Gumshoe_Maps
         private void dgvMaps_SelectionChanged(object sender, EventArgs e)
         {
             panelDgv.Size = new Size(480, 214);
-            dgvMaps.Size = new Size(479, 208);
+            dgvMaps.Size = new Size(497, 234);
             dgvMaps.Location = new Point(1, 1);
         }
 
@@ -331,6 +331,11 @@ namespace Gumshoe_Maps
         {
             _timerTicks++;
             labelDurationValue.Text = string.Format("{0:00}:{1:00}:{2:00}", _timerTicks / 3600, (_timerTicks / 60) % 60, _timerTicks % 60);
+        }
+
+        private void panelDgv_MouseEnter(object sender, EventArgs e)
+        {
+
         }
     }
 }
