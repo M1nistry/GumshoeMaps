@@ -1,0 +1,43 @@
+bin/Debug/Gumshoe Maps.vshost.exe
+bin/
+*.bin
+obj/Debug/DesignTimeResolveAssemblyReferences.cache
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+bin/Debug/Gumshoe Maps.vshost.exe.manifest
+bin/Debug/Gumshoe Maps.pdb
+obj/Debug/Gumshoe Maps.csproj.FileListAbsolute.txt
+obj/Debug/Gumshoe Maps.csproj.GenerateResource.Cache
+obj/Debug/Gumshoe Maps.csprojResolveAssemblyReference.cache
+obj/Debug/Gumshoe Maps.pdb
+obj/Debug/Gumshoe_Maps.Main.resources
+obj/Debug/Gumshoe_Maps.Properties.Resources.resources
+obj/Debug/Gumshoe_Maps.TitleBar.resources
