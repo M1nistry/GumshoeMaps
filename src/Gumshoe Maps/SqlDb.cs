@@ -9,11 +9,17 @@ namespace Gumshoe_Maps
     public class SqlDb
     {
         private readonly string _dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\MapsDB.s3db";
+        private SQLiteConnection Connection { get; set; }
         private string Constring { get; set; }
         public SqlDb()
         {
+            
             Constring = String.Format(@"Data Source={0};Version=3;", _dbPath);
-            SetupDb();
+            Connection = new SQLiteConnection(Constring) {ParseViaFramework = true};
+            if (SetupDb())
+            {
+                
+            }
         }
 
         private bool SetupDb()
@@ -25,7 +31,7 @@ namespace Gumshoe_Maps
             }
             try
             {
-                using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+                using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
                 {
                     using (var cmd = new SQLiteCommand(connection))
                     {

@@ -60,7 +60,7 @@ namespace Gumshoe_Maps
             _mapSource = new BindingSource
             {
                 DataSource = _sql.MapDataTable(),
-                Sort ="ID DESC"
+                //Sort ="id DESC"
             };
             dgvMaps.DataSource = _mapSource;
             _state ="WAITING";

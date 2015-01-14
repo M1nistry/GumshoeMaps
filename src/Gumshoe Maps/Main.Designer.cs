@@ -37,14 +37,6 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelDgv = new System.Windows.Forms.Panel();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
-            this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.qualityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.minusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCurrentMap = new System.Windows.Forms.Panel();
             this.labelDurationValue = new System.Windows.Forms.Label();
             this.labelId = new System.Windows.Forms.Label();
@@ -55,13 +47,21 @@
             this.labelStatusValue = new System.Windows.Forms.Label();
             this.panelDgvExtra = new System.Windows.Forms.Panel();
             this.dgvDrops = new System.Windows.Forms.DataGridView();
+            this.dgvId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnDrops = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numericZana = new System.Windows.Forms.NumericUpDown();
             this.labelZana = new System.Windows.Forms.Label();
             this.timerMap = new System.Windows.Forms.Timer(this.components);
             this.titleBar = new Gumshoe_Maps.TitleBar();
-            this.dgvId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnDrops = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.qualityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.minusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelDgv.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.panelCurrentMap.SuspendLayout();
@@ -96,8 +96,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvMaps.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
             this.dgvMaps.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvMaps.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.dgvMaps.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlLight;
@@ -115,7 +115,7 @@
             this.minusColumn,
             this.evenColumn,
             this.plusColumn});
-            this.dgvMaps.Location = new System.Drawing.Point(1, 2);
+            this.dgvMaps.Location = new System.Drawing.Point(1, 1);
             this.dgvMaps.Margin = new System.Windows.Forms.Padding(2);
             this.dgvMaps.Name = "dgvMaps";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -128,68 +128,12 @@
             this.dgvMaps.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvMaps.RowHeadersVisible = false;
             this.dgvMaps.RowTemplate.Height = 24;
+            this.dgvMaps.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvMaps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMaps.Size = new System.Drawing.Size(478, 234);
+            this.dgvMaps.Size = new System.Drawing.Size(493, 234);
             this.dgvMaps.TabIndex = 5;
             this.dgvMaps.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_RowEnter);
             this.dgvMaps.SelectionChanged += new System.EventHandler(this.dgvMaps_SelectionChanged);
-            // 
-            // idColumn
-            // 
-            this.idColumn.DataPropertyName = "id";
-            this.idColumn.HeaderText = "ID";
-            this.idColumn.Name = "idColumn";
-            this.idColumn.Visible = false;
-            // 
-            // mapColumn
-            // 
-            this.mapColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.mapColumn.DataPropertyName = "name";
-            this.mapColumn.HeaderText = "Map";
-            this.mapColumn.MinimumWidth = 250;
-            this.mapColumn.Name = "mapColumn";
-            // 
-            // levelColumn
-            // 
-            this.levelColumn.DataPropertyName = "level";
-            this.levelColumn.HeaderText = "Level";
-            this.levelColumn.Name = "levelColumn";
-            this.levelColumn.Width = 35;
-            // 
-            // quantityColumn
-            // 
-            this.quantityColumn.DataPropertyName = "quantity";
-            this.quantityColumn.HeaderText = "Quantity";
-            this.quantityColumn.Name = "quantityColumn";
-            this.quantityColumn.Width = 50;
-            // 
-            // qualityColumn
-            // 
-            this.qualityColumn.DataPropertyName = "quality";
-            this.qualityColumn.HeaderText = "Quality";
-            this.qualityColumn.Name = "qualityColumn";
-            this.qualityColumn.Width = 50;
-            // 
-            // minusColumn
-            // 
-            this.minusColumn.DataPropertyName = "-";
-            this.minusColumn.HeaderText = "-";
-            this.minusColumn.Name = "minusColumn";
-            this.minusColumn.Width = 30;
-            // 
-            // evenColumn
-            // 
-            this.evenColumn.DataPropertyName = " ";
-            this.evenColumn.HeaderText = " ";
-            this.evenColumn.Name = "evenColumn";
-            this.evenColumn.Width = 30;
-            // 
-            // plusColumn
-            // 
-            this.plusColumn.DataPropertyName = "+";
-            this.plusColumn.HeaderText = "+";
-            this.plusColumn.Name = "plusColumn";
-            this.plusColumn.Width = 30;
             // 
             // panelCurrentMap
             // 
@@ -298,7 +242,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvDrops.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
             this.dgvDrops.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvDrops.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dgvDrops.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Sunken;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -308,6 +252,7 @@
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvDrops.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvDrops.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDrops.ColumnHeadersVisible = false;
             this.dgvDrops.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dgvId,
             this.dataGridViewTextBoxColumn2,
@@ -329,6 +274,26 @@
             this.dgvDrops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvDrops.Size = new System.Drawing.Size(473, 94);
             this.dgvDrops.TabIndex = 6;
+            // 
+            // dgvId
+            // 
+            this.dgvId.DataPropertyName = "id";
+            this.dgvId.HeaderText = "ID";
+            this.dgvId.Name = "dgvId";
+            this.dgvId.Visible = false;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "name";
+            this.dataGridViewTextBoxColumn2.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 75;
+            // 
+            // columnDrops
+            // 
+            this.columnDrops.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.columnDrops.HeaderText = "Drops";
+            this.columnDrops.Name = "columnDrops";
             // 
             // numericZana
             // 
@@ -372,25 +337,63 @@
             this.titleBar.Title = "Gumshoe Maps v0.1";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             // 
-            // dgvId
+            // idColumn
             // 
-            this.dgvId.DataPropertyName = "id";
-            this.dgvId.HeaderText = "ID";
-            this.dgvId.Name = "dgvId";
-            this.dgvId.Visible = false;
+            this.idColumn.DataPropertyName = "id";
+            this.idColumn.HeaderText = "ID";
+            this.idColumn.Name = "idColumn";
+            this.idColumn.Visible = false;
             // 
-            // dataGridViewTextBoxColumn2
+            // mapColumn
             // 
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "name";
-            this.dataGridViewTextBoxColumn2.HeaderText = "Name";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.Width = 75;
+            this.mapColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.mapColumn.DataPropertyName = "name";
+            this.mapColumn.HeaderText = "";
+            this.mapColumn.MinimumWidth = 225;
+            this.mapColumn.Name = "mapColumn";
+            this.mapColumn.Width = 230;
             // 
-            // columnDrops
+            // levelColumn
             // 
-            this.columnDrops.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.columnDrops.HeaderText = "Drops";
-            this.columnDrops.Name = "columnDrops";
+            this.levelColumn.DataPropertyName = "level";
+            this.levelColumn.HeaderText = "Level";
+            this.levelColumn.Name = "levelColumn";
+            this.levelColumn.Width = 35;
+            // 
+            // quantityColumn
+            // 
+            this.quantityColumn.DataPropertyName = "quantity";
+            this.quantityColumn.HeaderText = "Quantity";
+            this.quantityColumn.Name = "quantityColumn";
+            this.quantityColumn.Width = 50;
+            // 
+            // qualityColumn
+            // 
+            this.qualityColumn.DataPropertyName = "quality";
+            this.qualityColumn.HeaderText = "Quality";
+            this.qualityColumn.Name = "qualityColumn";
+            this.qualityColumn.Width = 50;
+            // 
+            // minusColumn
+            // 
+            this.minusColumn.DataPropertyName = "-";
+            this.minusColumn.HeaderText = "-";
+            this.minusColumn.Name = "minusColumn";
+            this.minusColumn.Width = 30;
+            // 
+            // evenColumn
+            // 
+            this.evenColumn.DataPropertyName = " ";
+            this.evenColumn.HeaderText = " ";
+            this.evenColumn.Name = "evenColumn";
+            this.evenColumn.Width = 30;
+            // 
+            // plusColumn
+            // 
+            this.plusColumn.DataPropertyName = "+";
+            this.plusColumn.HeaderText = "+";
+            this.plusColumn.Name = "plusColumn";
+            this.plusColumn.Width = 30;
             // 
             // Main
             // 
@@ -408,6 +411,7 @@
             this.Controls.Add(this.titleBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Main";
+            this.Text = "Gumshoe Maps v0.1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.panelDgv.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).EndInit();
@@ -439,6 +443,9 @@
         private System.Windows.Forms.NumericUpDown numericZana;
         private System.Windows.Forms.Label labelZana;
         private System.Windows.Forms.Timer timerMap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnDrops;
         private System.Windows.Forms.DataGridViewTextBoxColumn idColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn levelColumn;
@@ -447,9 +454,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn minusColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn evenColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn plusColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgvId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnDrops;
     }
 }
 
