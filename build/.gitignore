@@ -1,0 +1,5 @@
+*.bin
+obj/Debug/DesignTimeResolveAssemblyReferences.cache
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/Debug/Gumshoe Maps.vshost.exe.manifest
+bin/Debug/Gumshoe Maps.pdb
