@@ -43,6 +43,10 @@ namespace Gumshoe_Maps
             buttonZanaHotkey.Text = ((Keys)Properties.Settings.Default.zanaHotkey).ToString();
             buttonCartoHotkey.Text = ((Keys)Properties.Settings.Default.cartoHotkey).ToString();
 
+            UnregisterHotKey(_main.Handle, 1);
+            UnregisterHotKey(_main.Handle, 2);
+            UnregisterHotKey(_main.Handle, 3);
+
         }
 
         private void trackBarColor_ValueChanged(object sender, EventArgs e)
@@ -130,15 +134,20 @@ namespace Gumshoe_Maps
 
         private void buttonMapHotkey_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape)
+            {
+                buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
+                return;
+            }
             Properties.Settings.Default.mapHotkey = e.KeyValue;
-            if (e.KeyCode == Keys.Escape) buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
+            buttonMapHotkey.Text = e.KeyCode.ToString().ToUpper();
+            
         }
 
         private void buttonMapHotkey_Click(object sender, EventArgs e)
         {
-            UnregisterHotKey(_main.Handle, 1);
+            
             buttonMapHotkey.Text = String.Empty;
-
         }
 
 

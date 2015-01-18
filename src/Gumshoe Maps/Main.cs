@@ -84,7 +84,13 @@ namespace Gumshoe_Maps
             else
             {
                 _settings = new Settings();
-                _settings.FormClosed += (o, ea) => _settings = null;
+                _settings.FormClosed += (o, ea) =>
+                {
+                    _settings = null;
+                    RegisterHotKey(Handle, 0, 0x0000, Properties.Settings.Default.mapHotkey);
+                    RegisterHotKey(Handle, 1, 0x0000, Properties.Settings.Default.zanaHotkey);
+                    RegisterHotKey(Handle, 2, 0x0000, Properties.Settings.Default.cartoHotkey);
+                };
                 _settings.ShowDialog();
             }
         }
@@ -103,7 +109,6 @@ namespace Gumshoe_Maps
 
         protected override void WndProc(ref Message m)
         {
-            // defined in winuser.h
             const int WM_DRAWCLIPBOARD = 0x308;
             const int WM_CHANGECBCHAIN = 0x030D;
             const int WM_HOTKEY = 0x0312;
@@ -174,6 +179,7 @@ namespace Gumshoe_Maps
                             {
                                 _state = "DROPS";
                                 labelStatusValue.Text = @"Running a map, listening for map drops...";
+                                break;
                             }
                             labelStatusValue.Text = @"Zana found, press F3 again once maps have been recorded.";
                             _state = "ZANA";
@@ -183,6 +189,7 @@ namespace Gumshoe_Maps
                             {
                                 _state = "DROPS";
                                 labelStatusValue.Text = @"Running a map, listening for map drops...";
+                                break;
                             }
                             labelStatusValue.Text = @"Carto found, press F4 again once maps have been recorded.";
                             _state = "CARTO";
