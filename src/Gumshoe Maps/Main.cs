@@ -39,6 +39,8 @@ namespace Gumshoe_Maps
         private string _state;
         private int _timerTicks = 0;
 
+        private Control _focusedControl;
+
         public Main()
         {
             InitializeComponent();
@@ -111,6 +113,7 @@ namespace Gumshoe_Maps
                 case WM_DRAWCLIPBOARD:
                     if (CheckClipboard())
                     {
+                        var clipboard = Clipboard.GetText(TextDataFormat.Text);
                         switch (_state)
                         {
                             case("WAITING"):
@@ -132,18 +135,20 @@ namespace Gumshoe_Maps
 
                             case("DROPS"):
                                 if (labelId.Text == String.Empty) break;
-                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
+                                if (clipboard.Contains("Map")) _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
+                                if (clipboard.Contains("Currency")) _sql.AddCurrency(int.Parse(labelId.Text), ParseCurrency());
+                                if (!clipboard.Contains("Map") && clipboard.Contains("Unique")) _sql.AddUnique(int.Parse(labelId.Text), ParseUnique());
 
                                 break;
 
                             case ("ZANA"):
                                 if (labelId.Text == String.Empty) break;
-                                _sql.AddZana(ParseClipboard(), int.Parse(labelId.Text));
+                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text), 1);
                                 break;
 
                             case ("CARTO"):
                                 if (labelId.Text == String.Empty) break;
-                                //_sql.AddCarto(ParseClipboard(), int.Parse(labelId.Text));
+                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text), 0, 1);
                                 break;
                         }
                     }
@@ -246,6 +251,24 @@ namespace Gumshoe_Maps
             return newMap;
         }
 
+        internal string ParseCurrency()
+        {
+            var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] { '\n' });
+            if (clipboardContents[0] != "Rarity: Currency") return "";
+
+            var currency = clipboardContents[1].Replace("Orb", "").Replace("of", "").Replace(" ", "");
+            return currency;
+        }
+
+        internal string ParseUnique()
+        {
+            var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] { '\n' });
+            if (clipboardContents[0] != "Rarity: Unique") return "";
+
+            var item = clipboardContents[1];
+            return item;
+        }
+
         private static List<string> GetAffixes(string[] clipboardContents)
         {
             var affixes = new List<string>();
@@ -291,6 +314,17 @@ namespace Gumshoe_Maps
             return inputLine;
         }
 
+        public static Control FindFocusedControl(Control control)
+        {
+            var container = control as ContainerControl;
+            while (container != null)
+            {
+                control = container.ActiveControl;
+                container = control as ContainerControl;
+            }
+            return control;
+        }
+
         #endregion
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -333,9 +367,15 @@ namespace Gumshoe_Maps
             labelDurationValue.Text = string.Format("{0:00}:{1:00}:{2:00}", _timerTicks / 3600, (_timerTicks / 60) % 60, _timerTicks % 60);
         }
 
-        private void panelDgv_MouseEnter(object sender, EventArgs e)
+        private void dgvMaps_MouseEnter(object sender, EventArgs e)
         {
+            _focusedControl = FindFocusedControl(this);
+            dgvMaps.Focus();
+        }
 
+        private void dgvMaps_MouseLeave(object sender, EventArgs e)
+        {
+            if (_focusedControl != null) _focusedControl.Focus();
         }
     }
 }

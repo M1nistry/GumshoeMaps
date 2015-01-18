@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
+using System.Data.Entity.Migrations.Model;
 using System.Data.SQLite;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 
 namespace Gumshoe_Maps
@@ -46,17 +48,15 @@ namespace Gumshoe_Maps
 
                         cmd.CommandText =
                             @"CREATE TABLE IF NOT EXISTS `map_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `rarity` TEXT, 
-                                        `level` INTEGER, `name` TEXT)";
+                                        `level` INTEGER, `name` TEXT, `zana` TINYINT, `carto` TINYINT)";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `zana_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `rarity` TEXT, 
-                                        `level` INTEGER, `name` TEXT)";
+                            @"CREATE TABLE IF NOT EXISTS `currency_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `carto_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `rarity` TEXT, 
-                                        `level` INTEGER, `name` TEXT)";
+                            @"CREATE TABLE IF NOT EXISTS `unique_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
                         cmd.ExecuteNonQuery();
 
                         return true;
@@ -115,10 +115,12 @@ namespace Gumshoe_Maps
                         {
                             while (reader.Read())
                             {
-                                dtMaps.Rows.Add(int.Parse(reader["id"].ToString()),
+                                var mapId = int.Parse(reader["id"].ToString());
+                                dtMaps.Rows.Add(mapId,
                                     int.Parse(reader["level"].ToString()),
                                     reader["name"].ToString(), int.Parse(reader["quality"].ToString()),
-                                    int.Parse(reader["quantity"].ToString()));
+                                    int.Parse(reader["quantity"].ToString()), MapDrops(mapId, "-"),
+                                    MapDrops(mapId, "="), MapDrops(mapId, "+"));
                             }
                         }
                     }
@@ -133,90 +135,121 @@ namespace Gumshoe_Maps
 
         internal DataTable DropDataTable(int mapId)
         {
-            var dtDrops = new DataTable("maps");
-            dtDrops.Columns.Add("id");
-            dtDrops.Columns.Add("map_id");
-            dtDrops.Columns.Add("rarity");
-            dtDrops.Columns.Add("level");
-            dtDrops.Columns.Add("name");
+            var dtDrops = new DataTable("drops");
+            dtDrops.Columns.Add("title");
+            dtDrops.Columns.Add("drops");
+            var drops = "";
 
             try
             {
                 using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
                 {
-                    const string selectQuery = @"SELECT * FROM `map_drops` WHERE `map_id`=@mapid";
-                    using (var cmd = new SQLiteCommand(selectQuery, connection))
+                    const string mapQuery = @"SELECT `level` FROM `map_drops` WHERE `map_id`=@mapid";
+                    const string uniqueQuery = @"SELECT `name` FROM `unique_drops` WHERE `map_id`=@mapid";
+                    const string currencyQuery = @"SELECT `name`, count(`name`) FROM `currency_drops` WHERE `map_id`=@mapid";
+
+                    using (var cmd = new SQLiteCommand(connection))
                     {
+                        cmd.CommandText = mapQuery;
                         cmd.Parameters.AddWithValue("mapid", mapId);
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                dtDrops.Rows.Add(int.Parse(reader["id"].ToString()),
-                                    int.Parse(reader["map_id"].ToString()),
-                                    reader["rarity"].ToString(), int.Parse(reader["level"].ToString()),
-                                    int.Parse(reader["name"].ToString()));
+                                drops += reader["level"] + ", ";
                             }
+                            dtDrops.Rows.Add("Maps", drops);
+                        }
+
+                        cmd.CommandText = uniqueQuery;
+                        drops = "";
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                drops += reader["name"] + ", ";
+                            }
+                            dtDrops.Rows.Add("Uniques", drops);
+                        }
+
+                        cmd.CommandText = currencyQuery;
+                        drops = "";
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                drops += reader["name"] + " x" + reader["count(name)"] + ", ";
+                            }
+                            dtDrops.Rows.Add("Currency", drops);
                         }
                     }
                     return dtDrops;
                 }
             }
-            catch (Exception)
+            catch (SQLiteException ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
 
-        internal void AddDrop(Map newMap, int mapId)
+        internal void AddDrop(Map newMap, int mapId, int zana = 0, int carto = 0)
         {
             using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
             {
-                const string addQuery = @"INSERT INTO `map_drops` (`map_id`, `rarity`, `level`, `name`) VALUES 
-                                                                  (@mapid, @rarity, @level, @name)";
+                const string addQuery = @"INSERT INTO `map_drops` (`map_id`, `rarity`, `level`, `name`, `zana`, `carto`) VALUES 
+                                                                  (@mapid, @rarity, @level, @name, @zana, @carto)";
                 using (var cmd = new SQLiteCommand(addQuery, connection))
                 {
                     cmd.Parameters.AddWithValue("mapid", mapId);
                     cmd.Parameters.AddWithValue("rarity", newMap.Rarity);
                     cmd.Parameters.AddWithValue("level", newMap.Level);
                     cmd.Parameters.AddWithValue("name", newMap.Name);
+                    cmd.Parameters.AddWithValue("zana", zana);
+                    cmd.Parameters.AddWithValue("carto", carto);
 
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        internal void AddZana(Map newMap, int mapId)
+        internal int MapDrops(int mapId, string symbol)
         {
             using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
             {
-                const string addQuery = @"INSERT INTO `zana_drops` (`map_id`, `rarity`, `level`, `name`) VALUES 
-                                                                   (@mapid, @rarity, @level, @name)";
-                using (var cmd = new SQLiteCommand(addQuery, connection))
+                var queryMaps = @"SELECT count(d.level) FROM map_drops d JOIN maps m ON d.map_id=m.id WHERE d.map_id=@mapId AND d.level " + symbol + @" m.level ";
+                using (var cmd = new SQLiteCommand(queryMaps, connection))
                 {
-                    cmd.Parameters.AddWithValue("mapid", mapId);
-                    cmd.Parameters.AddWithValue("rarity", newMap.Rarity);
-                    cmd.Parameters.AddWithValue("level", newMap.Level);
-                    cmd.Parameters.AddWithValue("name", newMap.Name);
+                    cmd.Parameters.AddWithValue("mapId", mapId);
+                    var value = cmd.ExecuteScalar().ToString();
+                    return int.Parse(value);
+                }
+            }
+        }
 
+        internal void AddCurrency(int mapId, string name)
+        {
+            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            {
+                const string insertCurrency = @"INSERT INTO `currency_drops` (`name`) VALUES (@name) WHERE map_id=@id";
+                using (var cmd = new SQLiteCommand(insertCurrency, connection))
+                {
+                    cmd.Parameters.AddWithValue("id", mapId);
+                    cmd.Parameters.AddWithValue("name", name);
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-        internal void AddCarto(Map newMap, int mapId)
+        internal void AddUnique(int mapId, string name)
         {
             using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
             {
-                const string addQuery = @"INSERT INTO `carto_drops` (`map_id`, `rarity`, `level`, `name`) VALUES 
-                                                                   (@mapid, @rarity, @level, @name)";
-                using (var cmd = new SQLiteCommand(addQuery, connection))
+                const string insertCurrency = @"INSERT INTO `unique_drops` (`name`) VALUES (@name) WHERE map_id=@id";
+                using (var cmd = new SQLiteCommand(insertCurrency, connection))
                 {
-                    cmd.Parameters.AddWithValue("mapid", mapId);
-                    cmd.Parameters.AddWithValue("rarity", newMap.Rarity);
-                    cmd.Parameters.AddWithValue("level", newMap.Level);
-                    cmd.Parameters.AddWithValue("name", newMap.Name);
-
+                    cmd.Parameters.AddWithValue("id", mapId);
+                    cmd.Parameters.AddWithValue("name", name);
                     cmd.ExecuteNonQuery();
                 }
             }
