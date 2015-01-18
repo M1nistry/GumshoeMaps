@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -26,13 +25,14 @@ namespace Gumshoe_Maps
         public static extern int SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        internal static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        
 
         #endregion
 
         IntPtr _nextClipboardViewer;
         private readonly SqlDb _sql;
-        private BindingSource _mapSource;
+        private BindingSource _mapSource, _dropSource;
         private static Main _main;
         private Settings _settings;
         internal Map _currentMap;
@@ -51,10 +51,9 @@ namespace Gumshoe_Maps
             titleBar.SettingsClick += Settings_Click;
             titleBar.MinimizeClick += Minimize_Click;
             titleBar.CloseClick += Close_Click;
-
-            RegisterHotKey(Handle, 0, 0x0000, (int)Keys.F2);
-            RegisterHotKey(Handle, 1, 0x0000, (int)Keys.F3);
-            RegisterHotKey(Handle, 2, 0x0000, (int)Keys.F4);
+            RegisterHotKey(Handle, 0, 0x0000, Properties.Settings.Default.mapHotkey);
+            RegisterHotKey(Handle, 1, 0x0000, Properties.Settings.Default.zanaHotkey);
+            RegisterHotKey(Handle, 2, 0x0000, Properties.Settings.Default.cartoHotkey);
             numericZana.Value = Properties.Settings.Default.zanaQuantity;
 
             _main = this;
@@ -64,6 +63,7 @@ namespace Gumshoe_Maps
                 DataSource = _sql.MapDataTable(),
                 //Sort ="id DESC"
             };
+
             dgvMaps.DataSource = _mapSource;
             _state ="WAITING";
         }
@@ -334,20 +334,20 @@ namespace Gumshoe_Maps
 
         private void dgvMaps_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            panelDgv.Size = new Size(480, 214);
-            dgvMaps.Size = new Size(497, 234);
-            dgvMaps.Location = new Point(1, 1);
 
-            //if (dgvMaps.SelectedRows.Count <= 0) return;
-            //var selectedMap = dgvMaps.SelectedRows[0].Cells["idColumn"].Value;
-            //dgvDrops.DataSource = _sql.DropDataTable(int.Parse(selectedMap.ToString()));
+            if (dgvMaps.SelectedRows.Count <= 0) return;
+            var selectedMap = dgvMaps.SelectedRows[0];
+            if (selectedMap == null) return;
+            _dropSource = new BindingSource
+            {
+                DataSource = _sql.DropDataTable(int.Parse(selectedMap.Cells["idColumn"].Value.ToString()))
+            };
+            dgvDrops.DataSource = _dropSource;
         }
 
         private void dgvMaps_SelectionChanged(object sender, EventArgs e)
         {
-            panelDgv.Size = new Size(480, 214);
-            dgvMaps.Size = new Size(497, 234);
-            dgvMaps.Location = new Point(1, 1);
+
         }
 
         private void panelDgv_Paint(object sender, PaintEventArgs e)

@@ -46,5 +46,41 @@ namespace Gumshoe_Maps.Properties {
                 this["zanaQuantity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("113")]
+        public int mapHotkey {
+            get {
+                return ((int)(this["mapHotkey"]));
+            }
+            set {
+                this["mapHotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("114")]
+        public int zanaHotkey {
+            get {
+                return ((int)(this["zanaHotkey"]));
+            }
+            set {
+                this["zanaHotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("115")]
+        public int cartoHotkey {
+            get {
+                return ((int)(this["cartoHotkey"]));
+            }
+            set {
+                this["cartoHotkey"] = value;
+            }
+        }
     }
 }

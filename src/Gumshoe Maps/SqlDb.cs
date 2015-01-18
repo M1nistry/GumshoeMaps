@@ -52,7 +52,7 @@ namespace Gumshoe_Maps
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `currency_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
+                            @"CREATE TABLE IF NOT EXISTS `currency_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT, `count` INTEGER)";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText =
@@ -119,8 +119,8 @@ namespace Gumshoe_Maps
                                 dtMaps.Rows.Add(mapId,
                                     int.Parse(reader["level"].ToString()),
                                     reader["name"].ToString(), int.Parse(reader["quality"].ToString()),
-                                    int.Parse(reader["quantity"].ToString()), MapDrops(mapId, "-"),
-                                    MapDrops(mapId, "="), MapDrops(mapId, "+"));
+                                    int.Parse(reader["quantity"].ToString()), MapDrops(mapId, "<"),
+                                    MapDrops(mapId, "="), MapDrops(mapId, ">"));
                             }
                         }
                     }
@@ -146,7 +146,7 @@ namespace Gumshoe_Maps
                 {
                     const string mapQuery = @"SELECT `level` FROM `map_drops` WHERE `map_id`=@mapid";
                     const string uniqueQuery = @"SELECT `name` FROM `unique_drops` WHERE `map_id`=@mapid";
-                    const string currencyQuery = @"SELECT `name`, count(`name`) FROM `currency_drops` WHERE `map_id`=@mapid";
+                    const string currencyQuery = @"SELECT name, count FROM `currency_drops` WHERE `map_id`=@mapid";
 
                     using (var cmd = new SQLiteCommand(connection))
                     {
@@ -158,6 +158,7 @@ namespace Gumshoe_Maps
                             {
                                 drops += reader["level"] + ", ";
                             }
+                            if (drops.Length > 2) drops = drops.Remove(drops.Length - 2, 2);
                             dtDrops.Rows.Add("Maps", drops);
                         }
 
@@ -169,6 +170,7 @@ namespace Gumshoe_Maps
                             {
                                 drops += reader["name"] + ", ";
                             }
+                            if (drops.Length > 2)drops = drops.Remove(drops.Length - 2, 2);
                             dtDrops.Rows.Add("Uniques", drops);
                         }
 
@@ -178,8 +180,9 @@ namespace Gumshoe_Maps
                         {
                             while (reader.Read())
                             {
-                                drops += reader["name"] + " x" + reader["count(name)"] + ", ";
+                                drops += reader["name"] + " x" + reader["count"] + ", ";
                             }
+                            if (drops.Length > 2) drops = drops.Remove(drops.Length - 2, 2);
                             dtDrops.Rows.Add("Currency", drops);
                         }
                     }
@@ -231,7 +234,7 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
             {
-                const string insertCurrency = @"INSERT INTO `currency_drops` (`name`) VALUES (@name) WHERE map_id=@id";
+                const string insertCurrency = @"INSERT OR REPLACE INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @name, COALESCE((SELECT count FROM currency_drops WHERE name=@name AND map_id=@id), 0) + 1)";
                 using (var cmd = new SQLiteCommand(insertCurrency, connection))
                 {
                     cmd.Parameters.AddWithValue("id", mapId);
