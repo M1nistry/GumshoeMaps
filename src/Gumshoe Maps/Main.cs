@@ -61,11 +61,24 @@ namespace Gumshoe_Maps
             _mapSource = new BindingSource
             {
                 DataSource = _sql.MapDataTable(),
-                //Sort ="id DESC"
-            };
-
+                Sort ="id DESC"
+            }; 
             dgvMaps.DataSource = _mapSource;
             _state ="WAITING";
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (_state != "WAITING")
+            {
+                titleBar.TitleColor = Color.Red;
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+            }
+            else
+            {
+                titleBar.TitleColor = Properties.Settings.Default.themeColor;
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Properties.Settings.Default.themeColor, ButtonBorderStyle.Solid);
+            }
         }
 
         public static Main GetSingleton()
@@ -130,6 +143,7 @@ namespace Gumshoe_Maps
                                     dgvMaps.DataSource = _mapSource;
                                     labelStatusValue.Text = @"Running a map, listening for map drops...";
                                     _state = "DROPS";
+                                    Refresh();
                                 }
                                 break;
 
@@ -138,7 +152,11 @@ namespace Gumshoe_Maps
                                 if (clipboard.Contains("Map")) _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
                                 if (clipboard.Contains("Currency")) _sql.AddCurrency(int.Parse(labelId.Text), ParseCurrency());
                                 if (!clipboard.Contains("Map") && clipboard.Contains("Unique")) _sql.AddUnique(int.Parse(labelId.Text), ParseUnique());
-
+                                //_dropSource = new BindingSource
+                                //{
+                                //    DataSource = _sql.DropDataTable(int.Parse(labelId.Text))
+                                //};
+                                //dgvDrops.DataSource = _dropSource;
                                 break;
 
                             case ("ZANA"):
@@ -167,6 +185,7 @@ namespace Gumshoe_Maps
                             timerMap.Stop();
                             _state = "WAITING";
                             labelStatusValue.Text = @"Awaiting a map to be selected to run...";
+                            Refresh();
                             break;
 
                         case (1): //F3
@@ -297,7 +316,7 @@ namespace Gumshoe_Maps
         {
             var maps = new[]
             {
-               "Crypt","Dried Lake","Dunes","Dungeon","Grotto","Overgrown Ruin", "Tropical Island",
+               "Academy", "Crypt","Dried Lake","Dunes","Dungeon","Grotto","Overgrown Ruin", "Tropical Island",
                "Arcade","Arsenal","Cemetery","Mountain Ledge","Sewer","Thicket", "Wharf","Ghetto",
                "Mud Geyser","Reef","Spider Lair","Springs","Vaal Pyramid", "Catacombs", "Overgrown Shrine",
                "Promenade","Shore","Spider Forest","Tunnel","Bog", "Coves", "Graveyard", "Pier",
@@ -332,19 +351,6 @@ namespace Gumshoe_Maps
             ChangeClipboardChain(Handle, _nextClipboardViewer);
         }
 
-        private void dgvMaps_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-
-            if (dgvMaps.SelectedRows.Count <= 0) return;
-            var selectedMap = dgvMaps.SelectedRows[0];
-            if (selectedMap == null) return;
-            _dropSource = new BindingSource
-            {
-                DataSource = _sql.DropDataTable(int.Parse(selectedMap.Cells["idColumn"].Value.ToString()))
-            };
-            dgvDrops.DataSource = _dropSource;
-        }
-
         private void dgvMaps_SelectionChanged(object sender, EventArgs e)
         {
 
@@ -376,6 +382,31 @@ namespace Gumshoe_Maps
         private void dgvMaps_MouseLeave(object sender, EventArgs e)
         {
             if (_focusedControl != null) _focusedControl.Focus();
+        }
+
+        private void dgvDrops_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex != 0 && e.ColumnIndex != 1) return;
+            var selectedId = dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString();
+            var mapToolTip = _sql.MapList(int.Parse(selectedId));
+            var tooltipText = mapToolTip.Aggregate("", (current, item) => current + (item.Key + " - " + item.Value + Environment.NewLine));
+            dgvDrops[1, 0].ToolTipText = tooltipText;
+        }
+
+        private void dgvDrops_SelectionChanged(object sender, EventArgs e)
+        {
+            
+
+        }
+
+        private void dgvMaps_RowEnter_1(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvMaps.SelectedRows.Count != 1) return;
+            _dropSource = new BindingSource
+            {
+                DataSource = _sql.DropDataTable(int.Parse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString()))
+            };
+            dgvDrops.DataSource = _dropSource;
         }
     }
 }

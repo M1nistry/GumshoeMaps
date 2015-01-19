@@ -69,7 +69,7 @@ namespace Gumshoe_Maps
             titlePanel.BackColor = _titleColor;
             _main.titleBar.TitleColor = _titleColor;
             buttonApply.FlatAppearance.BorderColor = _titleColor;
-            buttonCancel.FlatAppearance.BorderColor = _titleColor;
+            buttonCancel.FlatAppearance.BorderColor = _titleColor; 
         }
 
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
@@ -102,7 +102,7 @@ namespace Gumshoe_Maps
         {
             Properties.Settings.Default.themeColor = Color.FromArgb(trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value);
             Properties.Settings.Default.Save();
-
+            _main.Refresh();
             Dispose();
         }
 

@@ -35,6 +35,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelDgv = new System.Windows.Forms.Panel();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
             this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,18 +56,22 @@
             this.labelStatusValue = new System.Windows.Forms.Label();
             this.panelDgvExtra = new System.Windows.Forms.Panel();
             this.dgvDrops = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnDrops = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.numericZana = new System.Windows.Forms.NumericUpDown();
             this.labelZana = new System.Windows.Forms.Label();
             this.timerMap = new System.Windows.Forms.Timer(this.components);
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnDrops = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.titleBar = new Gumshoe_Maps.TitleBar();
+            this.contextMenuDgvMaps = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDgv.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.panelCurrentMap.SuspendLayout();
             this.panelDgvExtra.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDrops)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericZana)).BeginInit();
+            this.contextMenuDgvMaps.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelDgv
@@ -75,10 +80,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDgv.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelDgv.Controls.Add(this.dgvMaps);
-            this.panelDgv.Location = new System.Drawing.Point(12, 139);
-            this.panelDgv.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelDgv.Location = new System.Drawing.Point(9, 113);
+            this.panelDgv.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelDgv.Name = "panelDgv";
-            this.panelDgv.Size = new System.Drawing.Size(639, 319);
+            this.panelDgv.Size = new System.Drawing.Size(480, 260);
             this.panelDgv.TabIndex = 5;
             this.panelDgv.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDgv_Paint);
             // 
@@ -115,7 +120,7 @@
             this.evenColumn,
             this.plusColumn});
             this.dgvMaps.Location = new System.Drawing.Point(1, 2);
-            this.dgvMaps.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgvMaps.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgvMaps.Name = "dgvMaps";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
@@ -129,9 +134,9 @@
             this.dgvMaps.RowTemplate.Height = 24;
             this.dgvMaps.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvMaps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMaps.Size = new System.Drawing.Size(663, 310);
+            this.dgvMaps.Size = new System.Drawing.Size(497, 252);
             this.dgvMaps.TabIndex = 5;
-            this.dgvMaps.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_RowEnter);
+            this.dgvMaps.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_RowEnter_1);
             this.dgvMaps.SelectionChanged += new System.EventHandler(this.dgvMaps_SelectionChanged);
             this.dgvMaps.MouseEnter += new System.EventHandler(this.dgvMaps_MouseEnter);
             this.dgvMaps.MouseLeave += new System.EventHandler(this.dgvMaps_MouseLeave);
@@ -202,10 +207,9 @@
             this.panelCurrentMap.Controls.Add(this.labelDuration);
             this.panelCurrentMap.Controls.Add(this.labelMapValue);
             this.panelCurrentMap.Controls.Add(this.labelCurrentMap);
-            this.panelCurrentMap.Location = new System.Drawing.Point(12, 73);
-            this.panelCurrentMap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelCurrentMap.Location = new System.Drawing.Point(9, 59);
             this.panelCurrentMap.Name = "panelCurrentMap";
-            this.panelCurrentMap.Size = new System.Drawing.Size(250, 60);
+            this.panelCurrentMap.Size = new System.Drawing.Size(188, 49);
             this.panelCurrentMap.TabIndex = 4;
             this.panelCurrentMap.Visible = false;
             // 
@@ -213,10 +217,9 @@
             // 
             this.labelDurationValue.AutoSize = true;
             this.labelDurationValue.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelDurationValue.Location = new System.Drawing.Point(100, 30);
-            this.labelDurationValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelDurationValue.Location = new System.Drawing.Point(75, 24);
             this.labelDurationValue.Name = "labelDurationValue";
-            this.labelDurationValue.Size = new System.Drawing.Size(64, 17);
+            this.labelDurationValue.Size = new System.Drawing.Size(49, 13);
             this.labelDurationValue.TabIndex = 4;
             this.labelDurationValue.Text = "00:00:00";
             // 
@@ -226,10 +229,9 @@
             this.labelId.Enabled = false;
             this.labelId.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelId.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelId.Location = new System.Drawing.Point(225, 2);
-            this.labelId.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelId.Location = new System.Drawing.Point(169, 2);
             this.labelId.Name = "labelId";
-            this.labelId.Size = new System.Drawing.Size(0, 15);
+            this.labelId.Size = new System.Drawing.Size(0, 12);
             this.labelId.TabIndex = 3;
             this.labelId.Visible = false;
             // 
@@ -237,10 +239,9 @@
             // 
             this.labelDuration.AutoSize = true;
             this.labelDuration.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelDuration.Location = new System.Drawing.Point(32, 30);
-            this.labelDuration.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelDuration.Location = new System.Drawing.Point(24, 24);
             this.labelDuration.Name = "labelDuration";
-            this.labelDuration.Size = new System.Drawing.Size(66, 17);
+            this.labelDuration.Size = new System.Drawing.Size(50, 13);
             this.labelDuration.TabIndex = 2;
             this.labelDuration.Text = "Duration:";
             // 
@@ -248,20 +249,18 @@
             // 
             this.labelMapValue.AutoSize = true;
             this.labelMapValue.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelMapValue.Location = new System.Drawing.Point(100, 7);
-            this.labelMapValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelMapValue.Location = new System.Drawing.Point(75, 6);
             this.labelMapValue.Name = "labelMapValue";
-            this.labelMapValue.Size = new System.Drawing.Size(0, 17);
+            this.labelMapValue.Size = new System.Drawing.Size(0, 13);
             this.labelMapValue.TabIndex = 1;
             // 
             // labelCurrentMap
             // 
             this.labelCurrentMap.AutoSize = true;
             this.labelCurrentMap.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelCurrentMap.Location = new System.Drawing.Point(8, 6);
-            this.labelCurrentMap.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelCurrentMap.Location = new System.Drawing.Point(6, 5);
             this.labelCurrentMap.Name = "labelCurrentMap";
-            this.labelCurrentMap.Size = new System.Drawing.Size(90, 17);
+            this.labelCurrentMap.Size = new System.Drawing.Size(68, 13);
             this.labelCurrentMap.TabIndex = 0;
             this.labelCurrentMap.Text = "Current Map:";
             // 
@@ -269,10 +268,9 @@
             // 
             this.labelStatus.AutoSize = true;
             this.labelStatus.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelStatus.Location = new System.Drawing.Point(23, 43);
-            this.labelStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelStatus.Location = new System.Drawing.Point(17, 35);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(52, 17);
+            this.labelStatus.Size = new System.Drawing.Size(40, 13);
             this.labelStatus.TabIndex = 2;
             this.labelStatus.Text = "Status:";
             // 
@@ -280,10 +278,9 @@
             // 
             this.labelStatusValue.AutoSize = true;
             this.labelStatusValue.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelStatusValue.Location = new System.Drawing.Point(72, 43);
-            this.labelStatusValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelStatusValue.Location = new System.Drawing.Point(54, 35);
             this.labelStatusValue.Name = "labelStatusValue";
-            this.labelStatusValue.Size = new System.Drawing.Size(249, 17);
+            this.labelStatusValue.Size = new System.Drawing.Size(188, 13);
             this.labelStatusValue.TabIndex = 5;
             this.labelStatusValue.Text = "Awaiting a map to be selected to run...";
             // 
@@ -291,10 +288,9 @@
             // 
             this.panelDgvExtra.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelDgvExtra.Controls.Add(this.dgvDrops);
-            this.panelDgvExtra.Location = new System.Drawing.Point(12, 464);
-            this.panelDgvExtra.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelDgvExtra.Location = new System.Drawing.Point(9, 377);
             this.panelDgvExtra.Name = "panelDgvExtra";
-            this.panelDgvExtra.Size = new System.Drawing.Size(638, 97);
+            this.panelDgvExtra.Size = new System.Drawing.Size(479, 79);
             this.panelDgvExtra.TabIndex = 6;
             // 
             // dgvDrops
@@ -324,56 +320,33 @@
             this.dgvDrops.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn2,
             this.columnDrops});
-            this.dgvDrops.Location = new System.Drawing.Point(1, 1);
-            this.dgvDrops.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dgvDrops.Name = "dgvDrops";
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.ControlLight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvDrops.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvDrops.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dgvDrops.Location = new System.Drawing.Point(1, 1);
+            this.dgvDrops.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgvDrops.Name = "dgvDrops";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDrops.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dgvDrops.RowHeadersVisible = false;
             this.dgvDrops.RowTemplate.Height = 24;
             this.dgvDrops.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.dgvDrops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDrops.Size = new System.Drawing.Size(636, 95);
+            this.dgvDrops.Size = new System.Drawing.Size(477, 77);
             this.dgvDrops.TabIndex = 6;
-            // 
-            // numericZana
-            // 
-            this.numericZana.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
-            this.numericZana.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.numericZana.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.numericZana.Location = new System.Drawing.Point(595, 44);
-            this.numericZana.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.numericZana.Maximum = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            this.numericZana.Name = "numericZana";
-            this.numericZana.Size = new System.Drawing.Size(41, 18);
-            this.numericZana.TabIndex = 23;
-            this.numericZana.ValueChanged += new System.EventHandler(this.numericZana_ValueChanged);
-            // 
-            // labelZana
-            // 
-            this.labelZana.AutoSize = true;
-            this.labelZana.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelZana.Location = new System.Drawing.Point(491, 44);
-            this.labelZana.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelZana.Name = "labelZana";
-            this.labelZana.Size = new System.Drawing.Size(99, 17);
-            this.labelZana.TabIndex = 22;
-            this.labelZana.Text = "Zana quantity:";
-            // 
-            // timerMap
-            // 
-            this.timerMap.Interval = 1000;
-            this.timerMap.Tick += new System.EventHandler(this.timerMap_Tick);
+            this.dgvDrops.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDrops_CellMouseEnter);
+            this.dgvDrops.SelectionChanged += new System.EventHandler(this.dgvDrops_SelectionChanged);
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -389,24 +362,72 @@
             this.columnDrops.HeaderText = "Drops";
             this.columnDrops.Name = "columnDrops";
             // 
+            // numericZana
+            // 
+            this.numericZana.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+            this.numericZana.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.numericZana.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.numericZana.Location = new System.Drawing.Point(446, 36);
+            this.numericZana.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.numericZana.Name = "numericZana";
+            this.numericZana.Size = new System.Drawing.Size(31, 16);
+            this.numericZana.TabIndex = 23;
+            this.numericZana.ValueChanged += new System.EventHandler(this.numericZana_ValueChanged);
+            // 
+            // labelZana
+            // 
+            this.labelZana.AutoSize = true;
+            this.labelZana.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelZana.Location = new System.Drawing.Point(368, 36);
+            this.labelZana.Name = "labelZana";
+            this.labelZana.Size = new System.Drawing.Size(75, 13);
+            this.labelZana.TabIndex = 22;
+            this.labelZana.Text = "Zana quantity:";
+            // 
+            // timerMap
+            // 
+            this.timerMap.Interval = 1000;
+            this.timerMap.Tick += new System.EventHandler(this.timerMap_Tick);
+            // 
+            // toolTip
+            // 
+            this.toolTip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+            // 
             // titleBar
             // 
             this.titleBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.titleBar.Location = new System.Drawing.Point(0, 0);
-            this.titleBar.Margin = new System.Windows.Forms.Padding(5);
+            this.titleBar.Margin = new System.Windows.Forms.Padding(4);
             this.titleBar.Name = "titleBar";
             this.titleBar.SettingsVisible = true;
-            this.titleBar.Size = new System.Drawing.Size(661, 27);
+            this.titleBar.Size = new System.Drawing.Size(496, 22);
             this.titleBar.TabIndex = 2;
             this.titleBar.Title = "Gumshoe Maps v0.1";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             // 
+            // contextMenuDgvMaps
+            // 
+            this.contextMenuDgvMaps.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
+            this.contextMenuDgvMaps.Name = "contextMenuDgvMaps";
+            this.contextMenuDgvMaps.Size = new System.Drawing.Size(108, 26);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
-            this.ClientSize = new System.Drawing.Size(661, 580);
+            this.ClientSize = new System.Drawing.Size(496, 471);
             this.Controls.Add(this.numericZana);
             this.Controls.Add(this.labelZana);
             this.Controls.Add(this.panelDgv);
@@ -416,7 +437,6 @@
             this.Controls.Add(this.panelCurrentMap);
             this.Controls.Add(this.titleBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Main";
             this.Text = "Gumshoe Maps v0.1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
@@ -427,6 +447,7 @@
             this.panelDgvExtra.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDrops)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericZana)).EndInit();
+            this.contextMenuDgvMaps.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -460,6 +481,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnDrops;
         public System.Windows.Forms.NumericUpDown numericZana;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ContextMenuStrip contextMenuDgvMaps;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
 

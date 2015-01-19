@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Migrations.Model;
 using System.Data.SQLite;
@@ -147,7 +148,6 @@ namespace Gumshoe_Maps
                     const string mapQuery = @"SELECT `level` FROM `map_drops` WHERE `map_id`=@mapid";
                     const string uniqueQuery = @"SELECT `name` FROM `unique_drops` WHERE `map_id`=@mapid";
                     const string currencyQuery = @"SELECT name, count FROM `currency_drops` WHERE `map_id`=@mapid";
-
                     using (var cmd = new SQLiteCommand(connection))
                     {
                         cmd.CommandText = mapQuery;
@@ -256,6 +256,27 @@ namespace Gumshoe_Maps
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        internal List<KeyValuePair<int, string>> MapList(int id)
+        {
+            var mapList = new List<KeyValuePair<int, string>>();
+            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            {
+                const string mapListQuery = @"SELECT level, name FROM `map_drops` WHERE map_id=@id;";
+                using (var cmd = new SQLiteCommand(mapListQuery, connection))
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            mapList.Add(new KeyValuePair<int, string>(int.Parse(reader["level"].ToString()), reader["name"].ToString()));
+                        }
+                    }
+                }
+            }
+            return mapList;
         }
     }
 }
