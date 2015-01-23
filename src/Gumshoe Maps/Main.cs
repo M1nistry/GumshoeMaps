@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -26,18 +25,21 @@ namespace Gumshoe_Maps
         public static extern int SendMessage(IntPtr hwnd, int wMsg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        internal static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        
 
         #endregion
 
         IntPtr _nextClipboardViewer;
         private readonly SqlDb _sql;
-        private BindingSource _mapSource;
+        private BindingSource _mapSource, _dropSource;
         private static Main _main;
         private Settings _settings;
         internal Map _currentMap;
         private string _state;
         private int _timerTicks = 0;
+
+        private Control _focusedControl;
 
         public Main()
         {
@@ -49,10 +51,9 @@ namespace Gumshoe_Maps
             titleBar.SettingsClick += Settings_Click;
             titleBar.MinimizeClick += Minimize_Click;
             titleBar.CloseClick += Close_Click;
-
-            RegisterHotKey(Handle, 0, 0x0000, (int)Keys.F2);
-            RegisterHotKey(Handle, 1, 0x0000, (int)Keys.F3);
-            RegisterHotKey(Handle, 2, 0x0000, (int)Keys.F4);
+            RegisterHotKey(Handle, 0, 0x0000, Properties.Settings.Default.mapHotkey);
+            RegisterHotKey(Handle, 1, 0x0000, Properties.Settings.Default.zanaHotkey);
+            RegisterHotKey(Handle, 2, 0x0000, Properties.Settings.Default.cartoHotkey);
             numericZana.Value = Properties.Settings.Default.zanaQuantity;
 
             _main = this;
@@ -60,10 +61,24 @@ namespace Gumshoe_Maps
             _mapSource = new BindingSource
             {
                 DataSource = _sql.MapDataTable(),
-                //Sort ="id DESC"
-            };
+                Sort ="id DESC"
+            }; 
             dgvMaps.DataSource = _mapSource;
             _state ="WAITING";
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (_state != "WAITING")
+            {
+                titleBar.TitleColor = Color.Red;
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+            }
+            else
+            {
+                titleBar.TitleColor = Properties.Settings.Default.themeColor;
+                ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Properties.Settings.Default.themeColor, ButtonBorderStyle.Solid);
+            }
         }
 
         public static Main GetSingleton()
@@ -111,6 +126,7 @@ namespace Gumshoe_Maps
                 case WM_DRAWCLIPBOARD:
                     if (CheckClipboard())
                     {
+                        var clipboard = Clipboard.GetText(TextDataFormat.Text);
                         switch (_state)
                         {
                             case("WAITING"):
@@ -127,23 +143,30 @@ namespace Gumshoe_Maps
                                     dgvMaps.DataSource = _mapSource;
                                     labelStatusValue.Text = @"Running a map, listening for map drops...";
                                     _state = "DROPS";
+                                    Refresh();
                                 }
                                 break;
 
                             case("DROPS"):
                                 if (labelId.Text == String.Empty) break;
-                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
-
+                                if (clipboard.Contains("Map")) _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
+                                if (clipboard.Contains("Currency")) _sql.AddCurrency(int.Parse(labelId.Text), ParseCurrency());
+                                if (!clipboard.Contains("Map") && clipboard.Contains("Unique")) _sql.AddUnique(int.Parse(labelId.Text), ParseUnique());
+                                //_dropSource = new BindingSource
+                                //{
+                                //    DataSource = _sql.DropDataTable(int.Parse(labelId.Text))
+                                //};
+                                //dgvDrops.DataSource = _dropSource;
                                 break;
 
                             case ("ZANA"):
                                 if (labelId.Text == String.Empty) break;
-                                _sql.AddZana(ParseClipboard(), int.Parse(labelId.Text));
+                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text), 1);
                                 break;
 
                             case ("CARTO"):
                                 if (labelId.Text == String.Empty) break;
-                                //_sql.AddCarto(ParseClipboard(), int.Parse(labelId.Text));
+                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text), 0, 1);
                                 break;
                         }
                     }
@@ -162,6 +185,7 @@ namespace Gumshoe_Maps
                             timerMap.Stop();
                             _state = "WAITING";
                             labelStatusValue.Text = @"Awaiting a map to be selected to run...";
+                            Refresh();
                             break;
 
                         case (1): //F3
@@ -246,6 +270,24 @@ namespace Gumshoe_Maps
             return newMap;
         }
 
+        internal string ParseCurrency()
+        {
+            var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] { '\n' });
+            if (clipboardContents[0] != "Rarity: Currency") return "";
+
+            var currency = clipboardContents[1].Replace("Orb", "").Replace("of", "").Replace(" ", "");
+            return currency;
+        }
+
+        internal string ParseUnique()
+        {
+            var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] { '\n' });
+            if (clipboardContents[0] != "Rarity: Unique") return "";
+
+            var item = clipboardContents[1];
+            return item;
+        }
+
         private static List<string> GetAffixes(string[] clipboardContents)
         {
             var affixes = new List<string>();
@@ -274,7 +316,7 @@ namespace Gumshoe_Maps
         {
             var maps = new[]
             {
-               "Crypt","Dried Lake","Dunes","Dungeon","Grotto","Overgrown Ruin", "Tropical Island",
+               "Academy", "Crypt","Dried Lake","Dunes","Dungeon","Grotto","Overgrown Ruin", "Tropical Island",
                "Arcade","Arsenal","Cemetery","Mountain Ledge","Sewer","Thicket", "Wharf","Ghetto",
                "Mud Geyser","Reef","Spider Lair","Springs","Vaal Pyramid", "Catacombs", "Overgrown Shrine",
                "Promenade","Shore","Spider Forest","Tunnel","Bog", "Coves", "Graveyard", "Pier",
@@ -291,6 +333,17 @@ namespace Gumshoe_Maps
             return inputLine;
         }
 
+        public static Control FindFocusedControl(Control control)
+        {
+            var container = control as ContainerControl;
+            while (container != null)
+            {
+                control = container.ActiveControl;
+                container = control as ContainerControl;
+            }
+            return control;
+        }
+
         #endregion
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -298,22 +351,9 @@ namespace Gumshoe_Maps
             ChangeClipboardChain(Handle, _nextClipboardViewer);
         }
 
-        private void dgvMaps_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            panelDgv.Size = new Size(480, 214);
-            dgvMaps.Size = new Size(479, 208);
-            dgvMaps.Location = new Point(1, 1);
-
-            //if (dgvMaps.SelectedRows.Count <= 0) return;
-            //var selectedMap = dgvMaps.SelectedRows[0].Cells["idColumn"].Value;
-            //dgvDrops.DataSource = _sql.DropDataTable(int.Parse(selectedMap.ToString()));
-        }
-
         private void dgvMaps_SelectionChanged(object sender, EventArgs e)
         {
-            panelDgv.Size = new Size(480, 214);
-            dgvMaps.Size = new Size(479, 208);
-            dgvMaps.Location = new Point(1, 1);
+
         }
 
         private void panelDgv_Paint(object sender, PaintEventArgs e)
@@ -331,6 +371,42 @@ namespace Gumshoe_Maps
         {
             _timerTicks++;
             labelDurationValue.Text = string.Format("{0:00}:{1:00}:{2:00}", _timerTicks / 3600, (_timerTicks / 60) % 60, _timerTicks % 60);
+        }
+
+        private void dgvMaps_MouseEnter(object sender, EventArgs e)
+        {
+            _focusedControl = FindFocusedControl(this);
+            dgvMaps.Focus();
+        }
+
+        private void dgvMaps_MouseLeave(object sender, EventArgs e)
+        {
+            if (_focusedControl != null) _focusedControl.Focus();
+        }
+
+        private void dgvDrops_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex != 0 && e.ColumnIndex != 1) return;
+            var selectedId = dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString();
+            var mapToolTip = _sql.MapList(int.Parse(selectedId));
+            var tooltipText = mapToolTip.Aggregate("", (current, item) => current + (item.Key + " - " + item.Value + Environment.NewLine));
+            dgvDrops[1, 0].ToolTipText = tooltipText;
+        }
+
+        private void dgvDrops_SelectionChanged(object sender, EventArgs e)
+        {
+            
+
+        }
+
+        private void dgvMaps_RowEnter_1(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvMaps.SelectedRows.Count != 1) return;
+            _dropSource = new BindingSource
+            {
+                DataSource = _sql.DropDataTable(int.Parse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString()))
+            };
+            dgvDrops.DataSource = _dropSource;
         }
     }
 }
