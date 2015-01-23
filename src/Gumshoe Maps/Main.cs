@@ -81,6 +81,9 @@ namespace Gumshoe_Maps
             {
                 titleBar.TitleColor = Properties.Settings.Default.themeColor;
                 ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Properties.Settings.Default.themeColor, ButtonBorderStyle.Solid);
+                dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Properties.Settings.Default.themeColor;
+                dgvMaps.DefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
+                dgvMaps.AlternatingRowsDefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
             }
         }
 
@@ -195,13 +198,15 @@ namespace Gumshoe_Maps
                     switch (m.WParam.ToInt32())
                     {
                         case (0): //F2
-                            timerMap.Stop();
-                            _state = "WAITING";
-                            labelStatusValue.Text = @"Awaiting a map to be selected to run...";
-                            Refresh();
+                            MessageBox.Show("Hotkey Index 0 pressed.");
+                            //timerMap.Stop();
+                            //_state = "WAITING";
+                            //labelStatusValue.Text = @"Awaiting a map to be selected to run...";
+                            //Refresh();
                             break;
 
                         case (1): //F3
+                            MessageBox.Show("Hotkey Index 1 pressed.");
                             if (_state == "ZANA")
                             {
                                 _state = "DROPS";
@@ -211,6 +216,7 @@ namespace Gumshoe_Maps
                             _state = "ZANA";
                             break;
                         case (2): //F4
+                            MessageBox.Show("Hotkey Index 2 pressed.");
                             if (_state == "CARTO")
                             {
                                 _state = "DROPS";

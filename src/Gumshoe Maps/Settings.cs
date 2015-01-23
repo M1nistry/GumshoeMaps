@@ -8,7 +8,6 @@ namespace Gumshoe_Maps
 {
     public partial class Settings : Form
     {
-        private Boolean _hoverPaint;
         private readonly Main _main;
         private HSLColor _titleColor;
 
@@ -21,6 +20,9 @@ namespace Gumshoe_Maps
 
         [DllImport("user32.dll")]
         internal static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        [DllImport("user32.dll")]
+        internal static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
 
         #endregion
 
@@ -39,9 +41,13 @@ namespace Gumshoe_Maps
             trackBarGreen.Value = Int32.Parse(rgbValues[1].ToString());
             trackBarBlue.Value = Int32.Parse(rgbValues[2].ToString());
 
-            buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
-            buttonZanaHotkey.Text = ((Keys)Properties.Settings.Default.zanaHotkey).ToString();
-            buttonCartoHotkey.Text = ((Keys)Properties.Settings.Default.cartoHotkey).ToString();
+            if (Properties.Settings.Default.mapHotkey != -1) buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
+            if (Properties.Settings.Default.zanaHotkey != -1) buttonZanaHotkey.Text = ((Keys)Properties.Settings.Default.zanaHotkey).ToString();
+            if (Properties.Settings.Default.cartoHotkey != -1) buttonCartoHotkey.Text = ((Keys)Properties.Settings.Default.cartoHotkey).ToString();
+
+            UnregisterHotKey(_main.Handle, 0);
+            UnregisterHotKey(_main.Handle, 1);
+            UnregisterHotKey(_main.Handle, 2);
 
         }
 
@@ -52,24 +58,6 @@ namespace Gumshoe_Maps
             _main.titleBar.TitleColor = _titleColor;
             buttonApply.FlatAppearance.BorderColor = _titleColor;
             buttonCancel.FlatAppearance.BorderColor = _titleColor;
-        }
-
-        private void trackBarBlue_ValueChanged(object sender, EventArgs e)
-        {
-            _titleColor = new HSLColor(Color.FromArgb(trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value));
-            titlePanel.BackColor = _titleColor;
-            _main.titleBar.TitleColor = _titleColor;
-            buttonApply.FlatAppearance.BorderColor = _titleColor;
-            buttonCancel.FlatAppearance.BorderColor = _titleColor;
-        }
-
-        private void trackBarGreen_ValueChanged(object sender, EventArgs e)
-        {
-            _titleColor = new HSLColor(Color.FromArgb(trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value));
-            titlePanel.BackColor = _titleColor;
-            _main.titleBar.TitleColor = _titleColor;
-            buttonApply.FlatAppearance.BorderColor = _titleColor;
-            buttonCancel.FlatAppearance.BorderColor = _titleColor; 
         }
 
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
@@ -104,6 +92,10 @@ namespace Gumshoe_Maps
             Properties.Settings.Default.Save();
             _main.dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Properties.Settings.Default.themeColor;
             _main.Refresh();
+
+            if (Properties.Settings.Default.mapHotkey != -1) RegisterHotKey(_main.Handle, 0, 0x0000, Properties.Settings.Default.mapHotkey);
+            if (Properties.Settings.Default.zanaHotkey != -1) RegisterHotKey(_main.Handle, 1, 0x0000, Properties.Settings.Default.zanaHotkey);
+            if (Properties.Settings.Default.cartoHotkey != -1) RegisterHotKey(_main.Handle, 2, 0x0000, Properties.Settings.Default.cartoHotkey);
             Dispose();
         }
 
@@ -115,33 +107,88 @@ namespace Gumshoe_Maps
                 e.ClipRectangle.Top,
                 e.ClipRectangle.Width - 1,
                 e.ClipRectangle.Height - 1);
-            base.OnPaint(e);
+            OnPaint(e);
         }
-
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             Dispose();
         }
 
-        private void buttonMapHotkey_KeyPress(object sender, KeyPressEventArgs e)
+        #region Hotkey Buttons
+
+        private void buttonMapHotkey_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(e.KeyChar);
+            buttonMapHotkey.Text = String.Empty;
+        }
+
+        private void buttonZanaHotkey_Click(object sender, EventArgs e)
+        {
+            buttonZanaHotkey.Text = String.Empty;
+        }
+
+        private void buttonCartoHotkey_Click(object sender, EventArgs e)
+        {
+            buttonCartoHotkey.Text = String.Empty;
         }
 
         private void buttonMapHotkey_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape)
+            {
+                buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
+                return;
+            }
+            if (Properties.Settings.Default.zanaHotkey == e.KeyValue) NullHotkeys(false, true, false);
+            if (Properties.Settings.Default.cartoHotkey == e.KeyValue) NullHotkeys(false, false, true);
             Properties.Settings.Default.mapHotkey = e.KeyValue;
-            if (e.KeyCode == Keys.Escape) buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
+            buttonMapHotkey.Text = ((Keys)e.KeyValue).ToString();
         }
 
-        private void buttonMapHotkey_Click(object sender, EventArgs e)
+        private void buttonZanaHotkey_KeyDown(object sender, KeyEventArgs e)
         {
-            UnregisterHotKey(_main.Handle, 1);
-            buttonMapHotkey.Text = String.Empty;
-
+            if (e.KeyCode == Keys.Escape)
+            {
+                buttonZanaHotkey.Text = ((Keys)Properties.Settings.Default.zanaHotkey).ToString();
+                return;
+            }
+            if (Properties.Settings.Default.mapHotkey == e.KeyValue) NullHotkeys(true, false, false);
+            if (Properties.Settings.Default.cartoHotkey == e.KeyValue) NullHotkeys(false, false, true);
+            Properties.Settings.Default.zanaHotkey = e.KeyValue;
+            buttonZanaHotkey.Text = ((Keys)e.KeyValue).ToString();
         }
 
+        private void buttonCartoHotkey_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                buttonCartoHotkey.Text = ((Keys)Properties.Settings.Default.cartoHotkey).ToString();
+                return;
+            }
+            if (Properties.Settings.Default.mapHotkey == e.KeyValue) NullHotkeys(true, false, false);
+            if (Properties.Settings.Default.zanaHotkey == e.KeyValue) NullHotkeys(false, true, false);
+            Properties.Settings.Default.cartoHotkey = e.KeyValue;
+            buttonCartoHotkey.Text = ((Keys)e.KeyValue).ToString();
+        }
 
+        #endregion
+
+        /// <summary> Removes the values for the hotkey pressed </summary>
+        private void NullHotkeys(bool map, bool zana, bool carto)
+        {
+            if (map)
+            {
+                Properties.Settings.Default.mapHotkey = -1;
+                buttonMapHotkey.Text = String.Empty;
+            }
+            if (zana)
+            {
+                Properties.Settings.Default.zanaHotkey = -1;
+                buttonZanaHotkey.Text = String.Empty;
+            }
+            if (!carto) return;
+            Properties.Settings.Default.cartoHotkey = -1;
+            buttonCartoHotkey.Text = String.Empty;
+        }
     }
 }
