@@ -13,12 +13,11 @@ namespace Gumshoe_Maps
     {
         private readonly string _dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\MapsDB.s3db";
         private SQLiteConnection Connection { get; set; }
-        private string Constring { get; set; }
         public SqlDb()
         {
             
-            Constring = String.Format(@"Data Source={0};Version=3;", _dbPath);
-            Connection = new SQLiteConnection(Constring) {ParseViaFramework = true};
+            var constring = String.Format(@"Data Source={0};Version=3;", _dbPath);
+            Connection = new SQLiteConnection(constring) {ParseViaFramework = true};
             if (SetupDb())
             {
                 
@@ -73,7 +72,7 @@ namespace Gumshoe_Maps
 
         internal int AddMap(Map newMap)
         {
-            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`) VALUES 
                                                              (@rarity, @level, @name, @quality, @quantity, @startedat)";
@@ -107,7 +106,7 @@ namespace Gumshoe_Maps
             
             try
             {
-                using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+                using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
                 {
                     const string selectQuery = @"SELECT * FROM `maps`";
                     using (var cmd = new SQLiteCommand(selectQuery, connection))
@@ -143,7 +142,7 @@ namespace Gumshoe_Maps
 
             try
             {
-                using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+                using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
                 {
                     const string mapQuery = @"SELECT `level` FROM `map_drops` WHERE `map_id`=@mapid";
                     const string uniqueQuery = @"SELECT `name` FROM `unique_drops` WHERE `map_id`=@mapid";
@@ -198,7 +197,7 @@ namespace Gumshoe_Maps
 
         internal void AddDrop(Map newMap, int mapId, int zana = 0, int carto = 0)
         {
-            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string addQuery = @"INSERT INTO `map_drops` (`map_id`, `rarity`, `level`, `name`, `zana`, `carto`) VALUES 
                                                                   (@mapid, @rarity, @level, @name, @zana, @carto)";
@@ -218,7 +217,7 @@ namespace Gumshoe_Maps
 
         internal int MapDrops(int mapId, string symbol)
         {
-            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 var queryMaps = @"SELECT count(d.level) FROM map_drops d JOIN maps m ON d.map_id=m.id WHERE d.map_id=@mapId AND d.level " + symbol + @" m.level ";
                 using (var cmd = new SQLiteCommand(queryMaps, connection))
@@ -232,7 +231,7 @@ namespace Gumshoe_Maps
 
         internal void AddCurrency(int mapId, string name)
         {
-            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string insertCurrency = @"INSERT OR REPLACE INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @name, COALESCE((SELECT count FROM currency_drops WHERE name=@name AND map_id=@id), 0) + 1)";
                 using (var cmd = new SQLiteCommand(insertCurrency, connection))
@@ -246,7 +245,7 @@ namespace Gumshoe_Maps
 
         internal void AddUnique(int mapId, string name)
         {
-            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string insertCurrency = @"INSERT INTO `unique_drops` (`map_id`, `name`) VALUES (@id, @name)";
                 using (var cmd = new SQLiteCommand(insertCurrency, connection))
@@ -261,7 +260,7 @@ namespace Gumshoe_Maps
         internal List<KeyValuePair<int, string>> MapList(int id)
         {
             var mapList = new List<KeyValuePair<int, string>>();
-            using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string mapListQuery = @"SELECT level, name FROM `map_drops` WHERE map_id=@id;";
                 using (var cmd = new SQLiteCommand(mapListQuery, connection))

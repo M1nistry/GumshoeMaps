@@ -32,6 +32,7 @@ obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 *.i*86
 *.x86_64
 *.hex
+*.suo
 bin/Debug/Gumshoe Maps.vshost.exe.manifest
 bin/Debug/Gumshoe Maps.pdb
 obj/Debug/Gumshoe Maps.csproj.FileListAbsolute.txt
