@@ -38,6 +38,7 @@ namespace Gumshoe_Maps
         internal Map _currentMap;
         private string _state;
         private int _timerTicks = 0;
+        private bool _paintBorder;
 
         private Control _focusedControl;
 
@@ -55,6 +56,8 @@ namespace Gumshoe_Maps
             RegisterHotKey(Handle, 1, 0x0000, Properties.Settings.Default.zanaHotkey);
             RegisterHotKey(Handle, 2, 0x0000, Properties.Settings.Default.cartoHotkey);
             numericZana.Value = Properties.Settings.Default.zanaQuantity;
+
+            dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Properties.Settings.Default.themeColor;
 
             _main = this;
 
@@ -149,14 +152,24 @@ namespace Gumshoe_Maps
 
                             case("DROPS"):
                                 if (labelId.Text == String.Empty) break;
-                                if (clipboard.Contains("Map")) _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
+                                if (clipboard.Contains("Map"))
+                                {
+                                    _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
+                                    _mapSource = new BindingSource
+                                    {
+                                        DataSource = _sql.MapDataTable(),
+                                        Sort = "id DESC"
+                                    };
+                                    dgvMaps.DataSource = _mapSource;
+                                    break;
+                                }
                                 if (clipboard.Contains("Currency")) _sql.AddCurrency(int.Parse(labelId.Text), ParseCurrency());
                                 if (!clipboard.Contains("Map") && clipboard.Contains("Unique")) _sql.AddUnique(int.Parse(labelId.Text), ParseUnique());
-                                //_dropSource = new BindingSource
-                                //{
-                                //    DataSource = _sql.DropDataTable(int.Parse(labelId.Text))
-                                //};
-                                //dgvDrops.DataSource = _dropSource;
+                                _dropSource = new BindingSource
+                                {
+                                    DataSource = _sql.DropDataTable(int.Parse(labelId.Text))
+                                };
+                                dgvDrops.DataSource = _dropSource;
                                 break;
 
                             case ("ZANA"):
@@ -344,6 +357,24 @@ namespace Gumshoe_Maps
             return control;
         }
 
+        public void HoverBorder(PaintEventArgs e)
+        {
+            var pen = new Pen(Properties.Settings.Default.themeColor);
+            e.Graphics.DrawRectangle(pen,
+                e.ClipRectangle.Left,
+                e.ClipRectangle.Top,
+                e.ClipRectangle.Width - 1,
+                e.ClipRectangle.Height - 1);
+            base.OnPaint(e);
+        }
+
+        private void HoverBorderFix(PaintEventArgs e)
+        {
+            var pen = new Pen(Properties.Settings.Default.themeColor);
+            e.Graphics.DrawLine(pen, 0, 0, 0, 260);
+            base.OnPaint(e);
+        }
+
         #endregion
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -358,7 +389,7 @@ namespace Gumshoe_Maps
 
         private void panelDgv_Paint(object sender, PaintEventArgs e)
         {
-            
+            if (_paintBorder) HoverBorder(e);
         }
 
         private void numericZana_ValueChanged(object sender, EventArgs e)
@@ -375,12 +406,21 @@ namespace Gumshoe_Maps
 
         private void dgvMaps_MouseEnter(object sender, EventArgs e)
         {
+            _paintBorder = true;
+            panelDgv.Refresh();
+            panelDgvRight.Refresh();
             _focusedControl = FindFocusedControl(this);
             dgvMaps.Focus();
         }
 
         private void dgvMaps_MouseLeave(object sender, EventArgs e)
         {
+            if (_paintBorder)
+            {
+                _paintBorder = false;
+                panelDgv.Refresh();
+                panelDgvRight.Refresh();
+            }
             if (_focusedControl != null) _focusedControl.Focus();
         }
 
@@ -402,11 +442,25 @@ namespace Gumshoe_Maps
         private void dgvMaps_RowEnter_1(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvMaps.SelectedRows.Count != 1) return;
+            dgvMaps.DefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
+            dgvMaps.AlternatingRowsDefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
+
             _dropSource = new BindingSource
             {
                 DataSource = _sql.DropDataTable(int.Parse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString()))
             };
             dgvDrops.DataSource = _dropSource;
+        }
+
+        private void panelDgvRight_Paint(object sender, PaintEventArgs e)
+        {
+            if (_paintBorder) HoverBorderFix(e);
+        }
+
+        private void dgvDrops_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvDrops.DefaultCellStyle.SelectionBackColor = dgvDrops.DefaultCellStyle.BackColor;
+            dgvDrops.AlternatingRowsDefaultCellStyle.SelectionBackColor = dgvDrops.AlternatingRowsDefaultCellStyle.BackColor;
         }
     }
 }

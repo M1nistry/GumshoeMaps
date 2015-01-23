@@ -102,6 +102,7 @@ namespace Gumshoe_Maps
         {
             Properties.Settings.Default.themeColor = Color.FromArgb(trackBarRed.Value, trackBarGreen.Value, trackBarBlue.Value);
             Properties.Settings.Default.Save();
+            _main.dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Properties.Settings.Default.themeColor;
             _main.Refresh();
             Dispose();
         }

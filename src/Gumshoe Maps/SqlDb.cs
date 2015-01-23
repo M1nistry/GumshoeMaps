@@ -248,7 +248,7 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Constring).OpenAndReturn())
             {
-                const string insertCurrency = @"INSERT INTO `unique_drops` (`name`) VALUES (@name) WHERE map_id=@id";
+                const string insertCurrency = @"INSERT INTO `unique_drops` (`map_id`, `name`) VALUES (@id, @name)";
                 using (var cmd = new SQLiteCommand(insertCurrency, connection))
                 {
                     cmd.Parameters.AddWithValue("id", mapId);
