@@ -147,7 +147,8 @@
             this.dgvMaps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMaps.Size = new System.Drawing.Size(499, 258);
             this.dgvMaps.TabIndex = 5;
-            this.dgvMaps.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_RowEnter_1);
+            this.dgvMaps.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_CellMouseEnter);
+            this.dgvMaps.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaps_RowEnter);
             this.dgvMaps.SelectionChanged += new System.EventHandler(this.dgvMaps_SelectionChanged);
             this.dgvMaps.MouseEnter += new System.EventHandler(this.dgvMaps_MouseEnter);
             this.dgvMaps.MouseLeave += new System.EventHandler(this.dgvMaps_MouseLeave);
@@ -297,12 +298,12 @@
             // 
             // panelDgvExtra
             // 
-            this.panelDgvExtra.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelDgvExtra.Controls.Add(this.dgvDrops);
             this.panelDgvExtra.Location = new System.Drawing.Point(9, 377);
             this.panelDgvExtra.Name = "panelDgvExtra";
             this.panelDgvExtra.Size = new System.Drawing.Size(479, 79);
             this.panelDgvExtra.TabIndex = 6;
+            this.panelDgvExtra.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDgvExtra_Paint);
             // 
             // dgvDrops
             // 
@@ -340,7 +341,7 @@
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvDrops.DefaultCellStyle = dataGridViewCellStyle7;
             this.dgvDrops.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
-            this.dgvDrops.Location = new System.Drawing.Point(0, 0);
+            this.dgvDrops.Location = new System.Drawing.Point(1, 1);
             this.dgvDrops.Margin = new System.Windows.Forms.Padding(2);
             this.dgvDrops.Name = "dgvDrops";
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -355,11 +356,13 @@
             this.dgvDrops.RowTemplate.Height = 24;
             this.dgvDrops.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.dgvDrops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvDrops.Size = new System.Drawing.Size(477, 78);
+            this.dgvDrops.Size = new System.Drawing.Size(477, 77);
             this.dgvDrops.TabIndex = 6;
             this.dgvDrops.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDrops_CellMouseEnter);
             this.dgvDrops.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDrops_RowEnter);
             this.dgvDrops.SelectionChanged += new System.EventHandler(this.dgvDrops_SelectionChanged);
+            this.dgvDrops.MouseEnter += new System.EventHandler(this.dgvDrops_MouseEnter);
+            this.dgvDrops.MouseLeave += new System.EventHandler(this.dgvDrops_MouseLeave);
             // 
             // dataGridViewTextBoxColumn2
             // 

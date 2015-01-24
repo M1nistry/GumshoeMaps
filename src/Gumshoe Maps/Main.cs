@@ -76,6 +76,9 @@ namespace Gumshoe_Maps
             {
                 titleBar.TitleColor = Color.Red;
                 ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+                dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Color.Red;
+                dgvMaps.DefaultCellStyle.SelectionBackColor = Color.Red;
+                dgvMaps.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.Red;
             }
             else
             {
@@ -84,6 +87,12 @@ namespace Gumshoe_Maps
                 dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Properties.Settings.Default.themeColor;
                 dgvMaps.DefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
                 dgvMaps.AlternatingRowsDefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
+
+                _dropSource = new BindingSource
+                {
+                    DataSource = _sql.DropDataTable(int.Parse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString()))
+                };
+                dgvDrops.DataSource = _dropSource;
             }
         }
 
@@ -197,30 +206,29 @@ namespace Gumshoe_Maps
                 case WM_HOTKEY:
                     switch (m.WParam.ToInt32())
                     {
-                        case (0): //F2
-                            MessageBox.Show("Hotkey Index 0 pressed.");
-                            //timerMap.Stop();
-                            //_state = "WAITING";
-                            //labelStatusValue.Text = @"Awaiting a map to be selected to run...";
-                            //Refresh();
+                        case (0):
+                            timerMap.Stop();
+                            _state = "WAITING";
+                            labelStatusValue.Text = @"Awaiting a map to be selected to run...";
+                            Refresh();
                             break;
 
-                        case (1): //F3
-                            MessageBox.Show("Hotkey Index 1 pressed.");
+                        case (1):
                             if (_state == "ZANA")
                             {
                                 _state = "DROPS";
                                 labelStatusValue.Text = @"Running a map, listening for map drops...";
+                                break;
                             }
                             labelStatusValue.Text = @"Zana found, press F3 again once maps have been recorded.";
                             _state = "ZANA";
                             break;
-                        case (2): //F4
-                            MessageBox.Show("Hotkey Index 2 pressed.");
+                        case (2):
                             if (_state == "CARTO")
                             {
                                 _state = "DROPS";
                                 labelStatusValue.Text = @"Running a map, listening for map drops...";
+                                break;
                             }
                             labelStatusValue.Text = @"Carto found, press F4 again once maps have been recorded.";
                             _state = "CARTO";
@@ -445,12 +453,9 @@ namespace Gumshoe_Maps
 
         }
 
-        private void dgvMaps_RowEnter_1(object sender, DataGridViewCellEventArgs e)
+        private void dgvMaps_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvMaps.SelectedRows.Count != 1) return;
-            dgvMaps.DefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
-            dgvMaps.AlternatingRowsDefaultCellStyle.SelectionBackColor = Properties.Settings.Default.themeColor;
-
+            if (e.RowIndex <= 0) return;
             _dropSource = new BindingSource
             {
                 DataSource = _sql.DropDataTable(int.Parse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString()))
@@ -467,6 +472,32 @@ namespace Gumshoe_Maps
         {
             dgvDrops.DefaultCellStyle.SelectionBackColor = dgvDrops.DefaultCellStyle.BackColor;
             dgvDrops.AlternatingRowsDefaultCellStyle.SelectionBackColor = dgvDrops.AlternatingRowsDefaultCellStyle.BackColor;
+        }
+
+        private void dgvDrops_MouseEnter(object sender, EventArgs e)
+        {
+            _paintBorder = true;
+            panelDgvExtra.Refresh();
+        }
+
+        private void panelDgvExtra_Paint(object sender, PaintEventArgs e)
+        {
+            if (_paintBorder) HoverBorder(e);
+        }
+
+        private void dgvDrops_MouseLeave(object sender, EventArgs e)
+        {
+            _paintBorder = false;
+            panelDgvExtra.Refresh();
+        }
+
+        private void dgvMaps_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex <= -1 && e.ColumnIndex != 0) return;
+            var selectedId = dgvMaps.Rows[e.RowIndex].Cells["idColumn"].Value.ToString();
+            var affixToolTip = _sql.MapAffixes(int.Parse(selectedId));
+            var tooltipText = affixToolTip.Aggregate("", (current, affix) => current + (affix + Environment.NewLine));
+            dgvMaps.Rows[e.RowIndex].Cells["mapColumn"].ToolTipText = tooltipText;
         }
     }
 }

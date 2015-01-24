@@ -86,10 +86,22 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("startedat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     cmd.ExecuteNonQuery();
-
-                    return (int)connection.LastInsertRowId;
                 }
+
+                const string addAffixes = @"INSERT INTO `affixes` (`map_id`, `affix`) VALUES (@id, @affix)";
+                using (var cmd = new SQLiteCommand(addAffixes, connection))
+                {
+                    cmd.Parameters.AddWithValue("id", connection.LastInsertRowId);
+                    foreach (var affix in newMap.Affixes)
+                    {
+                        cmd.Parameters.AddWithValue("affix", affix);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                return (int)connection.LastInsertRowId;
             }
+
         }
 
         internal DataTable MapDataTable()
@@ -276,6 +288,27 @@ namespace Gumshoe_Maps
                 }
             }
             return mapList;
+        }
+
+        internal List<string> MapAffixes(int id)
+        {
+            var affixList = new List<string>();
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string selectAffix = @"SELECT `affix` FROM `affixes` WHERE map_id=@id";
+                using (var cmd = new SQLiteCommand(selectAffix, connection))
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            affixList.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+            return affixList;
         }
     }
 }
