@@ -59,6 +59,8 @@ namespace Gumshoe_Maps
                             @"CREATE TABLE IF NOT EXISTS `unique_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
                         cmd.ExecuteNonQuery();
 
+                        cmd.CommandText = @"CREATE UNIQUE INDEX currency_idx ON currency_drops(map_id, name);";
+                        cmd.ExecuteNonQuery();
                         return true;
                     }
                 }
@@ -88,6 +90,7 @@ namespace Gumshoe_Maps
                     cmd.ExecuteNonQuery();
                 }
 
+                var mapId = (int)connection.LastInsertRowId;
                 const string addAffixes = @"INSERT INTO `affixes` (`map_id`, `affix`) VALUES (@id, @affix)";
                 using (var cmd = new SQLiteCommand(addAffixes, connection))
                 {
@@ -99,7 +102,7 @@ namespace Gumshoe_Maps
                     }
                 }
 
-                return (int)connection.LastInsertRowId;
+                return mapId;
             }
 
         }
@@ -241,15 +244,16 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal void AddCurrency(int mapId, string name)
+        internal void AddCurrency(int mapId, KeyValuePair<int, string> currency)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string insertCurrency = @"INSERT OR REPLACE INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @name, COALESCE((SELECT count FROM currency_drops WHERE name=@name AND map_id=@id), 0) + 1)";
+                const string insertCurrency = @"INSERT OR REPLACE INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @name, COALESCE((SELECT count FROM currency_drops WHERE name=@name AND map_id=@id), 0) + @count)";
                 using (var cmd = new SQLiteCommand(insertCurrency, connection))
                 {
                     cmd.Parameters.AddWithValue("id", mapId);
-                    cmd.Parameters.AddWithValue("name", name);
+                    cmd.Parameters.AddWithValue("name", currency.Value);
+                    cmd.Parameters.AddWithValue("count", currency.Key);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -309,6 +313,20 @@ namespace Gumshoe_Maps
                 }
             }
             return affixList;
+        }
+
+        internal void FinishMap(int id)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string updateFinish = @"UPDATE `maps` SET finished_at=@finish WHERE id=@id";
+                using (var cmd = new SQLiteCommand(updateFinish, connection))
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+                    cmd.Parameters.AddWithValue("finish", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
