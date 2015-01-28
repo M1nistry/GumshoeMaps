@@ -3,6 +3,8 @@ Path of Exile Map Logging
 
 This tool is aimed to replace people using Google docs to manually track their maps and the returns. It's still reasonably early days, however there are lots of ideas and features in mind to make it a very powerful tool.
 
+![Image](http://i.imgur.com/3JssJGY.png)
+
 It uses SQLite to database the maps and their details.
 
 **Working Features**
