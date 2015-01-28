@@ -9,11 +9,10 @@ It uses SQLite to database the maps and their details.
 - Logging maps you have ran, including their quantity, quality, rarity and affixes.
 - Logging the map drops attatched to a map ran
 - Duration of a running map
+- Logging map drops from Zana and Cartographers found
+- Logging notable drops (Currency, Uniques, etc)
 
 **Planned Features**
-- Logging map drops from Zana and Cartographers found.
 - Zana Dailies
-- Logging notable drops (Currency, Uniques, etc)
 - Reporting to spreadsheet/Google docs to share your results.
 - Experience gained per map.
-
