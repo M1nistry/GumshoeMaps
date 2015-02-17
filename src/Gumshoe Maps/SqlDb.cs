@@ -39,7 +39,7 @@ namespace Gumshoe_Maps
                     {
                         cmd.CommandText =
                             @"CREATE TABLE IF NOT EXISTS `maps` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `rarity` TEXT, `level` INTEGER, 
-                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME);";
+                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT);";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText =
@@ -59,7 +59,7 @@ namespace Gumshoe_Maps
                             @"CREATE TABLE IF NOT EXISTS `unique_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
                         cmd.ExecuteNonQuery();
 
-                        cmd.CommandText = @"CREATE UNIQUE INDEX currency_idx ON currency_drops(map_id, name);";
+                        cmd.CommandText = @"CREATE UNIQUE INDEX  IF NOT EXISTS currency_idx ON currency_drops(map_id, name);";
                         cmd.ExecuteNonQuery();
                         return true;
                     }
@@ -110,9 +110,10 @@ namespace Gumshoe_Maps
         internal DataTable MapDataTable()
         {
             var dtMaps = new DataTable("maps");
-            dtMaps.Columns.Add("id");
+            dtMaps.Columns.Add("id", typeof(int));
             dtMaps.Columns.Add("level");
             dtMaps.Columns.Add("name");
+            dtMaps.Columns.Add("rarity");
             dtMaps.Columns.Add("quality");
             dtMaps.Columns.Add("quantity");
             dtMaps.Columns.Add("-");
@@ -133,7 +134,7 @@ namespace Gumshoe_Maps
                                 var mapId = int.Parse(reader["id"].ToString());
                                 dtMaps.Rows.Add(mapId,
                                     int.Parse(reader["level"].ToString()),
-                                    reader["name"].ToString(), int.Parse(reader["quality"].ToString()),
+                                    reader["name"].ToString(), reader["rarity"].ToString(), int.Parse(reader["quality"].ToString()),
                                     int.Parse(reader["quantity"].ToString()), MapDrops(mapId, "<"),
                                     MapDrops(mapId, "="), MapDrops(mapId, ">"));
                             }
@@ -325,6 +326,34 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("id", id);
                     cmd.Parameters.AddWithValue("finish", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        internal bool DeleteMap(int id)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                using (var cmd = new SQLiteCommand(connection))
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    cmd.CommandText = @"DELETE FROM `maps` WHERE id=@id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = @"DELETE FROM `map_drops` WHERE map_id=@id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = @"DELETE FROM `currency_drops` WHERE map_id=@id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = @"DELETE FROM `unique_drops` WHERE map_id=@id";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = @"DELETE FROM `affixes` WHERE map_id=@id";
+                    cmd.ExecuteNonQuery();
+
+                    return true;
                 }
             }
         }
