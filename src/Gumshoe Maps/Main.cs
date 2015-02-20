@@ -629,7 +629,12 @@ namespace Gumshoe_Maps
             }
             else
             {
-                _details = new Details();
+                int mapId;
+                Console.WriteLine(int.TryParse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString(), out mapId));
+                _details = new Details
+                {
+                    MapId = int.TryParse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString(), out mapId) ? mapId : -1
+                };
                 _details.FormClosed += (o, ea) => _details = null;
                 _details.ShowDialog();
             }

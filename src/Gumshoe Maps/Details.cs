@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -8,6 +9,9 @@ namespace Gumshoe_Maps
     public partial class Details : Form
     {
         private readonly Main _main;
+        private List<string> _affixes;
+
+        public int MapId { get; set; }
 
         #region DLL Import
         [DllImport("user32.dll")]
@@ -30,6 +34,7 @@ namespace Gumshoe_Maps
 
             _main = Main.GetSingleton();
             titlePanel.BackColor = Properties.Settings.Default.themeColor;
+            Console.WriteLine(MapId);
         }
 
         private void titlePanel_MouseDown(object sender, MouseEventArgs e)
@@ -79,6 +84,22 @@ namespace Gumshoe_Maps
             textBoxLevel.Text = @"Level";
             textBoxLevel.ForeColor = SystemColors.ControlDark;
             textBoxLevel.TextAlign = HorizontalAlignment.Center;
+        }
+
+        private void textBoxName_Enter(object sender, EventArgs e)
+        {
+            if (textBoxName.Text != @"Name") return;
+            textBoxName.Text = String.Empty;
+            textBoxName.ForeColor = SystemColors.ControlDark;
+            textBoxName.TextAlign = HorizontalAlignment.Left;
+        }
+
+        private void textBoxName_Leave(object sender, EventArgs e)
+        {
+            if (textBoxName.Text != String.Empty) return;
+            textBoxName.Text = @"Name";
+            textBoxName.ForeColor = SystemColors.ControlLight;
+            textBoxName.TextAlign = HorizontalAlignment.Center;
         }
     }
 }
