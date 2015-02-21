@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -33,8 +34,8 @@ namespace Gumshoe_Maps
             InitializeComponent();
 
             _main = Main.GetSingleton();
+            Icon = _main.Icon;
             titlePanel.BackColor = Properties.Settings.Default.themeColor;
-            Console.WriteLine(MapId);
         }
 
         private void titlePanel_MouseDown(object sender, MouseEventArgs e)
@@ -100,6 +101,44 @@ namespace Gumshoe_Maps
             textBoxName.Text = @"Name";
             textBoxName.ForeColor = SystemColors.ControlLight;
             textBoxName.TextAlign = HorizontalAlignment.Center;
+        }
+
+        private void Details_VisibleChanged(object sender, EventArgs e)
+        {
+            var mapItem = _main._sql.GetMap(MapId);
+            var affixString = mapItem.Affixes.Aggregate("", (current, affix) => current + (affix + Environment.NewLine));
+            var duration = (mapItem.FinishAt - mapItem.StartAt);
+            labelMapDetails.Text = String.Format("Rarity: {0}\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}\r\n\r\n{6}", 
+                mapItem.Rarity, mapItem.Name, mapItem.Level, mapItem.Quantity, mapItem.Quality, affixString, String.Format("Duration: {0:00}:{1:00}:{2:00}", duration.Hours, duration.Minutes, duration.Seconds));
+            textBoxNotes.Text = mapItem.Notes;
+        }
+
+        private void textBoxNotes_Enter(object sender, EventArgs e)
+        {
+            if (textBoxNotes.Text != @"Notes...") return;
+            textBoxNotes.Text = String.Empty;
+            textBoxNotes.ForeColor = SystemColors.ControlLight;
+        }
+
+        private void textBoxNotes_Leave(object sender, EventArgs e)
+        {
+            if (textBoxNotes.Text != String.Empty && textBoxNotes.Text != @"Notes...")
+            {
+                _main._sql.UpdateNotes(MapId, textBoxNotes.Text);
+                return;
+            }
+            textBoxNotes.Text = @"Notes...";
+            textBoxNotes.ForeColor = SystemColors.ControlDark;
+        }
+
+        private void textBoxNotes_TextChanged(object sender, EventArgs e)
+        {
+            textBoxName.ForeColor = textBoxNotes.Text == @"Notes..." ? SystemColors.ControlDark : SystemColors.ControlLight;
+        }
+
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

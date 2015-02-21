@@ -66,12 +66,12 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuDgvMaps = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDgvRight = new System.Windows.Forms.Panel();
             this.labelZanaValue = new System.Windows.Forms.Label();
             this.buttonZanaDown = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaUp = new Gumshoe_Maps.Flatbutton();
             this.titleBar = new Gumshoe_Maps.TitleBar();
-            this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDgv.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.panelCurrentMap.SuspendLayout();
@@ -427,15 +427,22 @@
             this.deleteToolStripMenuItem,
             this.detailsToolStripMenuItem});
             this.contextMenuDgvMaps.Name = "contextMenuDgvMaps";
-            this.contextMenuDgvMaps.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuDgvMaps.Size = new System.Drawing.Size(110, 48);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // detailsToolStripMenuItem
+            // 
+            this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
+            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.detailsToolStripMenuItem.Text = "Details";
+            this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
             // 
             // panelDgvRight
             // 
@@ -495,13 +502,6 @@
             this.titleBar.TabIndex = 2;
             this.titleBar.Title = "Gumshoe Maps v0.1";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
-            // 
-            // detailsToolStripMenuItem
-            // 
-            this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
-            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.detailsToolStripMenuItem.Text = "Details";
-            this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
             // 
             // Main
             // 

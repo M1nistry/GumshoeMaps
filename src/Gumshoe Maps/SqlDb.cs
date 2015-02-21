@@ -39,7 +39,8 @@ namespace Gumshoe_Maps
                     {
                         cmd.CommandText =
                             @"CREATE TABLE IF NOT EXISTS `maps` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `rarity` TEXT, `level` INTEGER, 
-                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT);";
+                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT
+                                        `exp_before` INTEGER, `exp_after` INTEGER);";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText =
@@ -76,8 +77,8 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`) VALUES 
-                                                             (@rarity, @level, @name, @quality, @quantity, @startedat)";
+                const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`, `exp_before`) VALUES 
+                                                             (@rarity, @level, @name, @quality, @quantity, @startedat, @expb)";
                 using (var cmd = new SQLiteCommand(addQuery, connection))
                 {
                     cmd.Parameters.AddWithValue("rarity", newMap.Rarity);
@@ -86,6 +87,7 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("quality", newMap.Quality);
                     cmd.Parameters.AddWithValue("quantity", newMap.Quantity + Properties.Settings.Default.zanaQuantity);
                     cmd.Parameters.AddWithValue("startedat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("expb", newMap.ExpBefore);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -104,7 +106,41 @@ namespace Gumshoe_Maps
 
                 return mapId;
             }
+        }
 
+        internal Map GetMap(int mapId)
+        {
+            var affixes = MapAffixes(mapId);
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string queryMap = @"SELECT * from `maps` WHERE id=@id";
+                using (var cmd = new SQLiteCommand(queryMap, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", mapId);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int id, level, quality, quantity;
+                            DateTime startAt, finishAt;
+                            return new Map
+                            {
+                                Id = int.TryParse(reader["id"].ToString(), out id) ? id : -1,
+                                Rarity = reader["rarity"].ToString(),
+                                Level = int.TryParse(reader["level"].ToString(), out level) ? level : -1,
+                                Name = reader["name"].ToString(),
+                                Quality = int.TryParse(reader["quality"].ToString(), out quality) ? quality : -1,
+                                Quantity = int.TryParse(reader["quantity"].ToString(), out quantity) ? quantity : -1,
+                                StartAt = DateTime.TryParse(reader["started_at"].ToString(), out startAt) ? startAt : new DateTime(0001, 01, 01),
+                                FinishAt = DateTime.TryParse(reader["finished_at"].ToString(), out finishAt) ? finishAt : new DateTime(0001, 01, 01),
+                                Notes = reader["notes"].ToString(),
+                                Affixes = affixes
+                            };
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         internal DataTable MapDataTable()
@@ -316,15 +352,16 @@ namespace Gumshoe_Maps
             return affixList;
         }
 
-        internal void FinishMap(int id)
+        internal void FinishMap(int id, Int64 exp)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string updateFinish = @"UPDATE `maps` SET finished_at=@finish WHERE id=@id";
+                const string updateFinish = @"UPDATE `maps` SET finished_at=@finish AND exp_after=@expa WHERE id=@id";
                 using (var cmd = new SQLiteCommand(updateFinish, connection))
                 {
                     cmd.Parameters.AddWithValue("id", id);
                     cmd.Parameters.AddWithValue("finish", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("expa", exp);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -354,6 +391,20 @@ namespace Gumshoe_Maps
                     cmd.ExecuteNonQuery();
 
                     return true;
+                }
+            }
+        }
+
+        internal void UpdateNotes(int id, string notes)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string updateNotes = @"UPDATE `maps` SET notes=@notes WHERE id=@id";
+                using (var cmd = new SQLiteCommand(updateNotes, connection))
+                {
+                    cmd.Parameters.AddWithValue("@notes", notes);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

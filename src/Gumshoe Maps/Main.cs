@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
+using Tesseract;
+using ImageFormat = System.Drawing.Imaging.ImageFormat;
 
 namespace Gumshoe_Maps
 {
@@ -32,7 +38,7 @@ namespace Gumshoe_Maps
         #endregion
 
         IntPtr _nextClipboardViewer;
-        private readonly SqlDb _sql;
+        public readonly SqlDb _sql;
         private BindingSource _mapSource, _dropSource;
         private static Main _main;
         private Settings _settings;
@@ -149,6 +155,7 @@ namespace Gumshoe_Maps
                             case("WAITING"):
                                 _currentMap = ParseClipboard();
                                 if (_currentMap == null) break;
+                                _currentMap.ExpBefore = ExpValue();
                                 labelId.Text = _sql.AddMap(_currentMap).ToString(CultureInfo.InvariantCulture);
                                 if (labelId.Text != String.Empty)
                                 {
@@ -198,7 +205,7 @@ namespace Gumshoe_Maps
                     {
                         case (0):
                             timerMap.Stop();
-                            _sql.FinishMap(int.Parse(labelId.Text));
+                            _sql.FinishMap(int.Parse(labelId.Text), ExpValue());
                             _state = "WAITING";
                             labelStatusValue.Text = @"Awaiting a map to be selected to run...";
                             Refresh();
@@ -413,6 +420,53 @@ namespace Gumshoe_Maps
             dgvMaps.DataSource = _mapSource;
             dgvMaps.Columns["idColumn"].ValueType = typeof(double);
             
+        }
+
+        private string CaptureExp()
+        {
+            Cursor = new Cursor(Cursor.Current.Handle);
+            var previousPoint = Cursor.Position;
+            Cursor.Position = new Point(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height);
+            Cursor.Clip = new Rectangle(Cursor.Position, new Size(1, 1));
+            Thread.Sleep(500);
+            var bmpScreenshot = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
+                                                           Screen.PrimaryScreen.Bounds.Height,
+                                                           PixelFormat.Format32bppArgb);
+            var gfxScreenshot = Graphics.FromImage(bmpScreenshot);
+            gfxScreenshot.CopyFromScreen(MousePosition.X + 35, MousePosition.Y - 60, 0, 0, new Size(580, 500), CopyPixelOperation.SourceCopy);
+            
+            bmpScreenshot.Save("Screenshot.bmp");
+
+            var image = Pix.LoadFromFile(Directory.GetCurrentDirectory() + "\\Screenshot.bmp");
+            string result;
+            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            {
+                using (var page = engine.Process(image))
+                {
+                    result = page.GetText();
+                }
+
+            }
+            File.Delete(Directory.GetCurrentDirectory() + "\\Screenshot.bmp");
+            Cursor.Clip = Rectangle.Empty;
+            Cursor.Position = new Point(previousPoint.X, previousPoint.Y);
+            return result;
+        }
+
+        internal Int64 ExpValue()
+        {
+            var exp = CaptureExp();
+            var value = Regex.Match(exp.Split(new[] { '\r', '\n' })[1], ":(.*)/")
+                    .ToString()
+                    .Replace(":", "")
+                    .Replace("/", "")
+                    .Replace(",", "").Trim();
+            int expValue;
+            if (int.TryParse(value, out expValue))
+            {
+                return expValue;
+            }
+            return -1;
         }
 
         #endregion
@@ -630,11 +684,8 @@ namespace Gumshoe_Maps
             else
             {
                 int mapId;
-                Console.WriteLine(int.TryParse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString(), out mapId));
-                _details = new Details
-                {
-                    MapId = int.TryParse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString(), out mapId) ? mapId : -1
-                };
+                _details = new Details();
+                _details.MapId = int.TryParse(dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString(), out mapId) ? mapId : -1;
                 _details.FormClosed += (o, ea) => _details = null;
                 _details.ShowDialog();
             }

@@ -37,6 +37,11 @@ namespace Gumshoe_Maps
             this.titlePanel = new System.Windows.Forms.Panel();
             this.titleLabel = new System.Windows.Forms.Label();
             this.panelAddDrop = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.labelCurrency = new System.Windows.Forms.Label();
+            this.textBoxUnique = new System.Windows.Forms.TextBox();
+            this.labelUnique = new System.Windows.Forms.Label();
+            this.textBoxName = new System.Windows.Forms.TextBox();
             this.textBoxLevel = new System.Windows.Forms.TextBox();
             this.checkBoxCarto = new System.Windows.Forms.CheckBox();
             this.checkBoxZana = new System.Windows.Forms.CheckBox();
@@ -45,12 +50,8 @@ namespace Gumshoe_Maps
             this.listBoxEvents = new System.Windows.Forms.ListBox();
             this.labelMapDrop = new System.Windows.Forms.Label();
             this.labelAddDrop = new System.Windows.Forms.Label();
-            this.textBoxName = new System.Windows.Forms.TextBox();
-            this.labelUnique = new System.Windows.Forms.Label();
-            this.textBoxUnique = new System.Windows.Forms.TextBox();
-            this.labelCurrency = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.labelMapDetails = new System.Windows.Forms.Label();
+            this.textBoxNotes = new System.Windows.Forms.TextBox();
             this.buttonAdd = new Gumshoe_Maps.Flatbutton();
             this.buttonClose = new Gumshoe_Maps.Flatbutton();
             this.buttonMinimize = new Gumshoe_Maps.Flatbutton();
@@ -98,10 +99,225 @@ namespace Gumshoe_Maps
             this.panelAddDrop.Controls.Add(this.textBoxRarity);
             this.panelAddDrop.Controls.Add(this.panelEvents);
             this.panelAddDrop.Controls.Add(this.labelMapDrop);
-            this.panelAddDrop.Location = new System.Drawing.Point(14, 213);
+            this.panelAddDrop.Location = new System.Drawing.Point(14, 233);
             this.panelAddDrop.Name = "panelAddDrop";
             this.panelAddDrop.Size = new System.Drawing.Size(370, 105);
             this.panelAddDrop.TabIndex = 8;
+            // 
+            // textBox1
+            // 
+            this.textBox1.AutoCompleteCustomSource.AddRange(new string[] {
+            "Armourer\'s Scrap",
+            "Blacksmith\'s Whetstone",
+            "Glassblower\'s Bauble",
+            "Cartographer\'s Chisel",
+            "Gemcutter\'s Prism",
+            "Jeweller\'s",
+            "Chromatic",
+            "Fusing",
+            "Transmutation",
+            "Chance",
+            "Alchemy",
+            "Regal",
+            "Augmentation",
+            "Exalted",
+            "Alteration",
+            "Chaos",
+            "Blessed",
+            "Divine",
+            "Scouring",
+            "Mirror Kalandra",
+            "Eternal",
+            "Regret",
+            "Vaal"});
+            this.textBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.textBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.textBox1.Location = new System.Drawing.Point(60, 69);
+            this.textBox1.MaxLength = 800;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(185, 22);
+            this.textBox1.TabIndex = 37;
+            this.textBox1.Text = "Name";
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelCurrency
+            // 
+            this.labelCurrency.AutoSize = true;
+            this.labelCurrency.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelCurrency.Location = new System.Drawing.Point(2, 71);
+            this.labelCurrency.Name = "labelCurrency";
+            this.labelCurrency.Size = new System.Drawing.Size(52, 13);
+            this.labelCurrency.TabIndex = 36;
+            this.labelCurrency.Text = "Currency:";
+            // 
+            // textBoxUnique
+            // 
+            this.textBoxUnique.AutoCompleteCustomSource.AddRange(new string[] {
+            "Academy",
+            "Crypt",
+            "Dried Lake",
+            "Dunes",
+            "Dungeon",
+            "Grotto",
+            "Overgrown Ruin",
+            "Tropical Island",
+            "Arcade",
+            "Arsenal",
+            "Cemetery",
+            "Mountain Ledge",
+            "Sewer",
+            "Thicket",
+            "Wharf",
+            "Ghetto",
+            "Mud Geyser",
+            "Reef",
+            "Spider Lair",
+            "Springs",
+            "Vaal Pyramid",
+            "Catacomb",
+            "Overgrown Shrine",
+            "Promenade",
+            "Shore",
+            "Spider Forest",
+            "Tunnel",
+            "Bog",
+            "Coves",
+            "Graveyard",
+            "Pier",
+            "Underground Sea",
+            "Arachnid Nest",
+            "Colonnade",
+            "Dry Woods",
+            "Strand",
+            "Temple",
+            "Jungle Valley",
+            "Torture Chamber",
+            "Waste Pool",
+            "Mine",
+            "Dry Peninsula",
+            "Canyon",
+            "Cells",
+            "Dark Forest",
+            "Gorge",
+            "Maze",
+            "Underground River",
+            "Bazaar",
+            "Necropolis",
+            "Plateau",
+            "Crematorium",
+            "Precinct",
+            "Shipyard",
+            "Shrine",
+            "Villa",
+            "Palace"});
+            this.textBoxUnique.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.textBoxUnique.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxUnique.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.textBoxUnique.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxUnique.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxUnique.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxUnique.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.textBoxUnique.Location = new System.Drawing.Point(60, 41);
+            this.textBoxUnique.MaxLength = 800;
+            this.textBoxUnique.Name = "textBoxUnique";
+            this.textBoxUnique.Size = new System.Drawing.Size(185, 22);
+            this.textBoxUnique.TabIndex = 35;
+            this.textBoxUnique.Text = "Name";
+            this.textBoxUnique.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxUnique.Enter += new System.EventHandler(this.textBoxName_Enter);
+            this.textBoxUnique.Leave += new System.EventHandler(this.textBoxName_Leave);
+            // 
+            // labelUnique
+            // 
+            this.labelUnique.AutoSize = true;
+            this.labelUnique.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelUnique.Location = new System.Drawing.Point(10, 43);
+            this.labelUnique.Name = "labelUnique";
+            this.labelUnique.Size = new System.Drawing.Size(44, 13);
+            this.labelUnique.TabIndex = 34;
+            this.labelUnique.Text = "Unique:";
+            // 
+            // textBoxName
+            // 
+            this.textBoxName.AutoCompleteCustomSource.AddRange(new string[] {
+            "Academy",
+            "Crypt",
+            "Dried Lake",
+            "Dunes",
+            "Dungeon",
+            "Grotto",
+            "Overgrown Ruin",
+            "Tropical Island",
+            "Arcade",
+            "Arsenal",
+            "Cemetery",
+            "Mountain Ledge",
+            "Sewer",
+            "Thicket",
+            "Wharf",
+            "Ghetto",
+            "Mud Geyser",
+            "Reef",
+            "Spider Lair",
+            "Springs",
+            "Vaal Pyramid",
+            "Catacomb",
+            "Overgrown Shrine",
+            "Promenade",
+            "Shore",
+            "Spider Forest",
+            "Tunnel",
+            "Bog",
+            "Coves",
+            "Graveyard",
+            "Pier",
+            "Underground Sea",
+            "Arachnid Nest",
+            "Colonnade",
+            "Dry Woods",
+            "Strand",
+            "Temple",
+            "Jungle Valley",
+            "Torture Chamber",
+            "Waste Pool",
+            "Mine",
+            "Dry Peninsula",
+            "Canyon",
+            "Cells",
+            "Dark Forest",
+            "Gorge",
+            "Maze",
+            "Underground River",
+            "Bazaar",
+            "Necropolis",
+            "Plateau",
+            "Crematorium",
+            "Precinct",
+            "Shipyard",
+            "Shrine",
+            "Villa",
+            "Palace"});
+            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxName.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxName.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.textBoxName.Location = new System.Drawing.Point(168, 13);
+            this.textBoxName.MaxLength = 800;
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(77, 22);
+            this.textBoxName.TabIndex = 33;
+            this.textBoxName.Text = "Name";
+            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxName.Enter += new System.EventHandler(this.textBoxName_Enter);
+            this.textBoxName.Leave += new System.EventHandler(this.textBoxName_Leave);
             // 
             // textBoxLevel
             // 
@@ -220,283 +436,113 @@ namespace Gumshoe_Maps
             // 
             this.labelAddDrop.AutoSize = true;
             this.labelAddDrop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelAddDrop.Location = new System.Drawing.Point(21, 206);
+            this.labelAddDrop.Location = new System.Drawing.Point(21, 226);
             this.labelAddDrop.Name = "labelAddDrop";
             this.labelAddDrop.Size = new System.Drawing.Size(52, 13);
             this.labelAddDrop.TabIndex = 9;
             this.labelAddDrop.Text = "Add Drop";
-            // 
-            // textBoxName
-            // 
-            this.textBoxName.AutoCompleteCustomSource.AddRange(new string[] {
-            "Academy",
-            "Crypt",
-            "Dried Lake",
-            "Dunes",
-            "Dungeon",
-            "Grotto",
-            "Overgrown Ruin",
-            "Tropical Island",
-            "Arcade",
-            "Arsenal",
-            "Cemetery",
-            "Mountain Ledge",
-            "Sewer",
-            "Thicket",
-            "Wharf",
-            "Ghetto",
-            "Mud Geyser",
-            "Reef",
-            "Spider Lair",
-            "Springs",
-            "Vaal Pyramid",
-            "Catacomb",
-            "Overgrown Shrine",
-            "Promenade",
-            "Shore",
-            "Spider Forest",
-            "Tunnel",
-            "Bog",
-            "Coves",
-            "Graveyard",
-            "Pier",
-            "Underground Sea",
-            "Arachnid Nest",
-            "Colonnade",
-            "Dry Woods",
-            "Strand",
-            "Temple",
-            "Jungle Valley",
-            "Torture Chamber",
-            "Waste Pool",
-            "Mine",
-            "Dry Peninsula",
-            "Canyon",
-            "Cells",
-            "Dark Forest",
-            "Gorge",
-            "Maze",
-            "Underground River",
-            "Bazaar",
-            "Necropolis",
-            "Plateau",
-            "Crematorium",
-            "Precinct",
-            "Shipyard",
-            "Shrine",
-            "Villa",
-            "Palace"});
-            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
-            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxName.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxName.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxName.Location = new System.Drawing.Point(168, 13);
-            this.textBoxName.MaxLength = 800;
-            this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(77, 22);
-            this.textBoxName.TabIndex = 33;
-            this.textBoxName.Text = "Name";
-            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBoxName.Enter += new System.EventHandler(this.textBoxName_Enter);
-            this.textBoxName.Leave += new System.EventHandler(this.textBoxName_Leave);
-            // 
-            // labelUnique
-            // 
-            this.labelUnique.AutoSize = true;
-            this.labelUnique.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelUnique.Location = new System.Drawing.Point(10, 43);
-            this.labelUnique.Name = "labelUnique";
-            this.labelUnique.Size = new System.Drawing.Size(44, 13);
-            this.labelUnique.TabIndex = 34;
-            this.labelUnique.Text = "Unique:";
-            // 
-            // textBoxUnique
-            // 
-            this.textBoxUnique.AutoCompleteCustomSource.AddRange(new string[] {
-            "Academy",
-            "Crypt",
-            "Dried Lake",
-            "Dunes",
-            "Dungeon",
-            "Grotto",
-            "Overgrown Ruin",
-            "Tropical Island",
-            "Arcade",
-            "Arsenal",
-            "Cemetery",
-            "Mountain Ledge",
-            "Sewer",
-            "Thicket",
-            "Wharf",
-            "Ghetto",
-            "Mud Geyser",
-            "Reef",
-            "Spider Lair",
-            "Springs",
-            "Vaal Pyramid",
-            "Catacomb",
-            "Overgrown Shrine",
-            "Promenade",
-            "Shore",
-            "Spider Forest",
-            "Tunnel",
-            "Bog",
-            "Coves",
-            "Graveyard",
-            "Pier",
-            "Underground Sea",
-            "Arachnid Nest",
-            "Colonnade",
-            "Dry Woods",
-            "Strand",
-            "Temple",
-            "Jungle Valley",
-            "Torture Chamber",
-            "Waste Pool",
-            "Mine",
-            "Dry Peninsula",
-            "Canyon",
-            "Cells",
-            "Dark Forest",
-            "Gorge",
-            "Maze",
-            "Underground River",
-            "Bazaar",
-            "Necropolis",
-            "Plateau",
-            "Crematorium",
-            "Precinct",
-            "Shipyard",
-            "Shrine",
-            "Villa",
-            "Palace"});
-            this.textBoxUnique.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
-            this.textBoxUnique.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxUnique.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.textBoxUnique.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxUnique.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBoxUnique.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxUnique.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxUnique.Location = new System.Drawing.Point(60, 41);
-            this.textBoxUnique.MaxLength = 800;
-            this.textBoxUnique.Name = "textBoxUnique";
-            this.textBoxUnique.Size = new System.Drawing.Size(185, 22);
-            this.textBoxUnique.TabIndex = 35;
-            this.textBoxUnique.Text = "Name";
-            this.textBoxUnique.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBoxUnique.Enter += new System.EventHandler(this.textBoxName_Enter);
-            this.textBoxUnique.Leave += new System.EventHandler(this.textBoxName_Leave);
-            // 
-            // labelCurrency
-            // 
-            this.labelCurrency.AutoSize = true;
-            this.labelCurrency.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelCurrency.Location = new System.Drawing.Point(2, 71);
-            this.labelCurrency.Name = "labelCurrency";
-            this.labelCurrency.Size = new System.Drawing.Size(52, 13);
-            this.labelCurrency.TabIndex = 36;
-            this.labelCurrency.Text = "Currency:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.AutoCompleteCustomSource.AddRange(new string[] {
-            "Academy",
-            "Crypt",
-            "Dried Lake",
-            "Dunes",
-            "Dungeon",
-            "Grotto",
-            "Overgrown Ruin",
-            "Tropical Island",
-            "Arcade",
-            "Arsenal",
-            "Cemetery",
-            "Mountain Ledge",
-            "Sewer",
-            "Thicket",
-            "Wharf",
-            "Ghetto",
-            "Mud Geyser",
-            "Reef",
-            "Spider Lair",
-            "Springs",
-            "Vaal Pyramid",
-            "Catacomb",
-            "Overgrown Shrine",
-            "Promenade",
-            "Shore",
-            "Spider Forest",
-            "Tunnel",
-            "Bog",
-            "Coves",
-            "Graveyard",
-            "Pier",
-            "Underground Sea",
-            "Arachnid Nest",
-            "Colonnade",
-            "Dry Woods",
-            "Strand",
-            "Temple",
-            "Jungle Valley",
-            "Torture Chamber",
-            "Waste Pool",
-            "Mine",
-            "Dry Peninsula",
-            "Canyon",
-            "Cells",
-            "Dark Forest",
-            "Gorge",
-            "Maze",
-            "Underground River",
-            "Bazaar",
-            "Necropolis",
-            "Plateau",
-            "Crematorium",
-            "Precinct",
-            "Shipyard",
-            "Shrine",
-            "Villa",
-            "Palace"});
-            this.textBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
-            this.textBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBox1.Location = new System.Drawing.Point(60, 69);
-            this.textBox1.MaxLength = 800;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(185, 22);
-            this.textBox1.TabIndex = 37;
-            this.textBox1.Text = "Name";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelMapDetails
             // 
             this.labelMapDetails.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.labelMapDetails.Location = new System.Drawing.Point(14, 25);
             this.labelMapDetails.Name = "labelMapDetails";
-            this.labelMapDetails.Size = new System.Drawing.Size(370, 185);
+            this.labelMapDetails.Size = new System.Drawing.Size(370, 205);
             this.labelMapDetails.TabIndex = 11;
-            this.labelMapDetails.Text = "Rarity: (0)\r\n{1}\r\n{2}\r\nLevel: {3}\r\nQuantity: {4}\r\nQuality: {5}\r\n\r\n{6}";
+            this.labelMapDetails.Text = "Rarity: (0)\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}";
             this.labelMapDetails.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textBoxNotes
+            // 
+            this.textBoxNotes.AutoCompleteCustomSource.AddRange(new string[] {
+            "Academy",
+            "Crypt",
+            "Dried Lake",
+            "Dunes",
+            "Dungeon",
+            "Grotto",
+            "Overgrown Ruin",
+            "Tropical Island",
+            "Arcade",
+            "Arsenal",
+            "Cemetery",
+            "Mountain Ledge",
+            "Sewer",
+            "Thicket",
+            "Wharf",
+            "Ghetto",
+            "Mud Geyser",
+            "Reef",
+            "Spider Lair",
+            "Springs",
+            "Vaal Pyramid",
+            "Catacomb",
+            "Overgrown Shrine",
+            "Promenade",
+            "Shore",
+            "Spider Forest",
+            "Tunnel",
+            "Bog",
+            "Coves",
+            "Graveyard",
+            "Pier",
+            "Underground Sea",
+            "Arachnid Nest",
+            "Colonnade",
+            "Dry Woods",
+            "Strand",
+            "Temple",
+            "Jungle Valley",
+            "Torture Chamber",
+            "Waste Pool",
+            "Mine",
+            "Dry Peninsula",
+            "Canyon",
+            "Cells",
+            "Dark Forest",
+            "Gorge",
+            "Maze",
+            "Underground River",
+            "Bazaar",
+            "Necropolis",
+            "Plateau",
+            "Crematorium",
+            "Precinct",
+            "Shipyard",
+            "Shrine",
+            "Villa",
+            "Palace"});
+            this.textBoxNotes.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.textBoxNotes.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxNotes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.textBoxNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxNotes.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxNotes.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxNotes.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.textBoxNotes.Location = new System.Drawing.Point(14, 344);
+            this.textBoxNotes.MaxLength = 800;
+            this.textBoxNotes.Multiline = true;
+            this.textBoxNotes.Name = "textBoxNotes";
+            this.textBoxNotes.Size = new System.Drawing.Size(370, 85);
+            this.textBoxNotes.TabIndex = 38;
+            this.textBoxNotes.Text = "Notes...";
+            this.textBoxNotes.TextChanged += new System.EventHandler(this.textBoxNotes_TextChanged);
+            this.textBoxNotes.Enter += new System.EventHandler(this.textBoxNotes_Enter);
+            this.textBoxNotes.Leave += new System.EventHandler(this.textBoxNotes_Leave);
             // 
             // buttonAdd
             // 
             this.buttonAdd.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.buttonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAdd.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonAdd.Location = new System.Drawing.Point(285, 66);
+            this.buttonAdd.Location = new System.Drawing.Point(285, 68);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.OwnerDrawText = null;
             this.buttonAdd.Size = new System.Drawing.Size(75, 23);
             this.buttonAdd.TabIndex = 38;
             this.buttonAdd.Text = "Add";
             this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
             // 
             // buttonClose
             // 
@@ -537,7 +583,8 @@ namespace Gumshoe_Maps
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.ClientSize = new System.Drawing.Size(396, 334);
+            this.ClientSize = new System.Drawing.Size(396, 445);
+            this.Controls.Add(this.textBoxNotes);
             this.Controls.Add(this.labelAddDrop);
             this.Controls.Add(this.panelAddDrop);
             this.Controls.Add(this.titlePanel);
@@ -545,6 +592,7 @@ namespace Gumshoe_Maps
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Details";
             this.Text = "Details";
+            this.VisibleChanged += new System.EventHandler(this.Details_VisibleChanged);
             this.titlePanel.ResumeLayout(false);
             this.titlePanel.PerformLayout();
             this.panelAddDrop.ResumeLayout(false);
@@ -577,5 +625,6 @@ namespace Gumshoe_Maps
         private Label labelCurrency;
         private Flatbutton buttonAdd;
         private Label labelMapDetails;
+        private TextBox textBoxNotes;
     }
 }
