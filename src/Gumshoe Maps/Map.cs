@@ -12,6 +12,11 @@ namespace Gumshoe_Maps
         public int Quality { get; set; }
         public int Quantity { get; set; }
         public List<string> Affixes { get; set; }
+        public DateTime StartAt { get; set; }
+        public DateTime FinishAt { get; set; }
+        public Int64 ExpBefore { get; set; }
+        public Int64 ExpAfter { get; set; }
+        public string Notes { get; set; }
 
         public bool Equals(Map other)
         {
