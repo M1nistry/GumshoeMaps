@@ -408,5 +408,20 @@ namespace Gumshoe_Maps
                 }
             }
         }
+
+        internal void AddCurrency(int id, string currency, int count)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string insertCurrency = @"INSERT INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @currency, @count);";
+                using (var cmd = new SQLiteCommand(insertCurrency, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@currency", currency);
+                    cmd.Parameters.AddWithValue("@count", count);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

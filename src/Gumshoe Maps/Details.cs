@@ -138,7 +138,44 @@ namespace Gumshoe_Maps
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
+            if (textBoxRarity.Text != String.Empty)
+            {
+                int zana = checkBoxZana.Checked ? 1 : 0, carto = checkBoxCarto.Checked ? 1 : 0, level;
+                var newMap = new Map
+                {
+                    Rarity = textBoxRarity.Text,
+                    Name = textBoxName.Text,
+                    Level = int.TryParse(textBoxLevel.Text, out level) ? level : 0,
 
+                };
+                _main._sql.AddDrop(newMap, MapId, zana, carto);
+            }
+            if (textBoxUnique.Text != String.Empty)
+            {
+                _main._sql.AddUnique(MapId, textBoxUnique.Text);
+            }
+            if (textBoxCurrency.Text != String.Empty && labelCurrencyValue.Text != @"0")
+            {
+                int currencyCount;
+                _main._sql.AddCurrency(MapId, new KeyValuePair<int, string>(int.TryParse(labelCurrencyValue.Text, out currencyCount) ? currencyCount : 0, textBoxCurrency.Text));
+            }
+        }
+
+        private void buttonCurrencyUp_Click(object sender, EventArgs e)
+        {
+            int count;
+            if (int.TryParse(labelCurrencyValue.Text, out count))
+            {
+                labelCurrencyValue.Text = (count + 1).ToString("#");
+            }
+        }
+
+        private void buttonCurrencyDown_Click(object sender, EventArgs e)
+        {
+            int count;
+            if (!int.TryParse(labelCurrencyValue.Text, out count)) return;
+            if (count == 0) return;
+            labelCurrencyValue.Text = (count - 1).ToString("#");
         }
     }
 }
