@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -11,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Tesseract;
-using ImageFormat = System.Drawing.Imaging.ImageFormat;
 
 namespace Gumshoe_Maps
 {
@@ -47,6 +45,8 @@ namespace Gumshoe_Maps
         private string _state;
         private int _timerTicks = 0;
         private bool _paintBorder;
+        internal int levelPercent = 0;
+        //TODO: Breakdodwn % gained into decimal using level experience / next level value and current experience
 
         private Control _focusedControl;
 
@@ -161,11 +161,13 @@ namespace Gumshoe_Maps
                                 _currentMap = ParseClipboard();
                                 if (_currentMap == null) break;
                                 _currentMap.ExpBefore = ExpValue();
-                                labelId.Text = _sql.AddMap(_currentMap).ToString(CultureInfo.InvariantCulture);
+                                _currentMap.Id = _sql.AddMap(_currentMap);
+                                labelId.Text = _currentMap.Id.ToString(CultureInfo.InvariantCulture);
                                 if (labelId.Text != String.Empty)
                                 {
                                     labelMapValue.Text = _currentMap.Name;
                                     panelCurrentMap.Visible = true;
+                                    labelExperience.Visible = false;
                                     _timerTicks = 0;
                                     timerMap.Start();
                                     RefreshMaps();
@@ -209,11 +211,18 @@ namespace Gumshoe_Maps
                     switch (m.WParam.ToInt32())
                     {
                         case (0):
-                            timerMap.Stop();
-                            _sql.FinishMap(int.Parse(labelId.Text), ExpValue());
-                            _state = "WAITING";
-                            labelStatusValue.Text = @"Awaiting a map to be selected to run...";
-                            Refresh();
+                            if (_state == "DROPS") { 
+                                timerMap.Stop();
+                                var expAfter = ExpValue();
+                                _sql.FinishMap(_currentMap.Id, expAfter);
+                                _state = "WAITING";
+                                var expDiff = expAfter - _currentMap.ExpBefore;
+                                labelExperience.Visible = true;
+                                labelExperience.Text = String.Format("Gained {0} xp ({1}%)", expDiff.ToString("#,##0"), levelPercent);
+                                labelStatusValue.Text = @"Awaiting a map to be selected to run...";
+                                RefreshMaps();
+                                Refresh();
+                            }
                             break;
 
                         case (1):
@@ -433,7 +442,7 @@ namespace Gumshoe_Maps
             var previousPoint = Cursor.Position;
             Cursor.Position = new Point(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height);
             Cursor.Clip = new Rectangle(Cursor.Position, new Size(1, 1));
-            Thread.Sleep(500);
+            Thread.Sleep(750);
             var bmpScreenshot = new Bitmap(Screen.PrimaryScreen.Bounds.Width,
                                                            Screen.PrimaryScreen.Bounds.Height,
                                                            PixelFormat.Format32bppArgb);
@@ -461,16 +470,20 @@ namespace Gumshoe_Maps
         internal Int64 ExpValue()
         {
             var exp = CaptureExp();
-            var value = Regex.Match(exp.Split(new[] { '\r', '\n' })[1], ":(.*)/")
-                    .ToString()
-                    .Replace(":", "")
-                    .Replace("/", "")
-                    .Replace(",", "").Trim();
-            int expValue;
-            if (int.TryParse(value, out expValue))
+            var match = Regex.Match(exp, ":(.*)/");
+            var percentMatch = Regex.Match(exp, @"(?<=\().+?(?=\%)");
+            string value = "", nextLevel = "";
+            int percentLevel;
+            if (match.Success) value = match.Groups[1].ToString().Replace(",", "").Trim();
+            if (percentMatch.Success) nextLevel = percentMatch.Groups[0].ToString();
+            if (levelPercent == 0) levelPercent = int.TryParse(nextLevel, out percentLevel) ? percentLevel : 0;
+            else levelPercent = (int.TryParse(nextLevel, out percentLevel) ? percentLevel : 0) - levelPercent;
+            Int64 expValue;
+            if (Int64.TryParse(value, out expValue))
             {
                 return expValue;
             }
+            
             return -1;
         }
 
@@ -504,6 +517,7 @@ namespace Gumshoe_Maps
         }
 
         #endregion
+        
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             ChangeClipboardChain(Handle, _nextClipboardViewer);

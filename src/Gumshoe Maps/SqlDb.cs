@@ -58,10 +58,10 @@ namespace Gumshoe_Maps
 
                         cmd.CommandText =
                             @"CREATE TABLE IF NOT EXISTS `unique_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
 
-                        cmd.CommandText = @"CREATE UNIQUE INDEX  IF NOT EXISTS currency_idx ON currency_drops(map_id, name);";
-                        cmd.ExecuteNonQuery();
+                            cmd.CommandText = @"CREATE UNIQUE INDEX  IF NOT EXISTS currency_idx ON currency_drops(map_id, name);";
+                            cmd.ExecuteNonQuery();
                         return true;
                     }
                 }
@@ -122,6 +122,7 @@ namespace Gumshoe_Maps
                         while (reader.Read())
                         {
                             int id, level, quality, quantity;
+                            Int64 expAfter, expBefore;
                             DateTime startAt, finishAt;
                             return new Map
                             {
@@ -134,6 +135,8 @@ namespace Gumshoe_Maps
                                 StartAt = DateTime.TryParse(reader["started_at"].ToString(), out startAt) ? startAt : new DateTime(0001, 01, 01),
                                 FinishAt = DateTime.TryParse(reader["finished_at"].ToString(), out finishAt) ? finishAt : new DateTime(0001, 01, 01),
                                 Notes = reader["notes"].ToString(),
+                                ExpAfter = Int64.TryParse(reader["exp_before"].ToString(), out expBefore) ? expBefore : 0,
+                                ExpBefore = Int64.TryParse(reader["exp_after"].ToString(), out expAfter) ? expAfter : 0,
                                 Affixes = affixes
                             };
                         }
@@ -356,7 +359,7 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string updateFinish = @"UPDATE `maps` SET finished_at=@finish AND exp_after=@expa WHERE id=@id";
+                const string updateFinish = @"UPDATE maps SET finished_at=@finish, exp_after=@expa WHERE id=@id";
                 using (var cmd = new SQLiteCommand(updateFinish, connection))
                 {
                     cmd.Parameters.AddWithValue("id", id);
@@ -399,7 +402,7 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string updateNotes = @"UPDATE `maps` SET notes=@notes WHERE id=@id";
+                const string updateNotes = @"UPDATE maps SET notes=@notes WHERE id=@id";
                 using (var cmd = new SQLiteCommand(updateNotes, connection))
                 {
                     cmd.Parameters.AddWithValue("@notes", notes);

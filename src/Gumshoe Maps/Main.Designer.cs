@@ -50,6 +50,7 @@
             this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCurrentMap = new System.Windows.Forms.Panel();
+            this.labelExperience = new System.Windows.Forms.Label();
             this.labelDurationValue = new System.Windows.Forms.Label();
             this.labelDuration = new System.Windows.Forms.Label();
             this.labelMapValue = new System.Windows.Forms.Label();
@@ -138,6 +139,7 @@
             this.dgvMaps.Location = new System.Drawing.Point(1, 1);
             this.dgvMaps.Margin = new System.Windows.Forms.Padding(2);
             this.dgvMaps.Name = "dgvMaps";
+            this.dgvMaps.ReadOnly = true;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -166,6 +168,7 @@
             this.idColumn.DataPropertyName = "id";
             this.idColumn.HeaderText = "ID";
             this.idColumn.Name = "idColumn";
+            this.idColumn.ReadOnly = true;
             this.idColumn.Visible = false;
             // 
             // mapColumn
@@ -175,6 +178,7 @@
             this.mapColumn.HeaderText = "";
             this.mapColumn.MinimumWidth = 225;
             this.mapColumn.Name = "mapColumn";
+            this.mapColumn.ReadOnly = true;
             this.mapColumn.Width = 250;
             // 
             // columnRarity
@@ -182,6 +186,7 @@
             this.columnRarity.DataPropertyName = "rarity";
             this.columnRarity.HeaderText = "Rarity";
             this.columnRarity.Name = "columnRarity";
+            this.columnRarity.ReadOnly = true;
             this.columnRarity.Visible = false;
             // 
             // levelColumn
@@ -189,6 +194,7 @@
             this.levelColumn.DataPropertyName = "level";
             this.levelColumn.HeaderText = "Level";
             this.levelColumn.Name = "levelColumn";
+            this.levelColumn.ReadOnly = true;
             this.levelColumn.Width = 35;
             // 
             // quantityColumn
@@ -196,6 +202,7 @@
             this.quantityColumn.DataPropertyName = "quantity";
             this.quantityColumn.HeaderText = "Quantity";
             this.quantityColumn.Name = "quantityColumn";
+            this.quantityColumn.ReadOnly = true;
             this.quantityColumn.Width = 50;
             // 
             // qualityColumn
@@ -203,6 +210,7 @@
             this.qualityColumn.DataPropertyName = "quality";
             this.qualityColumn.HeaderText = "Quality";
             this.qualityColumn.Name = "qualityColumn";
+            this.qualityColumn.ReadOnly = true;
             this.qualityColumn.Width = 50;
             // 
             // minusColumn
@@ -210,6 +218,7 @@
             this.minusColumn.DataPropertyName = "-";
             this.minusColumn.HeaderText = "-";
             this.minusColumn.Name = "minusColumn";
+            this.minusColumn.ReadOnly = true;
             this.minusColumn.Width = 30;
             // 
             // evenColumn
@@ -217,6 +226,7 @@
             this.evenColumn.DataPropertyName = " ";
             this.evenColumn.HeaderText = " ";
             this.evenColumn.Name = "evenColumn";
+            this.evenColumn.ReadOnly = true;
             this.evenColumn.Width = 30;
             // 
             // plusColumn
@@ -224,20 +234,33 @@
             this.plusColumn.DataPropertyName = "+";
             this.plusColumn.HeaderText = "+";
             this.plusColumn.Name = "plusColumn";
+            this.plusColumn.ReadOnly = true;
             this.plusColumn.Width = 30;
             // 
             // panelCurrentMap
             // 
             this.panelCurrentMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelCurrentMap.Controls.Add(this.labelExperience);
             this.panelCurrentMap.Controls.Add(this.labelDurationValue);
             this.panelCurrentMap.Controls.Add(this.labelDuration);
             this.panelCurrentMap.Controls.Add(this.labelMapValue);
             this.panelCurrentMap.Controls.Add(this.labelCurrentMap);
             this.panelCurrentMap.Location = new System.Drawing.Point(9, 59);
             this.panelCurrentMap.Name = "panelCurrentMap";
-            this.panelCurrentMap.Size = new System.Drawing.Size(188, 49);
+            this.panelCurrentMap.Size = new System.Drawing.Size(340, 49);
             this.panelCurrentMap.TabIndex = 4;
             this.panelCurrentMap.Visible = false;
+            // 
+            // labelExperience
+            // 
+            this.labelExperience.AutoSize = true;
+            this.labelExperience.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelExperience.Location = new System.Drawing.Point(155, 24);
+            this.labelExperience.Name = "labelExperience";
+            this.labelExperience.Size = new System.Drawing.Size(77, 13);
+            this.labelExperience.TabIndex = 5;
+            this.labelExperience.Text = "Gained {0] exp";
+            this.labelExperience.Visible = false;
             // 
             // labelDurationValue
             // 
@@ -574,6 +597,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn evenColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn plusColumn;
         private System.Windows.Forms.ToolStripMenuItem detailsToolStripMenuItem;
+        private System.Windows.Forms.Label labelExperience;
     }
 }
 

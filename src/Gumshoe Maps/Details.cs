@@ -108,7 +108,7 @@ namespace Gumshoe_Maps
             var mapItem = _main._sql.GetMap(MapId);
             var affixString = mapItem.Affixes.Aggregate("", (current, affix) => current + (affix + Environment.NewLine));
             var duration = (mapItem.FinishAt - mapItem.StartAt);
-            labelMapDetails.Text = String.Format("Rarity: {0}\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}\r\n\r\n{6}", 
+            labelMapDetails.Text = String.Format("Rarity: {0}\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}\r\n\r\n{6}\r\n{7}", 
                 mapItem.Rarity, mapItem.Name, mapItem.Level, mapItem.Quantity, mapItem.Quality, affixString, String.Format("Duration: {0:00}:{1:00}:{2:00}", duration.Hours, duration.Minutes, duration.Seconds));
             textBoxNotes.Text = mapItem.Notes;
         }
@@ -122,7 +122,7 @@ namespace Gumshoe_Maps
 
         private void textBoxNotes_Leave(object sender, EventArgs e)
         {
-            if (textBoxNotes.Text != String.Empty && textBoxNotes.Text != @"Notes...")
+            if (textBoxNotes.Text != @"Notes...")
             {
                 _main._sql.UpdateNotes(MapId, textBoxNotes.Text);
                 return;
