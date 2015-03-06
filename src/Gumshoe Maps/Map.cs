@@ -14,8 +14,8 @@ namespace Gumshoe_Maps
         public List<string> Affixes { get; set; }
         public DateTime StartAt { get; set; }
         public DateTime FinishAt { get; set; }
-        public Int64 ExpBefore { get; set; }
-        public Int64 ExpAfter { get; set; }
+        public Experience ExpBefore { get; set; }
+        public Experience ExpAfter { get; set; }
         public string Notes { get; set; }
 
         public bool Equals(Map other)

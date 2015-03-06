@@ -78,6 +78,7 @@
     <Compile Include="Details.Designer.cs">
       <DependentUpon>Details.cs</DependentUpon>
     </Compile>
+    <Compile Include="Experience.cs" />
     <Compile Include="Flatbutton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -178,6 +179,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Experience.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\gears.png" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity.Migrations.Model;
 using System.Data.SQLite;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
+using System.Windows.Forms;
 
 namespace Gumshoe_Maps
 {
@@ -43,25 +41,24 @@ namespace Gumshoe_Maps
                                         `exp_before` INTEGER, `exp_after` INTEGER);";
                         cmd.ExecuteNonQuery();
 
-                        cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `affixes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `affix` TEXT);";
+                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `affixes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `affix` TEXT);";
                         cmd.ExecuteNonQuery();
 
-                        cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `map_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `rarity` TEXT, 
+                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `map_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `rarity` TEXT, 
                                         `level` INTEGER, `name` TEXT, `zana` TINYINT, `carto` TINYINT)";
                         cmd.ExecuteNonQuery();
 
-                        cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `currency_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT, `count` INTEGER)";
+                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `currency_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT, `count` INTEGER)";
                         cmd.ExecuteNonQuery();
 
-                        cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `unique_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
-                            cmd.ExecuteNonQuery();
+                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `unique_drops` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `name` TEXT)";
+                        cmd.ExecuteNonQuery();
 
-                            cmd.CommandText = @"CREATE UNIQUE INDEX  IF NOT EXISTS currency_idx ON currency_drops(map_id, name);";
-                            cmd.ExecuteNonQuery();
+                        cmd.CommandText = @"CREATE UNIQUE INDEX  IF NOT EXISTS currency_idx ON currency_drops(map_id, name);";
+                        cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `experience` (`level` INTEGER, `total_exp` INTEGER, `exp_goal` INTEGER);";
+                        cmd.ExecuteNonQuery();
                         return true;
                     }
                 }
@@ -87,7 +84,7 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("quality", newMap.Quality);
                     cmd.Parameters.AddWithValue("quantity", newMap.Quantity + Properties.Settings.Default.zanaQuantity);
                     cmd.Parameters.AddWithValue("startedat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    cmd.Parameters.AddWithValue("expb", newMap.ExpBefore);
+                    cmd.Parameters.AddWithValue("expb", newMap.ExpBefore.CurrentExperience);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -122,7 +119,15 @@ namespace Gumshoe_Maps
                         while (reader.Read())
                         {
                             int id, level, quality, quantity;
-                            Int64 expAfter, expBefore;
+                            Int64 experienceBefore, experienceAfter;
+                            var expAfter = new Experience
+                            {
+                                CurrentExperience = Int64.TryParse(reader["exp_before"].ToString(), out experienceAfter) ? experienceAfter : 0
+                            };
+                            var expBefore = new Experience
+                            {
+                                CurrentExperience = Int64.TryParse(reader["exp_after"].ToString(), out experienceBefore) ? experienceBefore : 0,
+                            };
                             DateTime startAt, finishAt;
                             return new Map
                             {
@@ -135,8 +140,8 @@ namespace Gumshoe_Maps
                                 StartAt = DateTime.TryParse(reader["started_at"].ToString(), out startAt) ? startAt : new DateTime(0001, 01, 01),
                                 FinishAt = DateTime.TryParse(reader["finished_at"].ToString(), out finishAt) ? finishAt : new DateTime(0001, 01, 01),
                                 Notes = reader["notes"].ToString(),
-                                ExpAfter = Int64.TryParse(reader["exp_before"].ToString(), out expBefore) ? expBefore : 0,
-                                ExpBefore = Int64.TryParse(reader["exp_after"].ToString(), out expAfter) ? expAfter : 0,
+                                ExpAfter = expAfter,
+                                ExpBefore = expBefore,
                                 Affixes = affixes
                             };
                         }
@@ -355,7 +360,7 @@ namespace Gumshoe_Maps
             return affixList;
         }
 
-        internal void FinishMap(int id, Int64 exp)
+        internal void FinishMap(int id, Experience exp)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -364,7 +369,7 @@ namespace Gumshoe_Maps
                 {
                     cmd.Parameters.AddWithValue("id", id);
                     cmd.Parameters.AddWithValue("finish", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    cmd.Parameters.AddWithValue("expa", exp);
+                    cmd.Parameters.AddWithValue("expa", exp.CurrentExperience);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -425,6 +430,65 @@ namespace Gumshoe_Maps
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        internal void AddExperience(List<Experience> expList)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string insertExp = @"INSERT INTO `experience` (level, total_exp, exp_goal) VALUES (@level, @totalExp, @expGoal);";
+                var transaction = connection.BeginTransaction();
+                using (var cmd = new SQLiteCommand(insertExp, connection))
+                {
+                    cmd.Parameters.AddWithValue("@level", "");
+                    cmd.Parameters.AddWithValue("@totalExp", "");
+                    cmd.Parameters.AddWithValue("@expGoal", "");
+                    foreach (var item in expList)
+                    {
+                        InsertExperience(item, cmd);
+                    }
+                }
+                transaction.Commit();
+            }
+        }
+
+        private static void InsertExperience(Experience exp, SQLiteCommand cmd)
+        {
+            cmd.Parameters["@level"].Value = exp.Level;
+            cmd.Parameters["@totalExp"].Value = exp.CurrentExperience;
+            cmd.Parameters["@expGoal"].Value = exp.NextLevelExperience;
+            cmd.ExecuteNonQuery();
+        }
+
+        internal int ExperienceCount()
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string countExp = @"SELECT count(*) FROM `experience`;";
+                using (var cmd = new SQLiteCommand(countExp, connection))
+                {
+                    int count;
+                    var value = cmd.ExecuteScalar();
+                    if (value != null && int.TryParse(value.ToString(), out count)) return count;
+                }
+            }
+            return 0;
+        }
+
+        internal int ExperienceGoal(int level)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string countExp = @"SELECT exp_goal FROM `experience` WHERE level=@level;";
+                using (var cmd = new SQLiteCommand(countExp, connection))
+                {
+                    cmd.Parameters.AddWithValue("@level", level);
+                    int exp;
+                    var value = cmd.ExecuteScalar();
+                    if (value != null && int.TryParse(value.ToString(), out exp)) return exp;
+                }
+            }
+            return 0;
         }
     }
 }

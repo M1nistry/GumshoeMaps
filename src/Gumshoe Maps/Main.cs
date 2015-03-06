@@ -45,7 +45,6 @@ namespace Gumshoe_Maps
         private string _state;
         private int _timerTicks = 0;
         private bool _paintBorder;
-        internal int levelPercent = 0;
         //TODO: Breakdodwn % gained into decimal using level experience / next level value and current experience
 
         private Control _focusedControl;
@@ -79,7 +78,7 @@ namespace Gumshoe_Maps
                 menuItem.ForeColor = SystemColors.ControlLight;
             }
             contextMenuDgvMaps.Renderer = new ContextRenderer();
-
+            if (_sql.ExperienceCount() != 100) PopulateExperience();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -105,6 +104,25 @@ namespace Gumshoe_Maps
         public static Main GetSingleton()
         {
             return _main;
+        }
+
+        private void PopulateExperience()
+        {
+            var lines = File.ReadAllLines(Directory.GetCurrentDirectory() + @"\Resources\Experience.csv").Select(a => a.Split(','));
+            var listExp = new List<Experience>();
+            foreach (var line in lines)
+            {
+                int level, expGoal;
+                Int64 experience;
+                var exp = new Experience
+                {
+                    Level = int.TryParse(line[0], out level) ? level : 0,
+                    CurrentExperience = Int64.TryParse(line[1], out experience) ? experience : 0,
+                    NextLevelExperience = int.TryParse(line[2], out expGoal) ? expGoal : 0
+                };
+                listExp.Add(exp);
+            }
+            _sql.AddExperience(listExp);
         }
 
         #region Title Bar
@@ -216,9 +234,11 @@ namespace Gumshoe_Maps
                                 var expAfter = ExpValue();
                                 _sql.FinishMap(_currentMap.Id, expAfter);
                                 _state = "WAITING";
-                                var expDiff = expAfter - _currentMap.ExpBefore;
+                                var expDiff = expAfter.CurrentExperience - _currentMap.ExpBefore.CurrentExperience;
+                                var expGoal = _sql.ExperienceGoal(_currentMap.ExpBefore.Level);
+                                var percentDiff = (float)expDiff/expGoal;
                                 labelExperience.Visible = true;
-                                labelExperience.Text = String.Format("Gained {0} xp ({1}%)", expDiff.ToString("#,##0"), levelPercent);
+                                labelExperience.Text = String.Format("Gained {0} xp ({1:P2})", expDiff.ToString("#,##0"), percentDiff);
                                 labelStatusValue.Text = @"Awaiting a map to be selected to run...";
                                 RefreshMaps();
                                 Refresh();
@@ -467,24 +487,23 @@ namespace Gumshoe_Maps
             return result;
         }
 
-        internal Int64 ExpValue()
+        internal Experience ExpValue()
         {
             var exp = CaptureExp();
-            var match = Regex.Match(exp, ":(.*)/");
-            var percentMatch = Regex.Match(exp, @"(?<=\().+?(?=\%)");
-            string value = "", nextLevel = "";
-            int percentLevel;
-            if (match.Success) value = match.Groups[1].ToString().Replace(",", "").Trim();
-            if (percentMatch.Success) nextLevel = percentMatch.Groups[0].ToString();
-            if (levelPercent == 0) levelPercent = int.TryParse(nextLevel, out percentLevel) ? percentLevel : 0;
-            else levelPercent = (int.TryParse(nextLevel, out percentLevel) ? percentLevel : 0) - levelPercent;
-            Int64 expValue;
-            if (Int64.TryParse(value, out expValue))
+            var currentPercent = Regex.Match(exp, @"(?<=\().+?(?=\%)");
+            var currentLevel = Regex.Match(exp, @"(?<=el ).+?(?=\ )");
+            var currentExperience = Regex.Match(exp, @"(?<=p: ).+?(?=\ )");
+            var nextLevel = Regex.Match(exp.Replace("\n", ""), @"(?<=l: ).+?(?=$)");
+            int level, percent;
+            Int64 currentExp, expToLevel;
+            var expObj = new Experience
             {
-                return expValue;
-            }
-            
-            return -1;
+                Level = currentLevel.Success ? int.TryParse(currentLevel.Groups[0].ToString(), out level) ? level : 0 : 0,
+                Percentage = currentPercent.Success ? int.TryParse(currentPercent.Groups[0].ToString(), out percent) ? percent : 0 : 0,
+                CurrentExperience = currentExperience.Success ? Int64.TryParse(currentExperience.Groups[0].ToString().Replace(",",""), out currentExp) ? currentExp : 0 : 0,
+                NextLevelExperience = nextLevel.Success ? Int64.TryParse(nextLevel.Groups[0].ToString().Replace(",",""), out expToLevel) ? expToLevel : 0 : 0
+            };
+            return expObj;
         }
 
         #endregion
