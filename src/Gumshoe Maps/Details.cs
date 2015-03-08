@@ -91,7 +91,7 @@ namespace Gumshoe_Maps
         {
             if (textBoxName.Text != @"Name") return;
             textBoxName.Text = String.Empty;
-            textBoxName.ForeColor = SystemColors.ControlDark;
+            textBoxName.ForeColor = SystemColors.ControlLight;
             textBoxName.TextAlign = HorizontalAlignment.Left;
         }
 
@@ -99,8 +99,41 @@ namespace Gumshoe_Maps
         {
             if (textBoxName.Text != String.Empty) return;
             textBoxName.Text = @"Name";
-            textBoxName.ForeColor = SystemColors.ControlLight;
+            textBoxName.ForeColor = SystemColors.ControlDark;
             textBoxName.TextAlign = HorizontalAlignment.Center;
+        }
+
+
+        private void textBoxUnique_Enter(object sender, EventArgs e)
+        {
+            if (textBoxUnique.Text != @"Name") return;
+            textBoxUnique.Text = String.Empty;
+            textBoxUnique.ForeColor = SystemColors.ControlLight;
+            textBoxUnique.TextAlign = HorizontalAlignment.Left;
+        }
+
+        private void textBoxUnique_Leave(object sender, EventArgs e)
+        {
+            if (textBoxUnique.Text != String.Empty) return;
+            textBoxUnique.Text = @"Name";
+            textBoxUnique.ForeColor = SystemColors.ControlDark;
+            textBoxUnique.TextAlign = HorizontalAlignment.Center;
+        }
+
+        private void textBoxCurrency_Enter(object sender, EventArgs e)
+        {
+            if (textBoxCurrency.Text != @"Name") return;
+            textBoxCurrency.Text = String.Empty;
+            textBoxCurrency.ForeColor = SystemColors.ControlLight;
+            textBoxCurrency.TextAlign = HorizontalAlignment.Left;
+        }
+
+        private void textBoxCurrency_Leave(object sender, EventArgs e)
+        {
+            if (textBoxCurrency.Text != String.Empty) return;
+            textBoxCurrency.Text = @"Name";
+            textBoxCurrency.ForeColor = SystemColors.ControlDark;
+            textBoxCurrency.TextAlign = HorizontalAlignment.Center;
         }
 
         private void Details_VisibleChanged(object sender, EventArgs e)
@@ -108,8 +141,11 @@ namespace Gumshoe_Maps
             var mapItem = _main._sql.GetMap(MapId);
             var affixString = mapItem.Affixes.Aggregate("", (current, affix) => current + (affix + Environment.NewLine));
             var duration = (mapItem.FinishAt - mapItem.StartAt);
-            labelMapDetails.Text = String.Format("Rarity: {0}\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}\r\n\r\n{6}\r\n{7}", 
-                mapItem.Rarity, mapItem.Name, mapItem.Level, mapItem.Quantity, mapItem.Quality, affixString, String.Format("Duration: {0:00}:{1:00}:{2:00}", duration.Hours, duration.Minutes, duration.Seconds));
+            var expDiff = mapItem.ExpAfter.CurrentExperience - mapItem.ExpBefore.CurrentExperience;
+            var expGoal = _main._sql.ExperienceGoal(mapItem.ExpBefore.Level);
+            var percentDiff = (float)expDiff / expGoal;
+            labelMapDetails.Text = String.Format("Rarity: {0}\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}\r\n\r\n{6}\r\nGained: {7} ({8:P2})",
+                mapItem.Rarity, mapItem.Name, mapItem.Level, mapItem.Quantity, mapItem.Quality, affixString, String.Format("Duration: {0:00}:{1:00}:{2:00}", duration.Hours, duration.Minutes, duration.Seconds), expDiff.ToString("#,##0"), percentDiff);
             textBoxNotes.Text = mapItem.Notes;
         }
 
@@ -177,5 +213,8 @@ namespace Gumshoe_Maps
             if (count == 0) return;
             labelCurrencyValue.Text = (count - 1).ToString("#");
         }
+
+
+
     }
 }

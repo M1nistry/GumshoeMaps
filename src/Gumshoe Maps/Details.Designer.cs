@@ -35,11 +35,9 @@ namespace Gumshoe_Maps
         private void InitializeComponent()
         {
             this.titlePanel = new System.Windows.Forms.Panel();
-            this.buttonClose = new Gumshoe_Maps.Flatbutton();
-            this.buttonMinimize = new Gumshoe_Maps.Flatbutton();
             this.titleLabel = new System.Windows.Forms.Label();
             this.panelAddDrop = new System.Windows.Forms.Panel();
-            this.buttonAdd = new Gumshoe_Maps.Flatbutton();
+            this.labelCurrencyValue = new System.Windows.Forms.Label();
             this.textBoxCurrency = new System.Windows.Forms.TextBox();
             this.labelCurrency = new System.Windows.Forms.Label();
             this.textBoxUnique = new System.Windows.Forms.TextBox();
@@ -55,9 +53,11 @@ namespace Gumshoe_Maps
             this.labelAddDrop = new System.Windows.Forms.Label();
             this.labelMapDetails = new System.Windows.Forms.Label();
             this.textBoxNotes = new System.Windows.Forms.TextBox();
-            this.labelCurrencyValue = new System.Windows.Forms.Label();
             this.buttonCurrencyDown = new Gumshoe_Maps.Flatbutton();
             this.buttonCurrencyUp = new Gumshoe_Maps.Flatbutton();
+            this.buttonAdd = new Gumshoe_Maps.Flatbutton();
+            this.buttonClose = new Gumshoe_Maps.Flatbutton();
+            this.buttonMinimize = new Gumshoe_Maps.Flatbutton();
             this.titlePanel.SuspendLayout();
             this.panelAddDrop.SuspendLayout();
             this.panelEvents.SuspendLayout();
@@ -71,57 +71,19 @@ namespace Gumshoe_Maps
             this.titlePanel.Controls.Add(this.titleLabel);
             this.titlePanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.titlePanel.Location = new System.Drawing.Point(0, 0);
-            this.titlePanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.titlePanel.Name = "titlePanel";
-            this.titlePanel.Size = new System.Drawing.Size(528, 27);
+            this.titlePanel.Size = new System.Drawing.Size(396, 22);
             this.titlePanel.TabIndex = 7;
             this.titlePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.titlePanel_MouseDown);
-            // 
-            // buttonClose
-            // 
-            this.buttonClose.BackColor = System.Drawing.Color.Transparent;
-            this.buttonClose.FlatAppearance.BorderSize = 0;
-            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonClose.Location = new System.Drawing.Point(492, 0);
-            this.buttonClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.OwnerDrawText = null;
-            this.buttonClose.Size = new System.Drawing.Size(29, 27);
-            this.buttonClose.TabIndex = 23;
-            this.buttonClose.Text = "×";
-            this.buttonClose.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonClose.UseVisualStyleBackColor = false;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
-            // 
-            // buttonMinimize
-            // 
-            this.buttonMinimize.BackColor = System.Drawing.Color.Transparent;
-            this.buttonMinimize.FlatAppearance.BorderSize = 0;
-            this.buttonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMinimize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonMinimize.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonMinimize.Location = new System.Drawing.Point(452, 0);
-            this.buttonMinimize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonMinimize.Name = "buttonMinimize";
-            this.buttonMinimize.OwnerDrawText = "";
-            this.buttonMinimize.Size = new System.Drawing.Size(29, 27);
-            this.buttonMinimize.TabIndex = 22;
-            this.buttonMinimize.Text = "-";
-            this.buttonMinimize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonMinimize.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.buttonMinimize.UseVisualStyleBackColor = false;
-            this.buttonMinimize.Click += new System.EventHandler(this.buttonMinimize_Click);
             // 
             // titleLabel
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.titleLabel.Location = new System.Drawing.Point(15, 5);
-            this.titleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.titleLabel.Location = new System.Drawing.Point(11, 4);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(50, 19);
+            this.titleLabel.Size = new System.Drawing.Size(42, 13);
             this.titleLabel.TabIndex = 0;
             this.titleLabel.Text = "Details";
             // 
@@ -143,26 +105,20 @@ namespace Gumshoe_Maps
             this.panelAddDrop.Controls.Add(this.textBoxRarity);
             this.panelAddDrop.Controls.Add(this.panelEvents);
             this.panelAddDrop.Controls.Add(this.labelMapDrop);
-            this.panelAddDrop.Location = new System.Drawing.Point(19, 287);
-            this.panelAddDrop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelAddDrop.Location = new System.Drawing.Point(14, 233);
             this.panelAddDrop.Name = "panelAddDrop";
-            this.panelAddDrop.Size = new System.Drawing.Size(493, 129);
+            this.panelAddDrop.Size = new System.Drawing.Size(370, 105);
             this.panelAddDrop.TabIndex = 8;
             // 
-            // buttonAdd
+            // labelCurrencyValue
             // 
-            this.buttonAdd.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.buttonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAdd.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonAdd.Location = new System.Drawing.Point(380, 84);
-            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.OwnerDrawText = null;
-            this.buttonAdd.Size = new System.Drawing.Size(100, 28);
-            this.buttonAdd.TabIndex = 38;
-            this.buttonAdd.Text = "Add";
-            this.buttonAdd.UseVisualStyleBackColor = true;
-            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            this.labelCurrencyValue.AutoSize = true;
+            this.labelCurrencyValue.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelCurrencyValue.Location = new System.Drawing.Point(250, 73);
+            this.labelCurrencyValue.Name = "labelCurrencyValue";
+            this.labelCurrencyValue.Size = new System.Drawing.Size(13, 13);
+            this.labelCurrencyValue.TabIndex = 41;
+            this.labelCurrencyValue.Text = "0";
             // 
             // textBoxCurrency
             // 
@@ -197,23 +153,23 @@ namespace Gumshoe_Maps
             this.textBoxCurrency.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxCurrency.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCurrency.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxCurrency.Location = new System.Drawing.Point(80, 85);
-            this.textBoxCurrency.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxCurrency.Location = new System.Drawing.Point(60, 69);
             this.textBoxCurrency.MaxLength = 800;
             this.textBoxCurrency.Name = "textBoxCurrency";
-            this.textBoxCurrency.Size = new System.Drawing.Size(246, 26);
+            this.textBoxCurrency.Size = new System.Drawing.Size(185, 22);
             this.textBoxCurrency.TabIndex = 37;
             this.textBoxCurrency.Text = "Name";
             this.textBoxCurrency.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxCurrency.Enter += new System.EventHandler(this.textBoxCurrency_Enter);
+            this.textBoxCurrency.Leave += new System.EventHandler(this.textBoxCurrency_Leave);
             // 
             // labelCurrency
             // 
             this.labelCurrency.AutoSize = true;
             this.labelCurrency.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelCurrency.Location = new System.Drawing.Point(3, 87);
-            this.labelCurrency.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelCurrency.Location = new System.Drawing.Point(2, 71);
             this.labelCurrency.Name = "labelCurrency";
-            this.labelCurrency.Size = new System.Drawing.Size(69, 17);
+            this.labelCurrency.Size = new System.Drawing.Size(52, 13);
             this.labelCurrency.TabIndex = 36;
             this.labelCurrency.Text = "Currency:";
             // 
@@ -284,25 +240,23 @@ namespace Gumshoe_Maps
             this.textBoxUnique.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxUnique.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxUnique.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxUnique.Location = new System.Drawing.Point(80, 50);
-            this.textBoxUnique.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxUnique.Location = new System.Drawing.Point(60, 41);
             this.textBoxUnique.MaxLength = 800;
             this.textBoxUnique.Name = "textBoxUnique";
-            this.textBoxUnique.Size = new System.Drawing.Size(246, 26);
+            this.textBoxUnique.Size = new System.Drawing.Size(185, 22);
             this.textBoxUnique.TabIndex = 35;
             this.textBoxUnique.Text = "Name";
             this.textBoxUnique.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBoxUnique.Enter += new System.EventHandler(this.textBoxName_Enter);
-            this.textBoxUnique.Leave += new System.EventHandler(this.textBoxName_Leave);
+            this.textBoxUnique.Enter += new System.EventHandler(this.textBoxUnique_Enter);
+            this.textBoxUnique.Leave += new System.EventHandler(this.textBoxUnique_Leave);
             // 
             // labelUnique
             // 
             this.labelUnique.AutoSize = true;
             this.labelUnique.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelUnique.Location = new System.Drawing.Point(13, 53);
-            this.labelUnique.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelUnique.Location = new System.Drawing.Point(10, 43);
             this.labelUnique.Name = "labelUnique";
-            this.labelUnique.Size = new System.Drawing.Size(57, 17);
+            this.labelUnique.Size = new System.Drawing.Size(44, 13);
             this.labelUnique.TabIndex = 34;
             this.labelUnique.Text = "Unique:";
             // 
@@ -373,11 +327,10 @@ namespace Gumshoe_Maps
             this.textBoxName.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxName.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxName.Location = new System.Drawing.Point(224, 16);
-            this.textBoxName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxName.Location = new System.Drawing.Point(168, 13);
             this.textBoxName.MaxLength = 800;
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(102, 26);
+            this.textBoxName.Size = new System.Drawing.Size(77, 22);
             this.textBoxName.TabIndex = 33;
             this.textBoxName.Text = "Name";
             this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -408,11 +361,10 @@ namespace Gumshoe_Maps
             this.textBoxLevel.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxLevel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxLevel.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxLevel.Location = new System.Drawing.Point(172, 16);
-            this.textBoxLevel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxLevel.Location = new System.Drawing.Point(129, 13);
             this.textBoxLevel.MaxLength = 800;
             this.textBoxLevel.Name = "textBoxLevel";
-            this.textBoxLevel.Size = new System.Drawing.Size(43, 26);
+            this.textBoxLevel.Size = new System.Drawing.Size(33, 22);
             this.textBoxLevel.TabIndex = 32;
             this.textBoxLevel.Text = "Level";
             this.textBoxLevel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -423,11 +375,10 @@ namespace Gumshoe_Maps
             // 
             this.checkBoxCarto.AutoSize = true;
             this.checkBoxCarto.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBoxCarto.Location = new System.Drawing.Point(408, 20);
-            this.checkBoxCarto.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxCarto.Location = new System.Drawing.Point(306, 16);
             this.checkBoxCarto.Name = "checkBoxCarto";
             this.checkBoxCarto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxCarto.Size = new System.Drawing.Size(68, 21);
+            this.checkBoxCarto.Size = new System.Drawing.Size(54, 17);
             this.checkBoxCarto.TabIndex = 31;
             this.checkBoxCarto.Text = ":Carto";
             this.checkBoxCarto.UseVisualStyleBackColor = true;
@@ -436,11 +387,10 @@ namespace Gumshoe_Maps
             // 
             this.checkBoxZana.AutoSize = true;
             this.checkBoxZana.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.checkBoxZana.Location = new System.Drawing.Point(331, 20);
-            this.checkBoxZana.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxZana.Location = new System.Drawing.Point(248, 16);
             this.checkBoxZana.Name = "checkBoxZana";
             this.checkBoxZana.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxZana.Size = new System.Drawing.Size(67, 21);
+            this.checkBoxZana.Size = new System.Drawing.Size(54, 17);
             this.checkBoxZana.TabIndex = 30;
             this.checkBoxZana.Text = ":Zana";
             this.checkBoxZana.UseVisualStyleBackColor = true;
@@ -459,11 +409,10 @@ namespace Gumshoe_Maps
             this.textBoxRarity.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxRarity.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxRarity.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxRarity.Location = new System.Drawing.Point(80, 16);
-            this.textBoxRarity.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxRarity.Location = new System.Drawing.Point(60, 13);
             this.textBoxRarity.MaxLength = 800;
             this.textBoxRarity.Name = "textBoxRarity";
-            this.textBoxRarity.Size = new System.Drawing.Size(83, 26);
+            this.textBoxRarity.Size = new System.Drawing.Size(63, 22);
             this.textBoxRarity.TabIndex = 29;
             this.textBoxRarity.Text = "Rarity";
             this.textBoxRarity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -473,10 +422,9 @@ namespace Gumshoe_Maps
             // panelEvents
             // 
             this.panelEvents.Controls.Add(this.listBoxEvents);
-            this.panelEvents.Location = new System.Drawing.Point(83, 41);
-            this.panelEvents.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelEvents.Location = new System.Drawing.Point(62, 33);
             this.panelEvents.Name = "panelEvents";
-            this.panelEvents.Size = new System.Drawing.Size(133, 0);
+            this.panelEvents.Size = new System.Drawing.Size(100, 0);
             this.panelEvents.TabIndex = 26;
             this.panelEvents.Visible = false;
             // 
@@ -487,20 +435,18 @@ namespace Gumshoe_Maps
             this.listBoxEvents.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.listBoxEvents.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.listBoxEvents.FormattingEnabled = true;
-            this.listBoxEvents.Location = new System.Drawing.Point(3, 2);
-            this.listBoxEvents.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBoxEvents.Location = new System.Drawing.Point(2, 2);
             this.listBoxEvents.Name = "listBoxEvents";
-            this.listBoxEvents.Size = new System.Drawing.Size(231, 13);
+            this.listBoxEvents.Size = new System.Drawing.Size(173, 13);
             this.listBoxEvents.TabIndex = 22;
             // 
             // labelMapDrop
             // 
             this.labelMapDrop.AutoSize = true;
             this.labelMapDrop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelMapDrop.Location = new System.Drawing.Point(31, 21);
-            this.labelMapDrop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelMapDrop.Location = new System.Drawing.Point(23, 17);
             this.labelMapDrop.Name = "labelMapDrop";
-            this.labelMapDrop.Size = new System.Drawing.Size(39, 17);
+            this.labelMapDrop.Size = new System.Drawing.Size(31, 13);
             this.labelMapDrop.TabIndex = 10;
             this.labelMapDrop.Text = "Map:";
             // 
@@ -508,20 +454,18 @@ namespace Gumshoe_Maps
             // 
             this.labelAddDrop.AutoSize = true;
             this.labelAddDrop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelAddDrop.Location = new System.Drawing.Point(28, 278);
-            this.labelAddDrop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelAddDrop.Location = new System.Drawing.Point(21, 226);
             this.labelAddDrop.Name = "labelAddDrop";
-            this.labelAddDrop.Size = new System.Drawing.Size(68, 17);
+            this.labelAddDrop.Size = new System.Drawing.Size(52, 13);
             this.labelAddDrop.TabIndex = 9;
             this.labelAddDrop.Text = "Add Drop";
             // 
             // labelMapDetails
             // 
             this.labelMapDetails.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelMapDetails.Location = new System.Drawing.Point(19, 31);
-            this.labelMapDetails.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelMapDetails.Location = new System.Drawing.Point(14, 25);
             this.labelMapDetails.Name = "labelMapDetails";
-            this.labelMapDetails.Size = new System.Drawing.Size(493, 252);
+            this.labelMapDetails.Size = new System.Drawing.Size(370, 205);
             this.labelMapDetails.TabIndex = 11;
             this.labelMapDetails.Text = "Rarity: (0)\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}";
             this.labelMapDetails.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -593,39 +537,26 @@ namespace Gumshoe_Maps
             this.textBoxNotes.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxNotes.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxNotes.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.textBoxNotes.Location = new System.Drawing.Point(19, 423);
-            this.textBoxNotes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxNotes.Location = new System.Drawing.Point(14, 344);
             this.textBoxNotes.MaxLength = 800;
             this.textBoxNotes.Multiline = true;
             this.textBoxNotes.Name = "textBoxNotes";
-            this.textBoxNotes.Size = new System.Drawing.Size(493, 104);
+            this.textBoxNotes.Size = new System.Drawing.Size(370, 85);
             this.textBoxNotes.TabIndex = 38;
             this.textBoxNotes.Text = "Notes...";
             this.textBoxNotes.TextChanged += new System.EventHandler(this.textBoxNotes_TextChanged);
             this.textBoxNotes.Enter += new System.EventHandler(this.textBoxNotes_Enter);
             this.textBoxNotes.Leave += new System.EventHandler(this.textBoxNotes_Leave);
             // 
-            // labelCurrencyValue
-            // 
-            this.labelCurrencyValue.AutoSize = true;
-            this.labelCurrencyValue.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelCurrencyValue.Location = new System.Drawing.Point(334, 90);
-            this.labelCurrencyValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelCurrencyValue.Name = "labelCurrencyValue";
-            this.labelCurrencyValue.Size = new System.Drawing.Size(16, 17);
-            this.labelCurrencyValue.TabIndex = 41;
-            this.labelCurrencyValue.Text = "0";
-            // 
             // buttonCurrencyDown
             // 
             this.buttonCurrencyDown.FlatAppearance.BorderSize = 0;
             this.buttonCurrencyDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCurrencyDown.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonCurrencyDown.Location = new System.Drawing.Point(354, 97);
-            this.buttonCurrencyDown.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonCurrencyDown.Location = new System.Drawing.Point(266, 79);
             this.buttonCurrencyDown.Name = "buttonCurrencyDown";
             this.buttonCurrencyDown.OwnerDrawText = null;
-            this.buttonCurrencyDown.Size = new System.Drawing.Size(19, 23);
+            this.buttonCurrencyDown.Size = new System.Drawing.Size(14, 19);
             this.buttonCurrencyDown.TabIndex = 40;
             this.buttonCurrencyDown.Text = "↓";
             this.buttonCurrencyDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -637,29 +568,75 @@ namespace Gumshoe_Maps
             this.buttonCurrencyUp.FlatAppearance.BorderSize = 0;
             this.buttonCurrencyUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCurrencyUp.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonCurrencyUp.Location = new System.Drawing.Point(354, 73);
-            this.buttonCurrencyUp.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonCurrencyUp.Location = new System.Drawing.Point(266, 59);
             this.buttonCurrencyUp.Name = "buttonCurrencyUp";
             this.buttonCurrencyUp.OwnerDrawText = null;
-            this.buttonCurrencyUp.Size = new System.Drawing.Size(19, 23);
+            this.buttonCurrencyUp.Size = new System.Drawing.Size(14, 19);
             this.buttonCurrencyUp.TabIndex = 39;
             this.buttonCurrencyUp.Text = "↑";
             this.buttonCurrencyUp.UseVisualStyleBackColor = true;
             this.buttonCurrencyUp.Click += new System.EventHandler(this.buttonCurrencyUp_Click);
             // 
+            // buttonAdd
+            // 
+            this.buttonAdd.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.buttonAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAdd.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.buttonAdd.Location = new System.Drawing.Point(285, 68);
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.OwnerDrawText = null;
+            this.buttonAdd.Size = new System.Drawing.Size(75, 23);
+            this.buttonAdd.TabIndex = 38;
+            this.buttonAdd.Text = "Add";
+            this.buttonAdd.UseVisualStyleBackColor = true;
+            this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.BackColor = System.Drawing.Color.Transparent;
+            this.buttonClose.FlatAppearance.BorderSize = 0;
+            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClose.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.buttonClose.Location = new System.Drawing.Point(369, 0);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.OwnerDrawText = null;
+            this.buttonClose.Size = new System.Drawing.Size(22, 22);
+            this.buttonClose.TabIndex = 23;
+            this.buttonClose.Text = "×";
+            this.buttonClose.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonClose.UseVisualStyleBackColor = false;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
+            // buttonMinimize
+            // 
+            this.buttonMinimize.BackColor = System.Drawing.Color.Transparent;
+            this.buttonMinimize.FlatAppearance.BorderSize = 0;
+            this.buttonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMinimize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMinimize.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.buttonMinimize.Location = new System.Drawing.Point(339, 0);
+            this.buttonMinimize.Name = "buttonMinimize";
+            this.buttonMinimize.OwnerDrawText = "";
+            this.buttonMinimize.Size = new System.Drawing.Size(22, 22);
+            this.buttonMinimize.TabIndex = 22;
+            this.buttonMinimize.Text = "-";
+            this.buttonMinimize.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonMinimize.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.buttonMinimize.UseVisualStyleBackColor = false;
+            this.buttonMinimize.Click += new System.EventHandler(this.buttonMinimize_Click);
+            // 
             // Details
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.ClientSize = new System.Drawing.Size(528, 548);
+            this.ClientSize = new System.Drawing.Size(396, 445);
             this.Controls.Add(this.textBoxNotes);
             this.Controls.Add(this.labelAddDrop);
             this.Controls.Add(this.panelAddDrop);
             this.Controls.Add(this.titlePanel);
             this.Controls.Add(this.labelMapDetails);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Details";
             this.Text = "Details";
             this.VisibleChanged += new System.EventHandler(this.Details_VisibleChanged);

@@ -45,7 +45,6 @@ namespace Gumshoe_Maps
         private string _state;
         private int _timerTicks = 0;
         private bool _paintBorder;
-        //TODO: Breakdodwn % gained into decimal using level experience / next level value and current experience
 
         private Control _focusedControl;
 
@@ -453,7 +452,6 @@ namespace Gumshoe_Maps
             };
             dgvMaps.DataSource = _mapSource;
             dgvMaps.Columns["idColumn"].ValueType = typeof(double);
-            
         }
 
         private string CaptureExp()

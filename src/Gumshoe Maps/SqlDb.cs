@@ -37,8 +37,7 @@ namespace Gumshoe_Maps
                     {
                         cmd.CommandText =
                             @"CREATE TABLE IF NOT EXISTS `maps` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `rarity` TEXT, `level` INTEGER, 
-                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT
-                                        `exp_before` INTEGER, `exp_after` INTEGER);";
+                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT);";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `affixes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `affix` TEXT);";
@@ -59,6 +58,9 @@ namespace Gumshoe_Maps
 
                         cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `experience` (`level` INTEGER, `total_exp` INTEGER, `exp_goal` INTEGER);";
                         cmd.ExecuteNonQuery();
+
+                        cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `map_experience` (`map_id` INTEGER, `exp_before` INTEGER, `level_before` INTEGER, `percent_before` INTEGER, 
+                                           `exp_after` INTEGER, `level_after`, `percent_after`);";
                         return true;
                     }
                 }
@@ -75,7 +77,7 @@ namespace Gumshoe_Maps
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`, `exp_before`) VALUES 
-                                                             (@rarity, @level, @name, @quality, @quantity, @startedat, @expb)";
+                                                             (@rarity, @level, @name, @quality, @quantity, @startedat)";
                 using (var cmd = new SQLiteCommand(addQuery, connection))
                 {
                     cmd.Parameters.AddWithValue("rarity", newMap.Rarity);
@@ -84,7 +86,6 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("quality", newMap.Quality);
                     cmd.Parameters.AddWithValue("quantity", newMap.Quantity + Properties.Settings.Default.zanaQuantity);
                     cmd.Parameters.AddWithValue("startedat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    cmd.Parameters.AddWithValue("expb", newMap.ExpBefore.CurrentExperience);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -100,6 +101,16 @@ namespace Gumshoe_Maps
                         cmd.ExecuteNonQuery();
                     }
                 }
+                const string addExperience =
+                    @"INSERT INTO `map_experience` (`map_id`, `exp_before`, `level_before`, `percent_before`) VALUES (@id, @expb, @levelb, @percentb);";
+                using (var cmd = new SQLiteCommand(addExperience, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", mapId);
+                    cmd.Parameters.AddWithValue("@expb", newMap.ExpBefore.CurrentExperience);
+                    cmd.Parameters.AddWithValue("@levelb", newMap.ExpBefore.Level);
+                    cmd.Parameters.AddWithValue("@percentb", newMap.ExpBefore.Percentage);
+                    cmd.ExecuteNonQuery();
+                }
 
                 return mapId;
             }
@@ -110,7 +121,7 @@ namespace Gumshoe_Maps
             var affixes = MapAffixes(mapId);
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string queryMap = @"SELECT * from `maps` WHERE id=@id";
+                const string queryMap = @"SELECT * from `maps` m1 JOIN `map_experience` e1 ON m1.id=e1.map_id WHERE m1.id=@id";
                 using (var cmd = new SQLiteCommand(queryMap, connection))
                 {
                     cmd.Parameters.AddWithValue("@id", mapId);
@@ -118,16 +129,21 @@ namespace Gumshoe_Maps
                     {
                         while (reader.Read())
                         {
-                            int id, level, quality, quantity;
+                            int id, level, quality, quantity, levelBefore, percentBefore, levelAfter, percentAfter;
                             Int64 experienceBefore, experienceAfter;
-                            var expAfter = new Experience
-                            {
-                                CurrentExperience = Int64.TryParse(reader["exp_before"].ToString(), out experienceAfter) ? experienceAfter : 0
-                            };
                             var expBefore = new Experience
                             {
-                                CurrentExperience = Int64.TryParse(reader["exp_after"].ToString(), out experienceBefore) ? experienceBefore : 0,
+                                CurrentExperience = Int64.TryParse(reader["exp_before"].ToString(), out experienceBefore) ? experienceBefore : 0,
+                                Level = int.TryParse(reader["level_before"].ToString(), out levelBefore) ? levelBefore : 0,
+                                Percentage = int.TryParse(reader["percent_before"].ToString(), out percentBefore) ? percentBefore : 0,
                             };
+                            var expAfter = new Experience
+                            {
+                                CurrentExperience = Int64.TryParse(reader["exp_after"].ToString(), out experienceAfter) ? experienceAfter : 0,
+                                Level = int.TryParse(reader["level_after"].ToString(), out levelAfter) ? levelAfter : 0,
+                                Percentage = int.TryParse(reader["percent_after"].ToString(), out percentAfter) ? percentAfter : 0,
+                            };
+                            
                             DateTime startAt, finishAt;
                             return new Map
                             {
@@ -364,12 +380,20 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string updateFinish = @"UPDATE maps SET finished_at=@finish, exp_after=@expa WHERE id=@id";
+                const string updateFinish = @"UPDATE maps SET finished_at=@finish WHERE id=@id";
                 using (var cmd = new SQLiteCommand(updateFinish, connection))
                 {
                     cmd.Parameters.AddWithValue("id", id);
                     cmd.Parameters.AddWithValue("finish", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    cmd.Parameters.AddWithValue("expa", exp.CurrentExperience);
+                    cmd.ExecuteNonQuery();
+                }
+                const string updateExperience = @"UPDATE map_experience (exp_after, level_after, percent_after) VALUES (@expa, @levela, @percenta) WHERE map_id=@id;";
+                using (var cmd = new SQLiteCommand(updateExperience, connection))
+                {
+                    cmd.Parameters.AddWithValue("@expa", exp.CurrentExperience);
+                    cmd.Parameters.AddWithValue("@levla", exp.Level);
+                    cmd.Parameters.AddWithValue("@perceta", exp.Percentage);
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
                 }
             }
