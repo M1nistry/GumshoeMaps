@@ -525,7 +525,7 @@
             this.titleBar.SettingsVisible = true;
             this.titleBar.Size = new System.Drawing.Size(496, 22);
             this.titleBar.TabIndex = 2;
-            this.titleBar.Title = "Gumshoe Maps v0.1";
+            this.titleBar.Title = "Gumshoe Maps | 0.3";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             // 
             // Main

@@ -276,12 +276,20 @@ namespace Gumshoe_Maps
 
         #region Custom Methods
 
+        /// <summary>
+        /// Checks the clipboard to determine if it contains PoE Related data or not
+        /// </summary>
+        /// <returns> TRUE if it contains 'Rarity:' on the first line </returns>
         internal bool CheckClipboard()
         {
             var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r","").Split(new[] { '\n' });
             return clipboardContents.Length != -1 && clipboardContents[0].StartsWith("Rarity:");
         }
 
+        /// <summary>
+        /// Parses the information gained off the keyboard to construct a Map Object
+        /// </summary>
+        /// <returns>Map object with details from the clipboard</returns>
         internal Map ParseClipboard()
         {
             var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] {'\n'});
@@ -337,6 +345,10 @@ namespace Gumshoe_Maps
             return null;
         }
 
+        /// <summary>
+        /// Parses currency off the clipboard into a KVP of stack size and currency name
+        /// </summary>
+        /// <returns>Stack Count and Name</returns>
         internal KeyValuePair<int, string> ParseCurrency()
         {
             var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] { '\n' });
@@ -348,6 +360,10 @@ namespace Gumshoe_Maps
             return new KeyValuePair<int, string>(int.Parse(size.ToString()), currency);
         }
 
+        /// <summary>
+        /// Parses the name out of a unique non-map item off the clipboard
+        /// </summary>
+        /// <returns>Name of unique item</returns>
         internal string ParseUnique()
         {
             var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] { '\n' });
@@ -357,6 +373,11 @@ namespace Gumshoe_Maps
             return item;
         }
 
+        /// <summary>
+        /// Gets the affixes from the clipboard and puts them into a list
+        /// </summary>
+        /// <param name="clipboardContents">The map item as it appears on the clipboard</param>
+        /// <returns>List containing each parameter</returns>
         private static List<string> GetAffixes(string[] clipboardContents)
         {
             var affixes = new List<string>();
@@ -402,6 +423,11 @@ namespace Gumshoe_Maps
             return inputLine;
         }
 
+        /// <summary>
+        /// Finds the currently focused control
+        /// </summary>
+        /// <param name="control"></param>
+        /// <returns>control that is currently focused</returns>
         public static Control FindFocusedControl(Control control)
         {
             var container = control as ContainerControl;
@@ -431,6 +457,9 @@ namespace Gumshoe_Maps
             base.OnPaint(e);
         }
 
+        /// <summary>
+        /// Refreshes the drops datagridview
+        /// </summary>
         private void RefreshDrops()
         {
             if (labelId.Text == String.Empty) return;
@@ -443,6 +472,9 @@ namespace Gumshoe_Maps
             dgvDrops.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
+        /// <summary>
+        /// Refreshes the map datagridview
+        /// </summary>
         private void RefreshMaps()
         {
             _mapSource = new BindingSource
@@ -454,6 +486,10 @@ namespace Gumshoe_Maps
             dgvMaps.Columns["idColumn"].ValueType = typeof(double);
         }
 
+        /// <summary>
+        /// Uses OCR to parse the experience from the tooltip. Moves the mouse to the desired position automatically
+        /// </summary>
+        /// <returns>The string containing the full experience tooltip</returns>
         private string CaptureExp()
         {
             Cursor = new Cursor(Cursor.Current.Handle);
@@ -485,6 +521,10 @@ namespace Gumshoe_Maps
             return result;
         }
 
+        /// <summary>
+        /// Parses the captured experience into the Experience object
+        /// </summary>
+        /// <returns>Experience object containing all the details</returns>
         internal Experience ExpValue()
         {
             var exp = CaptureExp();
