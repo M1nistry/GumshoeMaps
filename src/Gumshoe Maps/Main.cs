@@ -15,7 +15,6 @@ namespace Gumshoe_Maps
 {
     public partial class Main : Form
     {
-
         #region DLLs
 
         [DllImport("User32.dll")]
@@ -41,7 +40,7 @@ namespace Gumshoe_Maps
         private static Main _main;
         private Settings _settings;
         private Details _details;
-        internal Map _currentMap;
+        internal Map CurrentMap;
         private string _state;
         private int _timerTicks = 0;
         private bool _paintBorder;
@@ -175,14 +174,14 @@ namespace Gumshoe_Maps
                         switch (_state)
                         {
                             case("WAITING"):
-                                _currentMap = ParseClipboard();
-                                if (_currentMap == null) break;
-                                _currentMap.ExpBefore = ExpValue();
-                                _currentMap.Id = _sql.AddMap(_currentMap);
-                                labelId.Text = _currentMap.Id.ToString(CultureInfo.InvariantCulture);
+                                CurrentMap = ParseClipboard();
+                                if (CurrentMap == null) break;
+                                CurrentMap.ExpBefore = ExpValue();
+                                CurrentMap.Id = _sql.AddMap(CurrentMap);
+                                labelId.Text = CurrentMap.Id.ToString(CultureInfo.InvariantCulture);
                                 if (labelId.Text != String.Empty)
                                 {
-                                    labelMapValue.Text = _currentMap.Name;
+                                    labelMapValue.Text = CurrentMap.Name;
                                     panelCurrentMap.Visible = true;
                                     labelExperience.Visible = false;
                                     _timerTicks = 0;
@@ -231,10 +230,10 @@ namespace Gumshoe_Maps
                             if (_state == "DROPS") { 
                                 timerMap.Stop();
                                 var expAfter = ExpValue();
-                                _sql.FinishMap(_currentMap.Id, expAfter);
+                                _sql.FinishMap(CurrentMap.Id, expAfter);
                                 _state = "WAITING";
-                                var expDiff = expAfter.CurrentExperience - _currentMap.ExpBefore.CurrentExperience;
-                                var expGoal = _sql.ExperienceGoal(_currentMap.ExpBefore.Level);
+                                var expDiff = expAfter.CurrentExperience - CurrentMap.ExpBefore.CurrentExperience;
+                                var expGoal = _sql.ExperienceGoal(CurrentMap.ExpBefore.Level);
                                 var percentDiff = (float)expDiff/expGoal;
                                 labelExperience.Visible = true;
                                 labelExperience.Text = String.Format("Gained {0} xp ({1:P2})", expDiff.ToString("#,##0"), percentDiff);
@@ -629,7 +628,7 @@ namespace Gumshoe_Maps
 
         private void dgvMaps_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex <= 0) return;
+            if (e.RowIndex <= 0 || dgvMaps.SelectedRows.Count <= 0) return;
             labelId.Text = dgvMaps.SelectedRows[0].Cells["idColumn"].Value.ToString();
             //RefreshDrops();
         }
@@ -752,6 +751,7 @@ namespace Gumshoe_Maps
 
         private void detailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (dgvMaps.SelectedRows.Count <= 0) return;
             if (_details != null && _details.Visible)
             {
                 _details.Focus();

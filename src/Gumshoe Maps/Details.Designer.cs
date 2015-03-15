@@ -114,7 +114,7 @@ namespace Gumshoe_Maps
             // 
             this.labelCurrencyValue.AutoSize = true;
             this.labelCurrencyValue.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelCurrencyValue.Location = new System.Drawing.Point(250, 73);
+            this.labelCurrencyValue.Location = new System.Drawing.Point(252, 73);
             this.labelCurrencyValue.Name = "labelCurrencyValue";
             this.labelCurrencyValue.Size = new System.Drawing.Size(13, 13);
             this.labelCurrencyValue.TabIndex = 41;
@@ -553,10 +553,10 @@ namespace Gumshoe_Maps
             this.buttonCurrencyDown.FlatAppearance.BorderSize = 0;
             this.buttonCurrencyDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCurrencyDown.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonCurrencyDown.Location = new System.Drawing.Point(266, 79);
+            this.buttonCurrencyDown.Location = new System.Drawing.Point(266, 77);
             this.buttonCurrencyDown.Name = "buttonCurrencyDown";
             this.buttonCurrencyDown.OwnerDrawText = null;
-            this.buttonCurrencyDown.Size = new System.Drawing.Size(14, 19);
+            this.buttonCurrencyDown.Size = new System.Drawing.Size(14, 20);
             this.buttonCurrencyDown.TabIndex = 40;
             this.buttonCurrencyDown.Text = "↓";
             this.buttonCurrencyDown.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -568,7 +568,7 @@ namespace Gumshoe_Maps
             this.buttonCurrencyUp.FlatAppearance.BorderSize = 0;
             this.buttonCurrencyUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCurrencyUp.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonCurrencyUp.Location = new System.Drawing.Point(266, 59);
+            this.buttonCurrencyUp.Location = new System.Drawing.Point(266, 58);
             this.buttonCurrencyUp.Name = "buttonCurrencyUp";
             this.buttonCurrencyUp.OwnerDrawText = null;
             this.buttonCurrencyUp.Size = new System.Drawing.Size(14, 19);
