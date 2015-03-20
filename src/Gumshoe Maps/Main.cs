@@ -77,8 +77,25 @@ namespace Gumshoe_Maps
             }
             contextMenuDgvMaps.Renderer = new ContextRenderer();
             if (_sql.ExperienceCount() != 100) PopulateExperience();
+            if (!PopulateLeagues()) MessageBox.Show(@"Failed to populate leagues! Check your internet connection and try again.", @"Error fetching league data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (listBoxEvents.Items.Contains(Properties.Settings.Default.selectedLeague))
+                textBoxSelectedEvent.Text = Properties.Settings.Default.selectedLeague;
         }
 
+        private bool PopulateLeagues()
+        {
+            var raceEvents = JsonHandler.ParseJson<JsonEvent[]>("http://api.pathofexile.com/leagues");
+            foreach (var league in raceEvents)
+            {
+                DateTime startAt, finishAt;
+                if (league.Id == "Standard" || league.Id == "Hardcore") listBoxEvents.Items.Add(league.Id);
+                if (league.StartAt == null || league.EndAt == null) continue;
+                if (!DateTime.TryParse(league.StartAt, out startAt) || !DateTime.TryParse(league.EndAt, out finishAt)) continue;
+                var diff = finishAt - startAt;
+                if (diff.Days > 6 && startAt.Year >= 2015) listBoxEvents.Items.Add(league.Id);
+            }
+            return listBoxEvents.Items.Count > 0;
+        }
         protected override void OnPaint(PaintEventArgs e)
         {
             if (_state != "WAITING")
@@ -170,6 +187,11 @@ namespace Gumshoe_Maps
                 case WM_DRAWCLIPBOARD:
                     if (CheckClipboard())
                     {
+                        if (textBoxSelectedEvent.Text == String.Empty && Visible)
+                        {
+                            MessageBox.Show(@"Please verify that you have selected a league and try again.", @"Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
                         var clipboard = Clipboard.GetText(TextDataFormat.Text);
                         switch (_state)
                         {
@@ -294,6 +316,7 @@ namespace Gumshoe_Maps
             var clipboardContents = Clipboard.GetText(TextDataFormat.Text).Replace("\r", "").Split(new[] {'\n'});
             Map newMap;
             if (!Clipboard.GetText(TextDataFormat.Text).Contains("Map")) return null;
+            if (Clipboard.GetText(TextDataFormat.Text).Contains("Sacrifice at")) return null;
 
             if (clipboardContents[0].Replace("Rarity: ", "") == "Normal" || clipboardContents[0].Replace("Rarity: ", "") == "Magic")
             {
@@ -766,6 +789,63 @@ namespace Gumshoe_Maps
                 _details.ShowDialog();
             }
         }
+
+        #region EventsDropDown
+        private void buttonExpandEvents_Click(object sender, EventArgs e)
+        {
+            buttonExpandEvents.Text = !panelEventsList.Visible ? "↑" : "↓";
+            panelEventsList.Visible = !panelEventsList.Visible;
+
+            if (panelEventsList.Visible)
+            {
+                panelEventsList.Height = (listBoxEvents.Items.Count * 14) + 1;
+                listBoxEvents.Height = panelEventsList.Height;
+                listBoxEvents.Focus();
+            }
+            else
+            {
+                panelEventsList.Height = 0;
+            }
+        }
+
+        private void listBoxEvents_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index,
+                    e.State ^ DrawItemState.Selected, e.ForeColor,
+                    Properties.Settings.Default.themeColor);
+            e.DrawBackground();
+            e.Graphics.DrawString(listBoxEvents.Items[e.Index].ToString(), e.Font, Brushes.FloralWhite, e.Bounds, StringFormat.GenericDefault);
+            e.DrawFocusRectangle();
+        }
+
+        private void listBoxEvents_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listBoxEvents.SelectedItems.Count != 1) return;
+            textBoxSelectedEvent.Text = listBoxEvents.SelectedItem.ToString();
+            buttonExpandEvents.PerformClick();
+        }
+
+        private void panelEventsList_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, panelEventsList.ClientRectangle, Properties.Settings.Default.themeColor, ButtonBorderStyle.Solid);
+        }
+
+        private void listBoxEvents_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (listBoxEvents.SelectedItems.Count != 1 && e.KeyChar != (Char)Keys.Enter) return;
+            textBoxSelectedEvent.Text = listBoxEvents.SelectedItem.ToString();
+            buttonExpandEvents.PerformClick();
+        }
+        #endregion
+
+        private void textBoxSelectedEvent_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.selectedLeague = textBoxSelectedEvent.Text;
+            Properties.Settings.Default.Save();
+        }
+
 
     }
 }

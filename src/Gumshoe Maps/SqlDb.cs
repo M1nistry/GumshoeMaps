@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Gumshoe_Maps
 {
@@ -76,7 +77,7 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`, `exp_before`) VALUES 
+                const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`) VALUES 
                                                              (@rarity, @level, @name, @quality, @quantity, @startedat)";
                 using (var cmd = new SQLiteCommand(addQuery, connection))
                 {
@@ -173,6 +174,7 @@ namespace Gumshoe_Maps
             dtMaps.Columns.Add("id", typeof(int));
             dtMaps.Columns.Add("level");
             dtMaps.Columns.Add("name");
+            dtMaps.Columns.Add("gained");
             dtMaps.Columns.Add("rarity");
             dtMaps.Columns.Add("quality");
             dtMaps.Columns.Add("quantity");
@@ -192,9 +194,9 @@ namespace Gumshoe_Maps
                             while (reader.Read())
                             {
                                 var mapId = int.Parse(reader["id"].ToString());
-                                dtMaps.Rows.Add(mapId,
-                                    int.Parse(reader["level"].ToString()),
-                                    reader["name"].ToString(), reader["rarity"].ToString(), int.Parse(reader["quality"].ToString()),
+                                dtMaps.Rows.Add(mapId, int.Parse(reader["level"].ToString()),
+                                    reader["name"].ToString(), String.Format("{0:N0}",ExpGained(mapId)),
+                                    reader["rarity"].ToString(), int.Parse(reader["quality"].ToString()),
                                     int.Parse(reader["quantity"].ToString()), MapDrops(mapId, "<"),
                                     MapDrops(mapId, "="), MapDrops(mapId, ">"));
                             }
@@ -305,6 +307,29 @@ namespace Gumshoe_Maps
             }
         }
 
+        internal long ExpGained(int id)
+        {
+            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+            {
+                const string queryGained = @"SELECT exp_after, exp_before FROM map_experience WHERE map_id=@id";
+                using (var cmd = new SQLiteCommand(queryGained, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            long expBefore, expAfter;
+                            if (!Int64.TryParse(reader["exp_before"].ToString(), out expBefore) || !Int64.TryParse(reader["exp_after"].ToString(), out expAfter)) continue;
+                            var value = (expAfter - expBefore);
+                            return value;
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+
         internal void AddCurrency(int mapId, KeyValuePair<int, string> currency)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
@@ -387,12 +412,12 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("finish", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     cmd.ExecuteNonQuery();
                 }
-                const string updateExperience = @"UPDATE map_experience (exp_after, level_after, percent_after) VALUES (@expa, @levela, @percenta) WHERE map_id=@id;";
+                const string updateExperience = @"UPDATE map_experience SET exp_after=@expa, level_after=@levela, percent_after=@percenta WHERE map_id=@id;";
                 using (var cmd = new SQLiteCommand(updateExperience, connection))
                 {
                     cmd.Parameters.AddWithValue("@expa", exp.CurrentExperience);
-                    cmd.Parameters.AddWithValue("@levla", exp.Level);
-                    cmd.Parameters.AddWithValue("@perceta", exp.Percentage);
+                    cmd.Parameters.AddWithValue("@levela", exp.Level);
+                    cmd.Parameters.AddWithValue("@percenta", exp.Percentage);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
                 }

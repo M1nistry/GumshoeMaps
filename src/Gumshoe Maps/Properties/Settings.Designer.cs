@@ -25,7 +25,7 @@ namespace Gumshoe_Maps.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
+        [global::System.Configuration.DefaultSettingValueAttribute("SkyBlue")]
         public global::System.Drawing.Color themeColor {
             get {
                 return ((global::System.Drawing.Color)(this["themeColor"]));
@@ -80,6 +80,18 @@ namespace Gumshoe_Maps.Properties {
             }
             set {
                 this["cartoHotkey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string selectedLeague {
+            get {
+                return ((string)(this["selectedLeague"]));
+            }
+            set {
+                this["selectedLeague"] = value;
             }
         }
     }

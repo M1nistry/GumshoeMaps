@@ -40,6 +40,12 @@ namespace Gumshoe_Maps
             set { titlePanel.BackColor = value;  } 
         }
 
+        public Color TitleFontColor
+        {
+            get { return titleLabel.ForeColor; }
+            set { titleLabel.ForeColor = value; }
+        }
+
         public EventHandler SettingsClick, MinimizeClick, CloseClick;
 
         protected void buttonSettings_Click(object sender, EventArgs e)
