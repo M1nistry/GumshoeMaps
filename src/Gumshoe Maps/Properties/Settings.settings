@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="themeColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">Gold</Value>
+      <Value Profile="(Default)">SkyBlue</Value>
     </Setting>
     <Setting Name="zanaQuantity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -16,6 +16,9 @@
     </Setting>
     <Setting Name="cartoHotkey" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">115</Value>
+    </Setting>
+    <Setting Name="selectedLeague" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

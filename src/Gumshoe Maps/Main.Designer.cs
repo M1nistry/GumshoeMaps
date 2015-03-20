@@ -40,15 +40,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.panelDgv = new System.Windows.Forms.Panel();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
-            this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnRarity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.qualityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.minusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCurrentMap = new System.Windows.Forms.Panel();
             this.labelExperience = new System.Windows.Forms.Label();
             this.labelDurationValue = new System.Windows.Forms.Label();
@@ -68,18 +59,35 @@
             this.contextMenuDgvMaps = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.detailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDgvRight = new System.Windows.Forms.Panel();
             this.labelZanaValue = new System.Windows.Forms.Label();
+            this.textBoxSelectedEvent = new System.Windows.Forms.TextBox();
+            this.panelEventsCombo = new System.Windows.Forms.Panel();
+            this.panelEventsList = new System.Windows.Forms.Panel();
+            this.listBoxEvents = new System.Windows.Forms.ListBox();
+            this.buttonExpandEvents = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaDown = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaUp = new Gumshoe_Maps.Flatbutton();
             this.titleBar = new Gumshoe_Maps.TitleBar();
-            this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnExp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnRarity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.qualityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.minusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelDgv.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.panelCurrentMap.SuspendLayout();
             this.panelDgvExtra.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDrops)).BeginInit();
             this.contextMenuDgvMaps.SuspendLayout();
+            this.panelEventsCombo.SuspendLayout();
+            this.panelEventsList.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelDgv
@@ -121,6 +129,7 @@
             this.dgvMaps.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMaps.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.mapColumn,
+            this.columnExp,
             this.idColumn,
             this.columnRarity,
             this.levelColumn,
@@ -166,80 +175,6 @@
             this.dgvMaps.MouseEnter += new System.EventHandler(this.dgvMaps_MouseEnter);
             this.dgvMaps.MouseLeave += new System.EventHandler(this.dgvMaps_MouseLeave);
             // 
-            // mapColumn
-            // 
-            this.mapColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.mapColumn.DataPropertyName = "name";
-            this.mapColumn.HeaderText = "";
-            this.mapColumn.MinimumWidth = 225;
-            this.mapColumn.Name = "mapColumn";
-            this.mapColumn.ReadOnly = true;
-            this.mapColumn.Width = 250;
-            // 
-            // idColumn
-            // 
-            this.idColumn.DataPropertyName = "id";
-            this.idColumn.HeaderText = "ID";
-            this.idColumn.Name = "idColumn";
-            this.idColumn.ReadOnly = true;
-            this.idColumn.Visible = false;
-            // 
-            // columnRarity
-            // 
-            this.columnRarity.DataPropertyName = "rarity";
-            this.columnRarity.HeaderText = "Rarity";
-            this.columnRarity.Name = "columnRarity";
-            this.columnRarity.ReadOnly = true;
-            this.columnRarity.Visible = false;
-            // 
-            // levelColumn
-            // 
-            this.levelColumn.DataPropertyName = "level";
-            this.levelColumn.HeaderText = "Level";
-            this.levelColumn.Name = "levelColumn";
-            this.levelColumn.ReadOnly = true;
-            this.levelColumn.Width = 35;
-            // 
-            // quantityColumn
-            // 
-            this.quantityColumn.DataPropertyName = "quantity";
-            this.quantityColumn.HeaderText = "Quantity";
-            this.quantityColumn.Name = "quantityColumn";
-            this.quantityColumn.ReadOnly = true;
-            this.quantityColumn.Width = 50;
-            // 
-            // qualityColumn
-            // 
-            this.qualityColumn.DataPropertyName = "quality";
-            this.qualityColumn.HeaderText = "Quality";
-            this.qualityColumn.Name = "qualityColumn";
-            this.qualityColumn.ReadOnly = true;
-            this.qualityColumn.Width = 50;
-            // 
-            // minusColumn
-            // 
-            this.minusColumn.DataPropertyName = "-";
-            this.minusColumn.HeaderText = "-";
-            this.minusColumn.Name = "minusColumn";
-            this.minusColumn.ReadOnly = true;
-            this.minusColumn.Width = 30;
-            // 
-            // evenColumn
-            // 
-            this.evenColumn.DataPropertyName = " ";
-            this.evenColumn.HeaderText = " ";
-            this.evenColumn.Name = "evenColumn";
-            this.evenColumn.ReadOnly = true;
-            this.evenColumn.Width = 30;
-            // 
-            // plusColumn
-            // 
-            this.plusColumn.DataPropertyName = "+";
-            this.plusColumn.HeaderText = "+";
-            this.plusColumn.Name = "plusColumn";
-            this.plusColumn.ReadOnly = true;
-            this.plusColumn.Width = 30;
-            // 
             // panelCurrentMap
             // 
             this.panelCurrentMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -250,7 +185,7 @@
             this.panelCurrentMap.Controls.Add(this.labelCurrentMap);
             this.panelCurrentMap.Location = new System.Drawing.Point(9, 59);
             this.panelCurrentMap.Name = "panelCurrentMap";
-            this.panelCurrentMap.Size = new System.Drawing.Size(340, 49);
+            this.panelCurrentMap.Size = new System.Drawing.Size(303, 49);
             this.panelCurrentMap.TabIndex = 4;
             this.panelCurrentMap.Visible = false;
             // 
@@ -310,7 +245,7 @@
             this.labelId.Enabled = false;
             this.labelId.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelId.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelId.Location = new System.Drawing.Point(472, 95);
+            this.labelId.Location = new System.Drawing.Point(467, 102);
             this.labelId.Name = "labelId";
             this.labelId.Size = new System.Drawing.Size(0, 13);
             this.labelId.TabIndex = 3;
@@ -430,7 +365,7 @@
             // labelZana
             // 
             this.labelZana.AutoSize = true;
-            this.labelZana.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelZana.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.labelZana.Location = new System.Drawing.Point(369, 38);
             this.labelZana.Name = "labelZana";
             this.labelZana.Size = new System.Drawing.Size(75, 13);
@@ -454,22 +389,28 @@
             this.detailsToolStripMenuItem,
             this.reportingToolStripMenuItem});
             this.contextMenuDgvMaps.Name = "contextMenuDgvMaps";
-            this.contextMenuDgvMaps.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuDgvMaps.Size = new System.Drawing.Size(127, 70);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // detailsToolStripMenuItem
             // 
             this.detailsToolStripMenuItem.Name = "detailsToolStripMenuItem";
-            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.detailsToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.detailsToolStripMenuItem.Text = "Details";
             this.detailsToolStripMenuItem.Click += new System.EventHandler(this.detailsToolStripMenuItem_Click);
+            // 
+            // reportingToolStripMenuItem
+            // 
+            this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
+            this.reportingToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.reportingToolStripMenuItem.Text = "Reporting";
             // 
             // panelDgvRight
             // 
@@ -482,18 +423,82 @@
             // labelZanaValue
             // 
             this.labelZanaValue.AutoSize = true;
-            this.labelZanaValue.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelZanaValue.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.labelZanaValue.Location = new System.Drawing.Point(446, 39);
             this.labelZanaValue.Name = "labelZanaValue";
             this.labelZanaValue.Size = new System.Drawing.Size(13, 13);
             this.labelZanaValue.TabIndex = 28;
             this.labelZanaValue.Text = "0";
             // 
+            // textBoxSelectedEvent
+            // 
+            this.textBoxSelectedEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+            this.textBoxSelectedEvent.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxSelectedEvent.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxSelectedEvent.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSelectedEvent.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxSelectedEvent.Location = new System.Drawing.Point(337, 89);
+            this.textBoxSelectedEvent.MaxLength = 800;
+            this.textBoxSelectedEvent.Name = "textBoxSelectedEvent";
+            this.textBoxSelectedEvent.ReadOnly = true;
+            this.textBoxSelectedEvent.Size = new System.Drawing.Size(122, 15);
+            this.textBoxSelectedEvent.TabIndex = 30;
+            this.textBoxSelectedEvent.TextChanged += new System.EventHandler(this.textBoxSelectedEvent_TextChanged);
+            // 
+            // panelEventsCombo
+            // 
+            this.panelEventsCombo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelEventsCombo.Controls.Add(this.buttonExpandEvents);
+            this.panelEventsCombo.Location = new System.Drawing.Point(334, 84);
+            this.panelEventsCombo.Name = "panelEventsCombo";
+            this.panelEventsCombo.Size = new System.Drawing.Size(141, 24);
+            this.panelEventsCombo.TabIndex = 31;
+            // 
+            // panelEventsList
+            // 
+            this.panelEventsList.Controls.Add(this.listBoxEvents);
+            this.panelEventsList.Location = new System.Drawing.Point(334, 108);
+            this.panelEventsList.Name = "panelEventsList";
+            this.panelEventsList.Size = new System.Drawing.Size(122, 0);
+            this.panelEventsList.TabIndex = 29;
+            this.panelEventsList.Visible = false;
+            this.panelEventsList.Paint += new System.Windows.Forms.PaintEventHandler(this.panelEventsList_Paint);
+            // 
+            // listBoxEvents
+            // 
+            this.listBoxEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+            this.listBoxEvents.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxEvents.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listBoxEvents.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.listBoxEvents.FormattingEnabled = true;
+            this.listBoxEvents.Location = new System.Drawing.Point(1, 1);
+            this.listBoxEvents.Name = "listBoxEvents";
+            this.listBoxEvents.Size = new System.Drawing.Size(120, 0);
+            this.listBoxEvents.TabIndex = 22;
+            this.listBoxEvents.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBoxEvents_DrawItem);
+            this.listBoxEvents.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listBoxEvents_KeyPress);
+            this.listBoxEvents.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxEvents_MouseDoubleClick);
+            // 
+            // buttonExpandEvents
+            // 
+            this.buttonExpandEvents.FlatAppearance.BorderSize = 0;
+            this.buttonExpandEvents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExpandEvents.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonExpandEvents.Location = new System.Drawing.Point(125, 0);
+            this.buttonExpandEvents.Name = "buttonExpandEvents";
+            this.buttonExpandEvents.OwnerDrawText = null;
+            this.buttonExpandEvents.Size = new System.Drawing.Size(14, 24);
+            this.buttonExpandEvents.TabIndex = 28;
+            this.buttonExpandEvents.Text = "↓";
+            this.buttonExpandEvents.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonExpandEvents.UseVisualStyleBackColor = true;
+            this.buttonExpandEvents.Click += new System.EventHandler(this.buttonExpandEvents_Click);
+            // 
             // buttonZanaDown
             // 
             this.buttonZanaDown.FlatAppearance.BorderSize = 0;
             this.buttonZanaDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonZanaDown.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.buttonZanaDown.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonZanaDown.Location = new System.Drawing.Point(461, 45);
             this.buttonZanaDown.Name = "buttonZanaDown";
             this.buttonZanaDown.OwnerDrawText = null;
@@ -508,7 +513,7 @@
             // 
             this.buttonZanaUp.FlatAppearance.BorderSize = 0;
             this.buttonZanaUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonZanaUp.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.buttonZanaUp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonZanaUp.Location = new System.Drawing.Point(461, 25);
             this.buttonZanaUp.Name = "buttonZanaUp";
             this.buttonZanaUp.OwnerDrawText = null;
@@ -529,12 +534,90 @@
             this.titleBar.TabIndex = 2;
             this.titleBar.Title = "Gumshoe Maps | 0.3";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.titleBar.TitleFontColor = System.Drawing.SystemColors.ControlLightLight;
             // 
-            // reportingToolStripMenuItem
+            // mapColumn
             // 
-            this.reportingToolStripMenuItem.Name = "reportingToolStripMenuItem";
-            this.reportingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.reportingToolStripMenuItem.Text = "Reporting";
+            this.mapColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.mapColumn.DataPropertyName = "name";
+            this.mapColumn.HeaderText = "";
+            this.mapColumn.MinimumWidth = 180;
+            this.mapColumn.Name = "mapColumn";
+            this.mapColumn.ReadOnly = true;
+            this.mapColumn.Width = 180;
+            // 
+            // columnExp
+            // 
+            this.columnExp.DataPropertyName = "gained";
+            this.columnExp.HeaderText = "Gained";
+            this.columnExp.MinimumWidth = 70;
+            this.columnExp.Name = "columnExp";
+            this.columnExp.ReadOnly = true;
+            this.columnExp.Width = 70;
+            // 
+            // idColumn
+            // 
+            this.idColumn.DataPropertyName = "id";
+            this.idColumn.HeaderText = "ID";
+            this.idColumn.Name = "idColumn";
+            this.idColumn.ReadOnly = true;
+            this.idColumn.Visible = false;
+            // 
+            // columnRarity
+            // 
+            this.columnRarity.DataPropertyName = "rarity";
+            this.columnRarity.HeaderText = "Rarity";
+            this.columnRarity.Name = "columnRarity";
+            this.columnRarity.ReadOnly = true;
+            this.columnRarity.Visible = false;
+            // 
+            // levelColumn
+            // 
+            this.levelColumn.DataPropertyName = "level";
+            this.levelColumn.HeaderText = "Level";
+            this.levelColumn.Name = "levelColumn";
+            this.levelColumn.ReadOnly = true;
+            this.levelColumn.Width = 35;
+            // 
+            // quantityColumn
+            // 
+            this.quantityColumn.DataPropertyName = "quantity";
+            this.quantityColumn.HeaderText = "Quantity";
+            this.quantityColumn.Name = "quantityColumn";
+            this.quantityColumn.ReadOnly = true;
+            this.quantityColumn.Width = 50;
+            // 
+            // qualityColumn
+            // 
+            this.qualityColumn.DataPropertyName = "quality";
+            this.qualityColumn.HeaderText = "Quality";
+            this.qualityColumn.Name = "qualityColumn";
+            this.qualityColumn.ReadOnly = true;
+            this.qualityColumn.Width = 50;
+            // 
+            // minusColumn
+            // 
+            this.minusColumn.DataPropertyName = "-";
+            this.minusColumn.HeaderText = "-";
+            this.minusColumn.Name = "minusColumn";
+            this.minusColumn.ReadOnly = true;
+            this.minusColumn.Width = 30;
+            // 
+            // evenColumn
+            // 
+            this.evenColumn.DataPropertyName = " ";
+            this.evenColumn.HeaderText = " ";
+            this.evenColumn.Name = "evenColumn";
+            this.evenColumn.ReadOnly = true;
+            this.evenColumn.Width = 30;
+            // 
+            // plusColumn
+            // 
+            this.plusColumn.DataPropertyName = "+";
+            this.plusColumn.HeaderText = "+";
+            this.plusColumn.Name = "plusColumn";
+            this.plusColumn.ReadOnly = true;
+            this.plusColumn.Width = 30;
             // 
             // Main
             // 
@@ -542,6 +625,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
             this.ClientSize = new System.Drawing.Size(496, 471);
+            this.Controls.Add(this.panelEventsList);
+            this.Controls.Add(this.textBoxSelectedEvent);
+            this.Controls.Add(this.panelEventsCombo);
             this.Controls.Add(this.labelZanaValue);
             this.Controls.Add(this.buttonZanaDown);
             this.Controls.Add(this.buttonZanaUp);
@@ -566,6 +652,8 @@
             this.panelDgvExtra.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDrops)).EndInit();
             this.contextMenuDgvMaps.ResumeLayout(false);
+            this.panelEventsCombo.ResumeLayout(false);
+            this.panelEventsList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -599,7 +687,14 @@
         private System.Windows.Forms.Label labelExperience;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnDrops;
+        private System.Windows.Forms.ToolStripMenuItem reportingToolStripMenuItem;
+        private System.Windows.Forms.TextBox textBoxSelectedEvent;
+        private System.Windows.Forms.Panel panelEventsCombo;
+        private Flatbutton buttonExpandEvents;
+        private System.Windows.Forms.Panel panelEventsList;
+        private System.Windows.Forms.ListBox listBoxEvents;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn columnExp;
         private System.Windows.Forms.DataGridViewTextBoxColumn idColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnRarity;
         private System.Windows.Forms.DataGridViewTextBoxColumn levelColumn;
@@ -608,7 +703,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn minusColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn evenColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn plusColumn;
-        private System.Windows.Forms.ToolStripMenuItem reportingToolStripMenuItem;
     }
 }
 
