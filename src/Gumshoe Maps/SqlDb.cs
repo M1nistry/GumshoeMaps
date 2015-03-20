@@ -60,6 +60,7 @@ namespace Gumshoe_Maps
 
                         cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `map_experience` (`map_id` INTEGER, `exp_before` INTEGER, `level_before` INTEGER, `percent_before` INTEGER, 
                                            `exp_after` INTEGER, `level_after`, `percent_after`);";
+                        cmd.ExecuteNonQuery();
                         return true;
                     }
                 }
