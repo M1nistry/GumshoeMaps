@@ -169,12 +169,12 @@ namespace Gumshoe_Maps
 
         private void textBoxNotes_TextChanged(object sender, EventArgs e)
         {
-            textBoxName.ForeColor = textBoxNotes.Text == @"Notes..." ? SystemColors.ControlDark : SystemColors.ControlLight;
+            textBoxName.ForeColor = textBoxName.Text == @"Name" ? SystemColors.ControlDark : SystemColors.ControlLight;
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            if (textBoxRarity.Text != String.Empty)
+            if (textBoxRarity.Text != String.Empty && textBoxName.Text != @"Name")
             {
                 int zana = checkBoxZana.Checked ? 1 : 0, carto = checkBoxCarto.Checked ? 1 : 0, level;
                 var newMap = new Map
@@ -186,11 +186,11 @@ namespace Gumshoe_Maps
                 };
                 _main._sql.AddDrop(newMap, MapId, zana, carto);
             }
-            if (textBoxUnique.Text != String.Empty)
+            if (textBoxUnique.Text != String.Empty && textBoxUnique.Text != @"Name")
             {
                 _main._sql.AddUnique(MapId, textBoxUnique.Text);
             }
-            if (textBoxCurrency.Text != String.Empty && labelCurrencyValue.Text != @"0")
+            if (textBoxCurrency.Text != String.Empty && textBoxCurrency.Text != @"Name" && labelCurrencyValue.Text != @"0")
             {
                 int currencyCount;
                 _main._sql.AddCurrency(MapId, new KeyValuePair<int, string>(int.TryParse(labelCurrencyValue.Text, out currencyCount) ? currencyCount : 0, textBoxCurrency.Text));

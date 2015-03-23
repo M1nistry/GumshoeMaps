@@ -7,15 +7,14 @@ using System.Windows.Forms;
 
 namespace Gumshoe_Maps
 {
-    public class SqlDb
+    public class SqlDb : SqlWrapper
     {
         private readonly string _dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\MapsDB.s3db";
         private SQLiteConnection Connection { get; set; }
         public SqlDb()
         {
-            
             var constring = String.Format(@"Data Source={0};Version=3;", _dbPath);
-            Connection = new SQLiteConnection(constring) {ParseViaFramework = true};
+            Connection = new SQLiteConnection(constring);
             if (SetupDb())
             {
                 
@@ -60,7 +59,7 @@ namespace Gumshoe_Maps
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `map_experience` (`map_id` INTEGER, `exp_before` INTEGER, `level_before` INTEGER, `percent_before` INTEGER, 
-                                           `exp_after` INTEGER, `level_after`, `percent_after`);";
+                                           `exp_after` INTEGER, `level_after` INTEGER, `percent_after` INTEGER);";
                         return true;
                     }
                 }
@@ -72,7 +71,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal int AddMap(Map newMap)
+        public int AddMap(Map newMap)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -116,7 +115,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal Map GetMap(int mapId)
+        public Map GetMap(int mapId)
         {
             var affixes = MapAffixes(mapId);
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
@@ -167,7 +166,7 @@ namespace Gumshoe_Maps
             return null;
         }
 
-        internal DataTable MapDataTable()
+        public DataTable MapDataTable()
         {
             var dtMaps = new DataTable("maps");
             dtMaps.Columns.Add("id", typeof(int));
@@ -210,7 +209,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal DataTable DropDataTable(int mapId)
+        public DataTable DropDataTable(int mapId)
         {
             var dtDrops = new DataTable("drops");
             dtDrops.Columns.Add("title");
@@ -272,7 +271,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal void AddDrop(Map newMap, int mapId, int zana = 0, int carto = 0)
+        public void AddDrop(Map newMap, int mapId, int zana = 0, int carto = 0)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -292,7 +291,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal int MapDrops(int mapId, string symbol)
+        public int MapDrops(int mapId, string symbol)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -306,7 +305,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal long ExpGained(int id)
+        public long ExpGained(int id)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -329,7 +328,7 @@ namespace Gumshoe_Maps
             return 0;
         }
 
-        internal void AddCurrency(int mapId, KeyValuePair<int, string> currency)
+        public void AddCurrency(int mapId, KeyValuePair<int, string> currency)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -344,7 +343,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal void AddUnique(int mapId, string name)
+        public void AddUnique(int mapId, string name)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -358,7 +357,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal List<KeyValuePair<int, string>> MapList(int id)
+        public List<KeyValuePair<int, string>> MapList(int id)
         {
             var mapList = new List<KeyValuePair<int, string>>();
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
@@ -379,7 +378,7 @@ namespace Gumshoe_Maps
             return mapList;
         }
 
-        internal List<string> MapAffixes(int id)
+        public List<string> MapAffixes(int id)
         {
             var affixList = new List<string>();
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
@@ -400,7 +399,7 @@ namespace Gumshoe_Maps
             return affixList;
         }
 
-        internal void FinishMap(int id, Experience exp)
+        public void FinishMap(int id, Experience exp)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -423,7 +422,7 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal bool DeleteMap(int id)
+        public bool DeleteMap(int id)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -446,12 +445,15 @@ namespace Gumshoe_Maps
                     cmd.CommandText = @"DELETE FROM `affixes` WHERE map_id=@id";
                     cmd.ExecuteNonQuery();
 
+                    cmd.CommandText = @"DELETE FROM `map_experience` WHERE map_id=@id";
+                    cmd.ExecuteNonQuery();
+
                     return true;
                 }
             }
         }
 
-        internal void UpdateNotes(int id, string notes)
+        public void UpdateNotes(int id, string notes)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -465,22 +467,22 @@ namespace Gumshoe_Maps
             }
         }
 
-        internal void AddCurrency(int id, string currency, int count)
-        {
-            using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
-            {
-                const string insertCurrency = @"INSERT INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @currency, @count);";
-                using (var cmd = new SQLiteCommand(insertCurrency, connection))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.Parameters.AddWithValue("@currency", currency);
-                    cmd.Parameters.AddWithValue("@count", count);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
+        //public void AddCurrency(int id, string currency, int count)
+        //{
+        //    using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
+        //    {
+        //        const string insertCurrency = @"INSERT INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @currency, @count);";
+        //        using (var cmd = new SQLiteCommand(insertCurrency, connection))
+        //        {
+        //            cmd.Parameters.AddWithValue("@id", id);
+        //            cmd.Parameters.AddWithValue("@currency", currency);
+        //            cmd.Parameters.AddWithValue("@count", count);
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
 
-        internal void AddExperience(List<Experience> expList)
+        public void AddExperience(List<Experience> expList)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -508,7 +510,7 @@ namespace Gumshoe_Maps
             cmd.ExecuteNonQuery();
         }
 
-        internal int ExperienceCount()
+        public int ExperienceCount()
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
@@ -523,7 +525,7 @@ namespace Gumshoe_Maps
             return 0;
         }
 
-        internal int ExperienceGoal(int level)
+        public int ExperienceGoal(int level)
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {

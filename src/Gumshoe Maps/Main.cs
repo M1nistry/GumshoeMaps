@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -40,6 +43,7 @@ namespace Gumshoe_Maps
         private static Main _main;
         private Settings _settings;
         private Details _details;
+        private OcrDownload _ocrDownload;
         internal Map CurrentMap;
         private string _state;
         private int _timerTicks = 0;
@@ -53,6 +57,13 @@ namespace Gumshoe_Maps
             _nextClipboardViewer = (IntPtr)SetClipboardViewer((int) Handle);
             _sql = new SqlDb();
 
+            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\tessdata\");
+            if (Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\tessdata\").Length <= 0)
+            {
+                _ocrDownload = new OcrDownload();
+                _ocrDownload.ShowDialog();
+            }
+            if (_ocrDownload != null) while (_ocrDownload.Visible) Thread.Sleep(5000);
             titleBar.TitleColor = Properties.Settings.Default.themeColor;
             titleBar.SettingsClick += Settings_Click;
             titleBar.MinimizeClick += Minimize_Click;
@@ -61,9 +72,7 @@ namespace Gumshoe_Maps
             RegisterHotKey(Handle, 1, 0x0000, Properties.Settings.Default.zanaHotkey);
             RegisterHotKey(Handle, 2, 0x0000, Properties.Settings.Default.cartoHotkey);
             labelZanaValue.Text = Properties.Settings.Default.zanaQuantity.ToString();
-
             dgvMaps.ColumnHeadersDefaultCellStyle.BackColor = Properties.Settings.Default.themeColor;
-
             _main = this;
 
             RefreshMaps();
@@ -75,11 +84,15 @@ namespace Gumshoe_Maps
                 ((ToolStripDropDownMenu)menuItem.DropDown).ShowImageMargin = false;
                 menuItem.ForeColor = SystemColors.ControlLight;
             }
+
             contextMenuDgvMaps.Renderer = new ContextRenderer();
+
             if (_sql.ExperienceCount() != 100) PopulateExperience();
             if (!PopulateLeagues()) MessageBox.Show(@"Failed to populate leagues! Check your internet connection and try again.", @"Error fetching league data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             if (listBoxEvents.Items.Contains(Properties.Settings.Default.selectedLeague))
                 textBoxSelectedEvent.Text = Properties.Settings.Default.selectedLeague;
+
+
         }
 
         private bool PopulateLeagues()
@@ -96,6 +109,8 @@ namespace Gumshoe_Maps
             }
             return listBoxEvents.Items.Count > 0;
         }
+
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (_state != "WAITING")
@@ -123,6 +138,7 @@ namespace Gumshoe_Maps
 
         private void PopulateExperience()
         {
+
             var lines = File.ReadAllLines(Directory.GetCurrentDirectory() + @"\Resources\Experience.csv").Select(a => a.Split(','));
             var listExp = new List<Experience>();
             foreach (var line in lines)
@@ -529,7 +545,8 @@ namespace Gumshoe_Maps
 
             var image = Pix.LoadFromFile(Directory.GetCurrentDirectory() + "\\Screenshot.bmp");
             string result;
-            using (var engine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default))
+            var tessData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps";
+            using (var engine = new TesseractEngine(tessData, "eng", EngineMode.Default))
             {
                 using (var page = engine.Process(image))
                 {

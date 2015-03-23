@@ -34,6 +34,7 @@ namespace Gumshoe_Maps
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.titlePanel = new System.Windows.Forms.Panel();
             this.titleLabel = new System.Windows.Forms.Label();
             this.labelColor = new System.Windows.Forms.Label();
@@ -47,6 +48,10 @@ namespace Gumshoe_Maps
             this.labelMap = new System.Windows.Forms.Label();
             this.labelZana = new System.Windows.Forms.Label();
             this.labelCarto = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxOptIn = new System.Windows.Forms.CheckBox();
+            this.labelInfo = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonCartoHotkey = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaHotkey = new Gumshoe_Maps.Flatbutton();
             this.buttonMapHotkey = new Gumshoe_Maps.Flatbutton();
@@ -194,6 +199,39 @@ namespace Gumshoe_Maps
             this.labelCarto.TabIndex = 27;
             this.labelCarto.Text = "Toggle Carto";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.label1.Location = new System.Drawing.Point(15, 205);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Public opt-in:";
+            // 
+            // checkBoxOptIn
+            // 
+            this.checkBoxOptIn.AutoSize = true;
+            this.checkBoxOptIn.Location = new System.Drawing.Point(207, 204);
+            this.checkBoxOptIn.Name = "checkBoxOptIn";
+            this.checkBoxOptIn.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxOptIn.TabIndex = 29;
+            this.checkBoxOptIn.UseVisualStyleBackColor = true;
+            this.checkBoxOptIn.CheckedChanged += new System.EventHandler(this.checkBoxOptIn_CheckedChanged);
+            // 
+            // labelInfo
+            // 
+            this.labelInfo.AutoSize = true;
+            this.labelInfo.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.labelInfo.Location = new System.Drawing.Point(233, 204);
+            this.labelInfo.Name = "labelInfo";
+            this.labelInfo.Size = new System.Drawing.Size(13, 13);
+            this.labelInfo.TabIndex = 30;
+            this.labelInfo.Text = "?";
+            this.toolTip.SetToolTip(this.labelInfo, "Opt-in to submit your map data to the public database.\r\nThis will allow your subm" +
+        "itted data to increase the quality\r\nof reporting generated at the end of a leagu" +
+        "e.");
+            // 
             // buttonCartoHotkey
             // 
             this.buttonCartoHotkey.BackColor = System.Drawing.Color.Transparent;
@@ -250,9 +288,10 @@ namespace Gumshoe_Maps
             // 
             // buttonCancel
             // 
+            this.buttonCancel.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCancel.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonCancel.Location = new System.Drawing.Point(202, 230);
+            this.buttonCancel.Location = new System.Drawing.Point(222, 239);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.OwnerDrawText = null;
             this.buttonCancel.Size = new System.Drawing.Size(54, 23);
@@ -263,9 +302,10 @@ namespace Gumshoe_Maps
             // 
             // buttonApply
             // 
+            this.buttonApply.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDark;
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.buttonApply.Location = new System.Drawing.Point(133, 230);
+            this.buttonApply.Location = new System.Drawing.Point(153, 239);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.OwnerDrawText = null;
             this.buttonApply.Size = new System.Drawing.Size(46, 23);
@@ -313,7 +353,10 @@ namespace Gumshoe_Maps
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.ClientSize = new System.Drawing.Size(288, 265);
+            this.ClientSize = new System.Drawing.Size(288, 275);
+            this.Controls.Add(this.labelInfo);
+            this.Controls.Add(this.checkBoxOptIn);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.labelCarto);
             this.Controls.Add(this.buttonCartoHotkey);
             this.Controls.Add(this.labelZana);
@@ -367,5 +410,9 @@ namespace Gumshoe_Maps
         private Flatbutton buttonZanaHotkey;
         private Label labelCarto;
         private Flatbutton buttonCartoHotkey;
+        private Label label1;
+        private CheckBox checkBoxOptIn;
+        private Label labelInfo;
+        private ToolTip toolTip;
     }
 }

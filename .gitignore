@@ -12,3 +12,12 @@ src/Gumshoe Maps/obj/Release/Gumshoe_Maps.Main.resources
 src/Gumshoe Maps/obj/Release/Gumshoe_Maps.Properties.Resources.resources
 src/Gumshoe Maps/obj/Release/Gumshoe_Maps.Settings.resources
 src/Gumshoe Maps/obj/Release/Gumshoe_Maps.TitleBar.resources
+src/packages/MySql.Data.6.9.6/CHANGES
+src/packages/MySql.Data.6.9.6/content/app.config.transform
+src/packages/MySql.Data.6.9.6/content/web.config.transform
+src/packages/MySql.Data.6.9.6/lib/net20/MySql.Data.dll
+src/packages/MySql.Data.6.9.6/lib/net20-cf/MySql.Data.CF.dll
+src/packages/MySql.Data.6.9.6/lib/net40/MySql.Data.dll
+src/packages/MySql.Data.6.9.6/lib/net45/MySql.Data.dll
+src/packages/MySql.Data.6.9.6/MySql.Data.6.9.6.nupkg
+src/packages/MySql.Data.6.9.6/Readme.txt

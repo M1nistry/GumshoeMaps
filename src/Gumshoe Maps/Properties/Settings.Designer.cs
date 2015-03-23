@@ -94,5 +94,17 @@ namespace Gumshoe_Maps.Properties {
                 this["selectedLeague"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool publicOptIn {
+            get {
+                return ((bool)(this["publicOptIn"]));
+            }
+            set {
+                this["publicOptIn"] = value;
+            }
+        }
     }
 }

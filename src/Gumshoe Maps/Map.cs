@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gumshoe_Maps
 {
-    internal class Map : IEquatable<Map>
+    public class Map : IEquatable<Map>
     {
         public int Id { get; set; }
         public string Rarity { get; set; }

@@ -40,6 +40,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.panelDgv = new System.Windows.Forms.Panel();
             this.dgvMaps = new System.Windows.Forms.DataGridView();
+            this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnExp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnRarity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.qualityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.minusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCurrentMap = new System.Windows.Forms.Panel();
             this.labelExperience = new System.Windows.Forms.Label();
             this.labelDurationValue = new System.Windows.Forms.Label();
@@ -64,22 +74,12 @@
             this.labelZanaValue = new System.Windows.Forms.Label();
             this.textBoxSelectedEvent = new System.Windows.Forms.TextBox();
             this.panelEventsCombo = new System.Windows.Forms.Panel();
+            this.buttonExpandEvents = new Gumshoe_Maps.Flatbutton();
             this.panelEventsList = new System.Windows.Forms.Panel();
             this.listBoxEvents = new System.Windows.Forms.ListBox();
-            this.buttonExpandEvents = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaDown = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaUp = new Gumshoe_Maps.Flatbutton();
             this.titleBar = new Gumshoe_Maps.TitleBar();
-            this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnExp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnRarity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.qualityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.minusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.evenColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.plusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelDgv.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.panelCurrentMap.SuspendLayout();
@@ -95,7 +95,7 @@
             this.panelDgv.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDgv.Controls.Add(this.dgvMaps);
-            this.panelDgv.Location = new System.Drawing.Point(9, 113);
+            this.panelDgv.Location = new System.Drawing.Point(11, 113);
             this.panelDgv.Margin = new System.Windows.Forms.Padding(2);
             this.panelDgv.Name = "panelDgv";
             this.panelDgv.Size = new System.Drawing.Size(480, 260);
@@ -175,6 +175,89 @@
             this.dgvMaps.MouseEnter += new System.EventHandler(this.dgvMaps_MouseEnter);
             this.dgvMaps.MouseLeave += new System.EventHandler(this.dgvMaps_MouseLeave);
             // 
+            // mapColumn
+            // 
+            this.mapColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.mapColumn.DataPropertyName = "name";
+            this.mapColumn.HeaderText = "";
+            this.mapColumn.MinimumWidth = 180;
+            this.mapColumn.Name = "mapColumn";
+            this.mapColumn.ReadOnly = true;
+            this.mapColumn.Width = 180;
+            // 
+            // columnExp
+            // 
+            this.columnExp.DataPropertyName = "gained";
+            this.columnExp.HeaderText = "Gained";
+            this.columnExp.MinimumWidth = 70;
+            this.columnExp.Name = "columnExp";
+            this.columnExp.ReadOnly = true;
+            this.columnExp.Width = 70;
+            // 
+            // idColumn
+            // 
+            this.idColumn.DataPropertyName = "id";
+            this.idColumn.HeaderText = "ID";
+            this.idColumn.Name = "idColumn";
+            this.idColumn.ReadOnly = true;
+            this.idColumn.Visible = false;
+            // 
+            // columnRarity
+            // 
+            this.columnRarity.DataPropertyName = "rarity";
+            this.columnRarity.HeaderText = "Rarity";
+            this.columnRarity.Name = "columnRarity";
+            this.columnRarity.ReadOnly = true;
+            this.columnRarity.Visible = false;
+            // 
+            // levelColumn
+            // 
+            this.levelColumn.DataPropertyName = "level";
+            this.levelColumn.HeaderText = "Level";
+            this.levelColumn.Name = "levelColumn";
+            this.levelColumn.ReadOnly = true;
+            this.levelColumn.Width = 35;
+            // 
+            // quantityColumn
+            // 
+            this.quantityColumn.DataPropertyName = "quantity";
+            this.quantityColumn.HeaderText = "Quantity";
+            this.quantityColumn.Name = "quantityColumn";
+            this.quantityColumn.ReadOnly = true;
+            this.quantityColumn.Width = 50;
+            // 
+            // qualityColumn
+            // 
+            this.qualityColumn.DataPropertyName = "quality";
+            this.qualityColumn.HeaderText = "Quality";
+            this.qualityColumn.Name = "qualityColumn";
+            this.qualityColumn.ReadOnly = true;
+            this.qualityColumn.Width = 50;
+            // 
+            // minusColumn
+            // 
+            this.minusColumn.DataPropertyName = "-";
+            this.minusColumn.HeaderText = "-";
+            this.minusColumn.Name = "minusColumn";
+            this.minusColumn.ReadOnly = true;
+            this.minusColumn.Width = 30;
+            // 
+            // evenColumn
+            // 
+            this.evenColumn.DataPropertyName = " ";
+            this.evenColumn.HeaderText = " ";
+            this.evenColumn.Name = "evenColumn";
+            this.evenColumn.ReadOnly = true;
+            this.evenColumn.Width = 30;
+            // 
+            // plusColumn
+            // 
+            this.plusColumn.DataPropertyName = "+";
+            this.plusColumn.HeaderText = "+";
+            this.plusColumn.Name = "plusColumn";
+            this.plusColumn.ReadOnly = true;
+            this.plusColumn.Width = 30;
+            // 
             // panelCurrentMap
             // 
             this.panelCurrentMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -245,7 +328,7 @@
             this.labelId.Enabled = false;
             this.labelId.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelId.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelId.Location = new System.Drawing.Point(467, 102);
+            this.labelId.Location = new System.Drawing.Point(371, 48);
             this.labelId.Name = "labelId";
             this.labelId.Size = new System.Drawing.Size(0, 13);
             this.labelId.TabIndex = 3;
@@ -366,7 +449,7 @@
             // 
             this.labelZana.AutoSize = true;
             this.labelZana.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelZana.Location = new System.Drawing.Point(369, 38);
+            this.labelZana.Location = new System.Drawing.Point(362, 79);
             this.labelZana.Name = "labelZana";
             this.labelZana.Size = new System.Drawing.Size(75, 13);
             this.labelZana.TabIndex = 22;
@@ -424,7 +507,7 @@
             // 
             this.labelZanaValue.AutoSize = true;
             this.labelZanaValue.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelZanaValue.Location = new System.Drawing.Point(446, 39);
+            this.labelZanaValue.Location = new System.Drawing.Point(439, 80);
             this.labelZanaValue.Name = "labelZanaValue";
             this.labelZanaValue.Size = new System.Drawing.Size(13, 13);
             this.labelZanaValue.TabIndex = 28;
@@ -437,7 +520,7 @@
             this.textBoxSelectedEvent.Cursor = System.Windows.Forms.Cursors.Default;
             this.textBoxSelectedEvent.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSelectedEvent.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.textBoxSelectedEvent.Location = new System.Drawing.Point(337, 89);
+            this.textBoxSelectedEvent.Location = new System.Drawing.Point(339, 40);
             this.textBoxSelectedEvent.MaxLength = 800;
             this.textBoxSelectedEvent.Name = "textBoxSelectedEvent";
             this.textBoxSelectedEvent.ReadOnly = true;
@@ -449,15 +532,30 @@
             // 
             this.panelEventsCombo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelEventsCombo.Controls.Add(this.buttonExpandEvents);
-            this.panelEventsCombo.Location = new System.Drawing.Point(334, 84);
+            this.panelEventsCombo.Location = new System.Drawing.Point(336, 35);
             this.panelEventsCombo.Name = "panelEventsCombo";
             this.panelEventsCombo.Size = new System.Drawing.Size(141, 24);
             this.panelEventsCombo.TabIndex = 31;
             // 
+            // buttonExpandEvents
+            // 
+            this.buttonExpandEvents.FlatAppearance.BorderSize = 0;
+            this.buttonExpandEvents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExpandEvents.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonExpandEvents.Location = new System.Drawing.Point(125, 0);
+            this.buttonExpandEvents.Name = "buttonExpandEvents";
+            this.buttonExpandEvents.OwnerDrawText = null;
+            this.buttonExpandEvents.Size = new System.Drawing.Size(14, 24);
+            this.buttonExpandEvents.TabIndex = 28;
+            this.buttonExpandEvents.Text = "↓";
+            this.buttonExpandEvents.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonExpandEvents.UseVisualStyleBackColor = true;
+            this.buttonExpandEvents.Click += new System.EventHandler(this.buttonExpandEvents_Click);
+            // 
             // panelEventsList
             // 
             this.panelEventsList.Controls.Add(this.listBoxEvents);
-            this.panelEventsList.Location = new System.Drawing.Point(334, 108);
+            this.panelEventsList.Location = new System.Drawing.Point(336, 60);
             this.panelEventsList.Name = "panelEventsList";
             this.panelEventsList.Size = new System.Drawing.Size(122, 0);
             this.panelEventsList.TabIndex = 29;
@@ -479,27 +577,12 @@
             this.listBoxEvents.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listBoxEvents_KeyPress);
             this.listBoxEvents.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxEvents_MouseDoubleClick);
             // 
-            // buttonExpandEvents
-            // 
-            this.buttonExpandEvents.FlatAppearance.BorderSize = 0;
-            this.buttonExpandEvents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExpandEvents.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonExpandEvents.Location = new System.Drawing.Point(125, 0);
-            this.buttonExpandEvents.Name = "buttonExpandEvents";
-            this.buttonExpandEvents.OwnerDrawText = null;
-            this.buttonExpandEvents.Size = new System.Drawing.Size(14, 24);
-            this.buttonExpandEvents.TabIndex = 28;
-            this.buttonExpandEvents.Text = "↓";
-            this.buttonExpandEvents.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonExpandEvents.UseVisualStyleBackColor = true;
-            this.buttonExpandEvents.Click += new System.EventHandler(this.buttonExpandEvents_Click);
-            // 
             // buttonZanaDown
             // 
             this.buttonZanaDown.FlatAppearance.BorderSize = 0;
             this.buttonZanaDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonZanaDown.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonZanaDown.Location = new System.Drawing.Point(461, 45);
+            this.buttonZanaDown.Location = new System.Drawing.Point(456, 86);
             this.buttonZanaDown.Name = "buttonZanaDown";
             this.buttonZanaDown.OwnerDrawText = null;
             this.buttonZanaDown.Size = new System.Drawing.Size(14, 19);
@@ -514,7 +597,7 @@
             this.buttonZanaUp.FlatAppearance.BorderSize = 0;
             this.buttonZanaUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonZanaUp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonZanaUp.Location = new System.Drawing.Point(461, 25);
+            this.buttonZanaUp.Location = new System.Drawing.Point(454, 66);
             this.buttonZanaUp.Name = "buttonZanaUp";
             this.buttonZanaUp.OwnerDrawText = null;
             this.buttonZanaUp.Size = new System.Drawing.Size(14, 19);
@@ -535,89 +618,6 @@
             this.titleBar.Title = "Gumshoe Maps | 0.3";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.titleBar.TitleFontColor = System.Drawing.SystemColors.ControlLightLight;
-            // 
-            // mapColumn
-            // 
-            this.mapColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.mapColumn.DataPropertyName = "name";
-            this.mapColumn.HeaderText = "";
-            this.mapColumn.MinimumWidth = 180;
-            this.mapColumn.Name = "mapColumn";
-            this.mapColumn.ReadOnly = true;
-            this.mapColumn.Width = 180;
-            // 
-            // columnExp
-            // 
-            this.columnExp.DataPropertyName = "gained";
-            this.columnExp.HeaderText = "Gained";
-            this.columnExp.MinimumWidth = 70;
-            this.columnExp.Name = "columnExp";
-            this.columnExp.ReadOnly = true;
-            this.columnExp.Width = 70;
-            // 
-            // idColumn
-            // 
-            this.idColumn.DataPropertyName = "id";
-            this.idColumn.HeaderText = "ID";
-            this.idColumn.Name = "idColumn";
-            this.idColumn.ReadOnly = true;
-            this.idColumn.Visible = false;
-            // 
-            // columnRarity
-            // 
-            this.columnRarity.DataPropertyName = "rarity";
-            this.columnRarity.HeaderText = "Rarity";
-            this.columnRarity.Name = "columnRarity";
-            this.columnRarity.ReadOnly = true;
-            this.columnRarity.Visible = false;
-            // 
-            // levelColumn
-            // 
-            this.levelColumn.DataPropertyName = "level";
-            this.levelColumn.HeaderText = "Level";
-            this.levelColumn.Name = "levelColumn";
-            this.levelColumn.ReadOnly = true;
-            this.levelColumn.Width = 35;
-            // 
-            // quantityColumn
-            // 
-            this.quantityColumn.DataPropertyName = "quantity";
-            this.quantityColumn.HeaderText = "Quantity";
-            this.quantityColumn.Name = "quantityColumn";
-            this.quantityColumn.ReadOnly = true;
-            this.quantityColumn.Width = 50;
-            // 
-            // qualityColumn
-            // 
-            this.qualityColumn.DataPropertyName = "quality";
-            this.qualityColumn.HeaderText = "Quality";
-            this.qualityColumn.Name = "qualityColumn";
-            this.qualityColumn.ReadOnly = true;
-            this.qualityColumn.Width = 50;
-            // 
-            // minusColumn
-            // 
-            this.minusColumn.DataPropertyName = "-";
-            this.minusColumn.HeaderText = "-";
-            this.minusColumn.Name = "minusColumn";
-            this.minusColumn.ReadOnly = true;
-            this.minusColumn.Width = 30;
-            // 
-            // evenColumn
-            // 
-            this.evenColumn.DataPropertyName = " ";
-            this.evenColumn.HeaderText = " ";
-            this.evenColumn.Name = "evenColumn";
-            this.evenColumn.ReadOnly = true;
-            this.evenColumn.Width = 30;
-            // 
-            // plusColumn
-            // 
-            this.plusColumn.DataPropertyName = "+";
-            this.plusColumn.HeaderText = "+";
-            this.plusColumn.Name = "plusColumn";
-            this.plusColumn.ReadOnly = true;
-            this.plusColumn.Width = 30;
             // 
             // Main
             // 

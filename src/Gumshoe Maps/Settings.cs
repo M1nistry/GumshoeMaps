@@ -40,6 +40,7 @@ namespace Gumshoe_Maps
             trackBarRed.Value = Int32.Parse(rgbValues[0].ToString());
             trackBarGreen.Value = Int32.Parse(rgbValues[1].ToString());
             trackBarBlue.Value = Int32.Parse(rgbValues[2].ToString());
+            checkBoxOptIn.Checked = Properties.Settings.Default.publicOptIn;
 
             if (Properties.Settings.Default.mapHotkey != -1) buttonMapHotkey.Text = ((Keys)Properties.Settings.Default.mapHotkey).ToString();
             if (Properties.Settings.Default.zanaHotkey != -1) buttonZanaHotkey.Text = ((Keys)Properties.Settings.Default.zanaHotkey).ToString();
@@ -189,6 +190,11 @@ namespace Gumshoe_Maps
             if (!carto) return;
             Properties.Settings.Default.cartoHotkey = -1;
             buttonCartoHotkey.Text = String.Empty;
+        }
+
+        private void checkBoxOptIn_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.publicOptIn = checkBoxOptIn.Checked;
         }
     }
 }

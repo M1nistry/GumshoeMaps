@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>ftp://ministry.happynuke.net/deploy/|C:\Users\M1nistry\Documents\Visual Studio 2013\Publish\|ftps://ministry.happynuke.net/deploy/|ftp://ministry.happynuke.net/|publish\</PublishUrlHistory>
+    <InstallUrlHistory>http://ministry.happynuke.net/gumshoe/deploy/|\\MINISTRY\Publish\|http://ministry.happynuke.net/</InstallUrlHistory>
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+</Project>
