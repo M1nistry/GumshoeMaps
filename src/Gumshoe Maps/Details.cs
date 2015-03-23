@@ -36,6 +36,7 @@ namespace Gumshoe_Maps
             _main = Main.GetSingleton();
             Icon = _main.Icon;
             titlePanel.BackColor = Properties.Settings.Default.themeColor;
+            var mapItem = _main._sql.GetMap(MapId);
         }
 
         private void titlePanel_MouseDown(object sender, MouseEventArgs e)
@@ -139,11 +140,23 @@ namespace Gumshoe_Maps
         private void Details_VisibleChanged(object sender, EventArgs e)
         {
             var mapItem = _main._sql.GetMap(MapId);
+            if (mapItem == null)
+            {
+                MessageBox.Show(@"Details for this map could not be loaded!", @"Problem fetching details",
+                    MessageBoxButtons.OK);
+                Dispose(true);
+                return;
+            }
             var affixString = mapItem.Affixes.Aggregate("", (current, affix) => current + (affix + Environment.NewLine));
             var duration = (mapItem.FinishAt - mapItem.StartAt);
-            var expDiff = mapItem.ExpAfter.CurrentExperience - mapItem.ExpBefore.CurrentExperience;
-            var expGoal = _main._sql.ExperienceGoal(mapItem.ExpBefore.Level);
-            var percentDiff = (float)expDiff / expGoal;
+            long expDiff = 0;
+            float percentDiff = 0;
+            if (mapItem.ExpAfter != null && mapItem.ExpBefore != null)
+            {
+                expDiff = mapItem.ExpAfter.CurrentExperience - mapItem.ExpBefore.CurrentExperience;
+                var expGoal = _main._sql.ExperienceGoal(mapItem.ExpBefore.Level);
+                percentDiff = (float) expDiff/expGoal;
+            }
             labelMapDetails.Text = String.Format("Rarity: {0}\r\n{1}\r\nLevel: {2}\r\nQuantity: {3}\r\nQuality: {4}\r\n\r\n{5}\r\n\r\n{6}\r\nGained: {7} ({8:P2})",
                 mapItem.Rarity, mapItem.Name, mapItem.Level, mapItem.Quantity, mapItem.Quality, affixString, String.Format("Duration: {0:00}:{1:00}:{2:00}", duration.Hours, duration.Minutes, duration.Seconds), expDiff.ToString("#,##0"), percentDiff);
             textBoxNotes.Text = mapItem.Notes;
