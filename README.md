@@ -19,3 +19,4 @@ It uses SQLite to database the maps and their details. Additionally you will be 
 **Planned Features**
 - Zana Dailies
 - Reporting to spreadsheet/Google docs to share your results.
+- Add MySQL inserts into a seperate thread to improve form responsiveness.
