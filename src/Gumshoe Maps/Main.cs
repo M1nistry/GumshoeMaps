@@ -39,15 +39,16 @@ namespace Gumshoe_Maps
 
         IntPtr _nextClipboardViewer;
         public readonly SqlDb _sql;
+        public readonly MySqlDb _mySql;
         private BindingSource _mapSource, _dropSource;
         private static Main _main;
         private Settings _settings;
         private Details _details;
-        private OcrDownload _ocrDownload;
+        private readonly OcrDownload _ocrDownload;
         internal Map CurrentMap;
         private string _state;
-        private int _timerTicks = 0;
-        private bool _paintBorder;
+        private int _timerTicks = 0, _mySqlId = 0, _SqLiteId = 0;
+        private bool _paintBorder, publicOpt;
 
         private Control _focusedControl;
 
@@ -55,7 +56,10 @@ namespace Gumshoe_Maps
         {
             InitializeComponent();
             _nextClipboardViewer = (IntPtr)SetClipboardViewer((int) Handle);
+            publicOpt = Properties.Settings.Default.publicOptIn;
             _sql = new SqlDb();
+            if (publicOpt) _mySql = new MySqlDb();
+            
 
             Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\tessdata\");
             if (Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\tessdata\").Length <= 0)
@@ -90,8 +94,11 @@ namespace Gumshoe_Maps
             if (_sql.ExperienceCount() != 100) PopulateExperience();
             if (!PopulateLeagues()) MessageBox.Show(@"Failed to populate leagues! Check your internet connection and try again.", @"Error fetching league data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             if (listBoxEvents.Items.Contains(Properties.Settings.Default.selectedLeague))
-                textBoxSelectedEvent.Text = Properties.Settings.Default.selectedLeague;
+                textBoxLeague.Text = Properties.Settings.Default.selectedLeague;
 
+            if (Properties.Settings.Default.selectedLeague == String.Empty)
+                MessageBox.Show(@"Please select your league in the top right before starting any maps", @"Select league",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -203,7 +210,7 @@ namespace Gumshoe_Maps
                 case WM_DRAWCLIPBOARD:
                     if (CheckClipboard())
                     {
-                        if (textBoxSelectedEvent.Text == String.Empty && Visible)
+                        if (textBoxLeague.Text == String.Empty && Visible)
                         {
                             MessageBox.Show(@"Please verify that you have selected a league and try again.", @"Error!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
@@ -215,10 +222,18 @@ namespace Gumshoe_Maps
                                 CurrentMap = ParseClipboard();
                                 if (CurrentMap == null) break;
                                 CurrentMap.ExpBefore = ExpValue();
-                                CurrentMap.Id = _sql.AddMap(CurrentMap);
-                                labelId.Text = CurrentMap.Id.ToString(CultureInfo.InvariantCulture);
+                                CurrentMap.League = textBoxLeague.Text;
+                                if (publicOpt)
+                                {
+                                    _mySqlId = _mySql.AddMap(CurrentMap);
+                                    labelMySqlId.Text = _mySqlId.ToString(CultureInfo.InvariantCulture);
+                                }
+                                CurrentMap.SqlId = _mySqlId;
+                                _SqLiteId = _sql.AddMap(CurrentMap);
+                                labelId.Text = _SqLiteId.ToString();
                                 if (labelId.Text != String.Empty)
                                 {
+
                                     labelMapValue.Text = CurrentMap.Name;
                                     panelCurrentMap.Visible = true;
                                     labelExperience.Visible = false;
@@ -235,21 +250,47 @@ namespace Gumshoe_Maps
 
                             case("DROPS"):
                                 if (labelId.Text == String.Empty) break;
-                                if (clipboard.Contains("Map")) _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text));
-                                if (clipboard.Contains("Currency")) _sql.AddCurrency(int.Parse(labelId.Text), ParseCurrency());
-                                if (!clipboard.Contains("Map") && clipboard.Contains("Unique")) _sql.AddUnique(int.Parse(labelId.Text), ParseUnique());
+                                try
+                                {
+                                    if (clipboard.Contains("Map"))
+                                    {
+                                        var parsedMap = ParseClipboard();
+                                        if (parsedMap == null) break;
+                                        _sql.AddDrop(parsedMap, _SqLiteId);
+                                        if (publicOpt && _mySqlId > 0) _mySql.AddDrop(parsedMap, _mySqlId);
+                                    }
+                                    if (clipboard.Contains("Currency"))
+                                    {
+                                        var parsedCurrency = ParseCurrency();
+                                        _sql.AddCurrency(_SqLiteId, parsedCurrency);
+                                        if (publicOpt && _mySqlId > 0) _mySql.AddCurrency(_mySqlId, parsedCurrency);
+                                    }
+                                    if (!clipboard.Contains("Map") && clipboard.Contains("Unique"))
+                                    {
+                                        var parsedUnique = ParseUnique();
+                                        _sql.AddUnique(_SqLiteId, parsedUnique);
+                                        if (publicOpt && _mySqlId > 0) _sql.AddUnique(_mySqlId, parsedUnique);
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    //do nothing
+                                }
+                                
                                 RefreshDrops();
                                 break;
 
                             case ("ZANA"):
                                 if (labelId.Text == String.Empty) break;
-                                _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text), 1);
+                                _sql.AddDrop(ParseClipboard(), _SqLiteId, 1);
+                                if (publicOpt && _mySqlId > 0) _mySql.AddDrop(ParseClipboard(), _SqLiteId, 1);
                                 RefreshDrops();
                                 break;
 
                             case ("CARTO"):
                                 if (labelId.Text == String.Empty) break;
                                 _sql.AddDrop(ParseClipboard(), int.Parse(labelId.Text), 0, 1);
+                                if (publicOpt && _mySqlId > 0) _mySql.AddDrop(ParseClipboard(), _SqLiteId, 0, 1);
                                 break;
                         }
                     }
@@ -268,7 +309,8 @@ namespace Gumshoe_Maps
                             if (_state == "DROPS") { 
                                 timerMap.Stop();
                                 var expAfter = ExpValue();
-                                _sql.FinishMap(CurrentMap.Id, expAfter);
+                                _sql.FinishMap(_SqLiteId, expAfter);
+                                if (publicOpt && _mySqlId > 0) _mySql.FinishMap(_mySqlId, expAfter);
                                 _state = "WAITING";
                                 var expDiff = expAfter.CurrentExperience - CurrentMap.ExpBefore.CurrentExperience;
                                 var expGoal = _sql.ExperienceGoal(CurrentMap.ExpBefore.Level);
@@ -333,7 +375,6 @@ namespace Gumshoe_Maps
             Map newMap;
             if (!Clipboard.GetText(TextDataFormat.Text).Contains("Map")) return null;
             if (Clipboard.GetText(TextDataFormat.Text).Contains("Sacrifice at")) return null;
-
             if (clipboardContents[0].Replace("Rarity: ", "") == "Normal" || clipboardContents[0].Replace("Rarity: ", "") == "Magic")
             {
                 newMap = new Map
@@ -540,7 +581,6 @@ namespace Gumshoe_Maps
                                                            PixelFormat.Format32bppArgb);
             var gfxScreenshot = Graphics.FromImage(bmpScreenshot);
             gfxScreenshot.CopyFromScreen(MousePosition.X + 35, MousePosition.Y - 60, 0, 0, new Size(580, 500), CopyPixelOperation.SourceCopy);
-            
             bmpScreenshot.Save("Screenshot.bmp");
 
             var image = Pix.LoadFromFile(Directory.GetCurrentDirectory() + "\\Screenshot.bmp");
@@ -703,7 +743,7 @@ namespace Gumshoe_Maps
 
         private void dgvMaps_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex <= -1 && e.ColumnIndex != 0) return;
+            if (e.RowIndex <= -1 || e.ColumnIndex != 0) return;
             var selectedId = dgvMaps.Rows[e.RowIndex].Cells["idColumn"].Value.ToString();
             var affixToolTip = _sql.MapAffixes(int.Parse(selectedId));
             var tooltipText = affixToolTip.Aggregate("", (current, affix) => current + (affix + Environment.NewLine));
@@ -723,7 +763,9 @@ namespace Gumshoe_Maps
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var selectedId = dgvMaps.SelectedRows[0].Cells["idColumn"].Value;
+            var mysqlId = dgvMaps.SelectedRows[0].Cells["mysqlColumn"].Value;
             if (!_sql.DeleteMap(int.Parse(selectedId.ToString()))) return;
+            if (publicOpt && _mySqlId > 0) _mySql.DeleteMap(int.Parse(mysqlId.ToString()));
             _mapSource.DataSource = _sql.MapDataTable();
             _mapSource.Sort = "id DESC";
             dgvMaps.DataSource = _mapSource;
@@ -774,16 +816,16 @@ namespace Gumshoe_Maps
                 switch (row.Cells["columnRarity"].Value.ToString())
                 {
                     case ("Normal"):
-                        dgvMaps[2, row.Index].Style.ForeColor = SystemColors.ControlLight;
+                        dgvMaps[3, row.Index].Style.ForeColor = SystemColors.ControlLight;
                         break;
                     case ("Magic"):
-                        dgvMaps[2, row.Index].Style.ForeColor = Color.CornflowerBlue;
+                        dgvMaps[3, row.Index].Style.ForeColor = Color.CornflowerBlue;
                         break;
                     case ("Rare"):
-                        dgvMaps[2, row.Index].Style.ForeColor = Color.Gold;
+                        dgvMaps[3, row.Index].Style.ForeColor = Color.Gold;
                         break;
                     case ("Unique"):
-                        dgvMaps[2, row.Index].Style.ForeColor = Color.DarkOrange;
+                        dgvMaps[3, row.Index].Style.ForeColor = Color.DarkOrange;
                         break;
                 }
             }
@@ -840,7 +882,7 @@ namespace Gumshoe_Maps
         private void listBoxEvents_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (listBoxEvents.SelectedItems.Count != 1) return;
-            textBoxSelectedEvent.Text = listBoxEvents.SelectedItem.ToString();
+            textBoxLeague.Text = listBoxEvents.SelectedItem.ToString();
             buttonExpandEvents.PerformClick();
         }
 
@@ -852,17 +894,15 @@ namespace Gumshoe_Maps
         private void listBoxEvents_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (listBoxEvents.SelectedItems.Count != 1 && e.KeyChar != (Char)Keys.Enter) return;
-            textBoxSelectedEvent.Text = listBoxEvents.SelectedItem.ToString();
+            textBoxLeague.Text = listBoxEvents.SelectedItem.ToString();
             buttonExpandEvents.PerformClick();
         }
         #endregion
 
         private void textBoxSelectedEvent_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.selectedLeague = textBoxSelectedEvent.Text;
+            Properties.Settings.Default.selectedLeague = textBoxLeague.Text;
             Properties.Settings.Default.Save();
         }
-
-
     }
 }

@@ -31,8 +31,8 @@
     <PublisherName>Gumshoe</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.html</WebPage>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.0.0.3</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.4.0.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -155,7 +155,7 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SqlDb.cs" />
-    <Compile Include="SqlWrapper.cs" />
+    <Compile Include="SqlInterface.cs" />
     <Compile Include="TitleBar.cs">
       <SubType>UserControl</SubType>
     </Compile>

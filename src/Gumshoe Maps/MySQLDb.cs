@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 
 namespace Gumshoe_Maps
 {
-    public class MySqlDb : SqlWrapper
+    public class MySqlDb : SqlInterface
     {
         private readonly string _constring;
 
@@ -13,20 +13,23 @@ namespace Gumshoe_Maps
         {
             var constringBuilder = new MySqlConnectionStringBuilder
             {
-                Server = "ministry.happynuke.net:3306",
+                Server = "ministry.happynuke.net",
+                Port = 3306,
                 Database = "gumshoe_maps",
                 UserID = "gumshoe",
                 Password = "1Q2q3q4q5q!",
             };
             _constring = constringBuilder.ToString();
+            var con = new MySqlConnection(_constring);
+            con.Open();
         }
 
         public int AddMap(Map newMap)
         {
             using (var connection = new MySqlConnection(_constring))
             {
-                const string addMap = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, " +
-                    @"`quantity`, `started_at`) VALUES (@rarity, @level, @name, @quality, @quantity, @startedat);";
+                const string addMap = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`, `league`) " +
+                    @"VALUES (@rarity, @level, @name, @quality, @quantity, @startedat, @league);";
                 long idValue;
                 connection.Open();
                 using (var cmd = new MySqlCommand(addMap, connection))
@@ -37,6 +40,7 @@ namespace Gumshoe_Maps
                     cmd.Parameters.AddWithValue("@quality", newMap.Quality);
                     cmd.Parameters.AddWithValue("@quantity", newMap.Quantity);
                     cmd.Parameters.AddWithValue("@startedat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("league", newMap.League);
 
                     cmd.ExecuteNonQuery();
                     idValue = cmd.LastInsertedId;
@@ -48,9 +52,10 @@ namespace Gumshoe_Maps
                 {
                     var transaction = connection.BeginTransaction();
                     cmd.Parameters.AddWithValue("@id", mapId);
+                    cmd.Parameters.AddWithValue("@affix", "");
                     foreach (var affix in newMap.Affixes)
                     {
-                        cmd.Parameters.AddWithValue("@affix", affix);
+                        cmd.Parameters["@affix"].Value = affix;
                         cmd.ExecuteNonQuery();
                     }
                     transaction.Commit();
@@ -291,7 +296,7 @@ namespace Gumshoe_Maps
         {
             using (var connection = new MySqlConnection(_constring))
             {
-                const string insertCurrency = @"INSERT OR REPLACE INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @name, COALESCE((SELECT count FROM currency_drops WHERE name=@name AND map_id=@id), 0) + @count)";
+                const string insertCurrency = @"REPLACE INTO `currency_drops` (`map_id`, `name`, `count`) VALUES (@id, @name, COALESCE((SELECT * FROM (SELECT count FROM currency_drops WHERE name=@name AND map_id=@id) currency_drops), 0) + @count)";
                 connection.Open();
                 using (var cmd = new MySqlCommand(insertCurrency, connection))
                 {

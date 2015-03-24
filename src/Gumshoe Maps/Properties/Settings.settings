@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="themeColor" Type="System.Drawing.Color" Scope="User">
-      <Value Profile="(Default)">SkyBlue</Value>
+      <Value Profile="(Default)">MediumSlateBlue</Value>
     </Setting>
     <Setting Name="zanaQuantity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>

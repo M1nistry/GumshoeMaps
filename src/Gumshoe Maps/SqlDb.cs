@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Gumshoe_Maps
 {
-    public class SqlDb : SqlWrapper
+    public class SqlDb : SqlInterface
     {
         private readonly string _dbPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\GumshoeMaps\MapsDB.s3db";
         private SQLiteConnection Connection { get; set; }
@@ -35,8 +35,8 @@ namespace Gumshoe_Maps
                     using (var cmd = new SQLiteCommand(connection))
                     {
                         cmd.CommandText =
-                            @"CREATE TABLE IF NOT EXISTS `maps` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `rarity` TEXT, `level` INTEGER, 
-                                        `name` TEXT, `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT);";
+                            @"CREATE TABLE IF NOT EXISTS `maps` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `mysql_id` INTEGER DEFAULT 0, `rarity` TEXT, `level` INTEGER, `name` TEXT, 
+                                            `quality` INTEGER, `quantity` INTEGER, `started_at` DATETIME, `finished_at` DATETIME, `notes` TEXT, `league` TEXT);";
                         cmd.ExecuteNonQuery();
 
                         cmd.CommandText = @"CREATE TABLE IF NOT EXISTS `affixes` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `map_id` INTEGER, `affix` TEXT);";
@@ -76,16 +76,18 @@ namespace Gumshoe_Maps
         {
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
-                const string addQuery = @"INSERT INTO `maps` (`rarity`, `level`, `name`, `quality`, `quantity`, `started_at`) VALUES 
-                                                             (@rarity, @level, @name, @quality, @quantity, @startedat)";
+                const string addQuery = @"INSERT INTO `maps` (`mysql_id`, `rarity`, `level`, `name`, `quality`, `quantity`, `started_at`, `league`) VALUES 
+                                                             (@mysqlid, @rarity, @level, @name, @quality, @quantity, @startedat, @league)";
                 using (var cmd = new SQLiteCommand(addQuery, connection))
                 {
+                    cmd.Parameters.AddWithValue("mysqlid", newMap.SqlId);
                     cmd.Parameters.AddWithValue("rarity", newMap.Rarity);
                     cmd.Parameters.AddWithValue("level", newMap.Level);
                     cmd.Parameters.AddWithValue("name", newMap.Name);
                     cmd.Parameters.AddWithValue("quality", newMap.Quality);
                     cmd.Parameters.AddWithValue("quantity", newMap.Quantity + Properties.Settings.Default.zanaQuantity);
                     cmd.Parameters.AddWithValue("startedat", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("league", newMap.League);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -171,6 +173,7 @@ namespace Gumshoe_Maps
         {
             var dtMaps = new DataTable("maps");
             dtMaps.Columns.Add("id", typeof(int));
+            dtMaps.Columns.Add("mysql_id", typeof (int));
             dtMaps.Columns.Add("level");
             dtMaps.Columns.Add("name");
             dtMaps.Columns.Add("gained");
@@ -193,7 +196,8 @@ namespace Gumshoe_Maps
                             while (reader.Read())
                             {
                                 var mapId = int.Parse(reader["id"].ToString());
-                                dtMaps.Rows.Add(mapId, int.Parse(reader["level"].ToString()),
+                                var sqlId = int.Parse(reader["mysql_id"].ToString());
+                                dtMaps.Rows.Add(mapId, sqlId, int.Parse(reader["level"].ToString()),
                                     reader["name"].ToString(), String.Format("{0:N0}",ExpGained(mapId)),
                                     reader["rarity"].ToString(), int.Parse(reader["quality"].ToString()),
                                     int.Parse(reader["quantity"].ToString()), MapDrops(mapId, "<"),
@@ -274,6 +278,7 @@ namespace Gumshoe_Maps
 
         public void AddDrop(Map newMap, int mapId, int zana = 0, int carto = 0)
         {
+            if (newMap == null) return;
             using (var connection = new SQLiteConnection(Connection).OpenAndReturn())
             {
                 const string addQuery = @"INSERT INTO `map_drops` (`map_id`, `rarity`, `level`, `name`, `zana`, `carto`) VALUES 

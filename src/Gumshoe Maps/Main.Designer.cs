@@ -43,6 +43,7 @@
             this.mapColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnExp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mysqlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.columnRarity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.quantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,7 +73,7 @@
             this.reportingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelDgvRight = new System.Windows.Forms.Panel();
             this.labelZanaValue = new System.Windows.Forms.Label();
-            this.textBoxSelectedEvent = new System.Windows.Forms.TextBox();
+            this.textBoxLeague = new System.Windows.Forms.TextBox();
             this.panelEventsCombo = new System.Windows.Forms.Panel();
             this.buttonExpandEvents = new Gumshoe_Maps.Flatbutton();
             this.panelEventsList = new System.Windows.Forms.Panel();
@@ -80,6 +81,7 @@
             this.buttonZanaDown = new Gumshoe_Maps.Flatbutton();
             this.buttonZanaUp = new Gumshoe_Maps.Flatbutton();
             this.titleBar = new Gumshoe_Maps.TitleBar();
+            this.labelMySqlId = new System.Windows.Forms.Label();
             this.panelDgv.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaps)).BeginInit();
             this.panelCurrentMap.SuspendLayout();
@@ -131,6 +133,7 @@
             this.mapColumn,
             this.columnExp,
             this.idColumn,
+            this.mysqlColumn,
             this.columnRarity,
             this.levelColumn,
             this.quantityColumn,
@@ -201,6 +204,14 @@
             this.idColumn.Name = "idColumn";
             this.idColumn.ReadOnly = true;
             this.idColumn.Visible = false;
+            // 
+            // mysqlColumn
+            // 
+            this.mysqlColumn.DataPropertyName = "mysql_id";
+            this.mysqlColumn.HeaderText = "MySQL";
+            this.mysqlColumn.Name = "mysqlColumn";
+            this.mysqlColumn.ReadOnly = true;
+            this.mysqlColumn.Visible = false;
             // 
             // columnRarity
             // 
@@ -328,7 +339,7 @@
             this.labelId.Enabled = false;
             this.labelId.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelId.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.labelId.Location = new System.Drawing.Point(371, 48);
+            this.labelId.Location = new System.Drawing.Point(348, 46);
             this.labelId.Name = "labelId";
             this.labelId.Size = new System.Drawing.Size(0, 13);
             this.labelId.TabIndex = 3;
@@ -513,36 +524,37 @@
             this.labelZanaValue.TabIndex = 28;
             this.labelZanaValue.Text = "0";
             // 
-            // textBoxSelectedEvent
+            // textBoxLeague
             // 
-            this.textBoxSelectedEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
-            this.textBoxSelectedEvent.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxSelectedEvent.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBoxSelectedEvent.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSelectedEvent.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.textBoxSelectedEvent.Location = new System.Drawing.Point(339, 40);
-            this.textBoxSelectedEvent.MaxLength = 800;
-            this.textBoxSelectedEvent.Name = "textBoxSelectedEvent";
-            this.textBoxSelectedEvent.ReadOnly = true;
-            this.textBoxSelectedEvent.Size = new System.Drawing.Size(122, 15);
-            this.textBoxSelectedEvent.TabIndex = 30;
-            this.textBoxSelectedEvent.TextChanged += new System.EventHandler(this.textBoxSelectedEvent_TextChanged);
+            this.textBoxLeague.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+            this.textBoxLeague.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxLeague.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxLeague.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxLeague.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxLeague.Location = new System.Drawing.Point(316, 38);
+            this.textBoxLeague.MaxLength = 800;
+            this.textBoxLeague.Name = "textBoxLeague";
+            this.textBoxLeague.ReadOnly = true;
+            this.textBoxLeague.Size = new System.Drawing.Size(152, 15);
+            this.textBoxLeague.TabIndex = 30;
+            this.textBoxLeague.TextChanged += new System.EventHandler(this.textBoxSelectedEvent_TextChanged);
             // 
             // panelEventsCombo
             // 
             this.panelEventsCombo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelEventsCombo.Controls.Add(this.buttonExpandEvents);
-            this.panelEventsCombo.Location = new System.Drawing.Point(336, 35);
+            this.panelEventsCombo.Location = new System.Drawing.Point(313, 33);
             this.panelEventsCombo.Name = "panelEventsCombo";
-            this.panelEventsCombo.Size = new System.Drawing.Size(141, 24);
+            this.panelEventsCombo.Size = new System.Drawing.Size(171, 24);
             this.panelEventsCombo.TabIndex = 31;
             // 
             // buttonExpandEvents
             // 
+            this.buttonExpandEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonExpandEvents.FlatAppearance.BorderSize = 0;
             this.buttonExpandEvents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExpandEvents.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonExpandEvents.Location = new System.Drawing.Point(125, 0);
+            this.buttonExpandEvents.Location = new System.Drawing.Point(155, 0);
             this.buttonExpandEvents.Name = "buttonExpandEvents";
             this.buttonExpandEvents.OwnerDrawText = null;
             this.buttonExpandEvents.Size = new System.Drawing.Size(14, 24);
@@ -555,9 +567,9 @@
             // panelEventsList
             // 
             this.panelEventsList.Controls.Add(this.listBoxEvents);
-            this.panelEventsList.Location = new System.Drawing.Point(336, 60);
+            this.panelEventsList.Location = new System.Drawing.Point(313, 58);
             this.panelEventsList.Name = "panelEventsList";
-            this.panelEventsList.Size = new System.Drawing.Size(122, 0);
+            this.panelEventsList.Size = new System.Drawing.Size(157, 0);
             this.panelEventsList.TabIndex = 29;
             this.panelEventsList.Visible = false;
             this.panelEventsList.Paint += new System.Windows.Forms.PaintEventHandler(this.panelEventsList_Paint);
@@ -569,9 +581,12 @@
             this.listBoxEvents.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.listBoxEvents.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.listBoxEvents.FormattingEnabled = true;
+            this.listBoxEvents.Items.AddRange(new object[] {
+            "Torment/Bloodlines Hardcore",
+            "Torment/Bloodlines Softcore"});
             this.listBoxEvents.Location = new System.Drawing.Point(1, 1);
             this.listBoxEvents.Name = "listBoxEvents";
-            this.listBoxEvents.Size = new System.Drawing.Size(120, 0);
+            this.listBoxEvents.Size = new System.Drawing.Size(154, 0);
             this.listBoxEvents.TabIndex = 22;
             this.listBoxEvents.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBoxEvents_DrawItem);
             this.listBoxEvents.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listBoxEvents_KeyPress);
@@ -615,9 +630,18 @@
             this.titleBar.SettingsVisible = true;
             this.titleBar.Size = new System.Drawing.Size(496, 22);
             this.titleBar.TabIndex = 2;
-            this.titleBar.Title = "Gumshoe Maps | 0.3";
+            this.titleBar.Title = "Gumshoe Maps | 0.4a";
             this.titleBar.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.titleBar.TitleFontColor = System.Drawing.SystemColors.ControlLightLight;
+            // 
+            // labelMySqlId
+            // 
+            this.labelMySqlId.AutoSize = true;
+            this.labelMySqlId.Location = new System.Drawing.Point(347, 66);
+            this.labelMySqlId.Name = "labelMySqlId";
+            this.labelMySqlId.Size = new System.Drawing.Size(0, 13);
+            this.labelMySqlId.TabIndex = 33;
+            this.labelMySqlId.Visible = false;
             // 
             // Main
             // 
@@ -625,13 +649,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
             this.ClientSize = new System.Drawing.Size(496, 471);
+            this.Controls.Add(this.labelMySqlId);
             this.Controls.Add(this.panelEventsList);
-            this.Controls.Add(this.textBoxSelectedEvent);
+            this.Controls.Add(this.textBoxLeague);
             this.Controls.Add(this.panelEventsCombo);
+            this.Controls.Add(this.labelId);
             this.Controls.Add(this.labelZanaValue);
             this.Controls.Add(this.buttonZanaDown);
             this.Controls.Add(this.buttonZanaUp);
-            this.Controls.Add(this.labelId);
             this.Controls.Add(this.panelDgvRight);
             this.Controls.Add(this.labelZana);
             this.Controls.Add(this.panelDgv);
@@ -688,14 +713,16 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnDrops;
         private System.Windows.Forms.ToolStripMenuItem reportingToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBoxSelectedEvent;
+        private System.Windows.Forms.TextBox textBoxLeague;
         private System.Windows.Forms.Panel panelEventsCombo;
         private Flatbutton buttonExpandEvents;
         private System.Windows.Forms.Panel panelEventsList;
         private System.Windows.Forms.ListBox listBoxEvents;
+        private System.Windows.Forms.Label labelMySqlId;
         private System.Windows.Forms.DataGridViewTextBoxColumn mapColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnExp;
         private System.Windows.Forms.DataGridViewTextBoxColumn idColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn mysqlColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnRarity;
         private System.Windows.Forms.DataGridViewTextBoxColumn levelColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn quantityColumn;

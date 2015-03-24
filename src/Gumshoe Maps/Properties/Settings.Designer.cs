@@ -25,7 +25,7 @@ namespace Gumshoe_Maps.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("SkyBlue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("MediumSlateBlue")]
         public global::System.Drawing.Color themeColor {
             get {
                 return ((global::System.Drawing.Color)(this["themeColor"]));

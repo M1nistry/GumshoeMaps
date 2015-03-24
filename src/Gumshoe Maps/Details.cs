@@ -174,6 +174,7 @@ namespace Gumshoe_Maps
             if (textBoxNotes.Text != @"Notes...")
             {
                 _main._sql.UpdateNotes(MapId, textBoxNotes.Text);
+                _main._mySql.UpdateNotes(3, textBoxNotes.Text);
                 return;
             }
             textBoxNotes.Text = @"Notes...";

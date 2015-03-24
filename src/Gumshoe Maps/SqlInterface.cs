@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Gumshoe_Maps
 {
-    internal interface SqlWrapper
+    internal interface SqlInterface
     {
 
         int AddMap(Map newMap);

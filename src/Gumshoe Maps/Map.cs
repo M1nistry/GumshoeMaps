@@ -6,6 +6,7 @@ namespace Gumshoe_Maps
     public class Map : IEquatable<Map>
     {
         public int Id { get; set; }
+        public int SqlId { get; set; }
         public string Rarity { get; set; }
         public int Level { get; set; }
         public string Name { get; set; }
@@ -17,6 +18,7 @@ namespace Gumshoe_Maps
         public Experience ExpBefore { get; set; }
         public Experience ExpAfter { get; set; }
         public string Notes { get; set; }
+        public string League { get; set; }
 
         public bool Equals(Map other)
         {
