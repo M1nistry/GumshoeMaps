@@ -1,5 +1,6 @@
 bin/Debug/Gumshoe Maps.vshost.exe
 bin/
+obj/
 *.bin
 obj/Debug/DesignTimeResolveAssemblyReferences.cache
 obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
