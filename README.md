@@ -1,6 +1,8 @@
 # Gumshoe Maps
 Path of Exile Map Logging
 
+For the latest release and information check the wiki: [here](https://github.com/M1nistry/GumshoeMaps/wiki)
+
 This tool is aimed to replace people using Google docs to manually track their maps and the returns. It's still reasonably early days, however there are lots of ideas and features in mind to make it a very powerful tool.
 
 ![Image](http://i.imgur.com/3JssJGY.png)
